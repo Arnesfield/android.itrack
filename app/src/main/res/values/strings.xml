@@ -2,7 +2,8 @@
     <string name="app_name">iTrack</string>
     <string name="app_long_name">FEUTECH\'S Discipline Unit Student Violation Monitoring System</string>
     <string name="copyright_text">© Systematix 2018</string>
-    <string name="background_desc">background</string>
+    <string name="background_desc">Background</string>
+    <string name="logo_desc">iTrack Logo</string>
 
     <!-- login -->
     <string name="login_txt_username_hint">Username</string>
