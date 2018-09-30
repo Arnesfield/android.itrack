@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
         }
 
         // go to next activity here
-        Intent intent = new Intent(this, MainActivity.class);
+        final Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
         return true;
@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
     // OnRespondListener
     @Override
     public void onResponse(String tag, JSONObject response) throws JSONException {
-        doLoading(false);
+        // do not unload hehe
 
         // check if successful
         if (!Api.isSuccessful(response)) {

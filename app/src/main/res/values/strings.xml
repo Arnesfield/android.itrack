@@ -19,6 +19,9 @@
     <string name="login_txt_password_hint">Password</string>
     <string name="login_btn_login">Login</string>
 
+    <!-- main nav drawer -->
+    <string name="nav_logout">Logout</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>

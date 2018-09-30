@@ -1,10 +1,11 @@
 package com.systematix.itrack;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,6 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.systematix.itrack.config.PreferencesList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +44,35 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        checkForLogInMsg();
+    }
+
+    private void checkForLogInMsg() {
+        // if did login, then show snackbar
+        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_LOGIN, MODE_PRIVATE);
+        final boolean didLogin = sharedPreferences.getBoolean(PreferencesList.PREF_DID_LOG_IN, false);
+
+        if (didLogin) {
+            Snackbar.make(findViewById(R.id.fab), R.string.msg_log_in, Snackbar.LENGTH_LONG).show();
+        }
+        // then remove that prop
+        sharedPreferences.edit().remove(PreferencesList.PREF_DID_LOG_IN).apply();
+    }
+
+    private void doLogout() {
+        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_LOGIN, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.remove(PreferencesList.PREF_USER_ID);
+        editor.remove(PreferencesList.PREF_USER_JSON);
+        editor.remove(PreferencesList.PREF_DID_LOG_IN);
+        editor.putBoolean(PreferencesList.PREF_DID_LOG_OUT, true);
+        editor.apply();
+
+        final Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -90,8 +123,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_logout) {
+            doLogout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
