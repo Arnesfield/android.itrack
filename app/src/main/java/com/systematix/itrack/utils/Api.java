@@ -1,6 +1,5 @@
 package com.systematix.itrack.utils;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.android.volley.Request;
@@ -10,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public final class Api {
@@ -23,8 +23,9 @@ public final class Api {
     private String tag;
 
     public interface OnRespondListener {
-        void onResponse(String tag, JSONObject response);
-        void onErrorResponse(String tag, VolleyError error);
+        void onResponse(String tag, JSONObject response) throws JSONException;
+        void onErrorResponse(String tag, VolleyError error) throws JSONException;
+        void onException(JSONException e);
     }
 
     private Api() {}
@@ -63,6 +64,10 @@ public final class Api {
         return instance;
     }
 
+    public static boolean isSuccessful(JSONObject response) throws JSONException {
+        return response.getBoolean("success");
+    }
+
     // instance
     private void setContext(Context context) {
         this.context = context;
@@ -82,7 +87,7 @@ public final class Api {
         return this;
     }
 
-    public void request(JSONObject params) {
+    public JsonObjectRequest request(JSONObject params) {
         final Api api = this;
 
         final JsonObjectRequest request = new JsonObjectRequest(
@@ -92,17 +97,28 @@ public final class Api {
             new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    listener.onResponse(api.tag, response);
+                    try {
+                        listener.onResponse(api.tag, response);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        listener.onException(e);
+                    }
                 }
             },
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    listener.onErrorResponse(api.tag, error);
+                    try {
+                        listener.onErrorResponse(api.tag, error);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        listener.onException(e);
+                    }
                 }
             }
         );
 
         requestQueue.add(request);
+        return request;
     }
 }

@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import com.android.volley.VolleyError;
 import com.systematix.itrack.config.PreferencesList;
 import com.systematix.itrack.config.UrlsConfig;
+import com.systematix.itrack.items.User;
 import com.systematix.itrack.utils.Api;
 
 import org.json.JSONException;
@@ -53,16 +54,16 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
 
                 final String username = txtUsername.getText().toString();
                 final String password = txtPassword.getText().toString();
-                final JSONObject request = new JSONObject();
+                final JSONObject params = new JSONObject();
 
                 try {
-                    request.put("username", username);
-                    request.put("password", password);
+                    params.put("username", username);
+                    params.put("password", password);
 
                     Api.post(view.getContext())
                         .setTag("login")
                         .setUrl(UrlsConfig.LOGIN_URL)
-                        .request(request);
+                        .request(params);
                 } catch (JSONException e) {
                     Snackbar.make(view, R.string.error, Snackbar.LENGTH_SHORT).show();
                 }
@@ -89,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
     }
 
     private void checkForLogOutMsg() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_LOGIN, MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_LOGIN, MODE_PRIVATE);
         boolean didLogOut = sharedPreferences.getBoolean(PreferencesList.PREF_DID_LOG_OUT, false);
         if (didLogOut) {
             Snackbar.make(btnLogin, R.string.msg_log_out, Snackbar.LENGTH_LONG).show();
@@ -119,14 +120,45 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
 
     // OnRespondListener
     @Override
-    public void onResponse(String tag, JSONObject response) {
+    public void onResponse(String tag, JSONObject response) throws JSONException {
         doLoading(false);
-        Snackbar.make(btnLogin, response.toString(), Snackbar.LENGTH_LONG).show();
+
+        // check if successful
+        if (!Api.isSuccessful(response)) {
+            final String msg = response.getString("msg");
+            if (msg != null && msg.length() > 0) {
+                txtUsernameContainer.setError("");
+                txtPasswordContainer.setError(msg);
+                Snackbar.make(btnLogin, msg, Snackbar.LENGTH_LONG).show();
+            }
+            return;
+        }
+
+        // get user
+        JSONObject jsonUser = response.getJSONObject("user");
+        final User user = new User(jsonUser);
+
+        // save user to sharedpref
+        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_LOGIN, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt(PreferencesList.PREF_USER_ID, user.getId());
+        editor.putString(PreferencesList.PREF_USER_JSON, jsonUser.toString());
+        editor.putBoolean(PreferencesList.PREF_DID_LOG_IN, true);
+        editor.apply();
+
+        this.checkForUser();
     }
 
     @Override
     public void onErrorResponse(String tag, VolleyError error) {
         doLoading(false);
-        Snackbar.make(btnLogin, error.toString(), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(btnLogin, R.string.error, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onException(JSONException e) {
+        doLoading(false);
+        Snackbar.make(btnLogin, R.string.error, Snackbar.LENGTH_LONG).show();
     }
 }
