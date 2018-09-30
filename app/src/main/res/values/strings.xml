@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">iTrack</string>
     <string name="app_long_name">FEUTECH\'S Discipline Unit Student Violation Monitoring System</string>
+    <string name="loading_text">Loading…</string>
     <string name="copyright_text">© Systematix 2018</string>
     <string name="background_desc">Background</string>
     <string name="logo_desc">iTrack Logo</string>
+
+    <!-- errors -->
+    <string name="error">An error occurred.</string>
+    <string name="error_frown">An error occurred :(</string>
+
+    <!-- msgs -->
+    <string name="msg_log_in">Logged in successfully.</string>
+    <string name="msg_log_out">Logged out successfully.</string>
 
     <!-- login -->
     <string name="login_txt_username_hint">Username</string>
