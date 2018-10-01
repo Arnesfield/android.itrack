@@ -7,4 +7,5 @@ public final class UrlsConfig {
     public static final String API_URL = BASE_URL + "api";
     // append with 'api...'
     public static final String LOGIN_URL = API_URL + "login";
+    public static final String UPLOADED_IMAGES_URL = BASE_URL + "images/";
 }

@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
     }
 
     private boolean checkForUser() {
-        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_LOGIN, MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_APP, MODE_PRIVATE);
         int uid = sharedPreferences.getInt(PreferencesList.PREF_USER_ID, -1);
 
         // if no id set, do nothing
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
     }
 
     private void checkForLogOutMsg() {
-        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_LOGIN, MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_APP, MODE_PRIVATE);
         boolean didLogOut = sharedPreferences.getBoolean(PreferencesList.PREF_DID_LOG_OUT, false);
         if (didLogOut) {
             Snackbar.make(btnLogin, R.string.msg_log_out, Snackbar.LENGTH_LONG).show();
@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
         final User user = new User(jsonUser);
 
         // save user to sharedpref
-        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_LOGIN, MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_APP, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putInt(PreferencesList.PREF_USER_ID, user.getId());

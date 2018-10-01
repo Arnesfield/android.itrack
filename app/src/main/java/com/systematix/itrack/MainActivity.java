@@ -14,20 +14,43 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.systematix.itrack.config.PreferencesList;
+import com.systematix.itrack.items.User;
+
+import org.json.JSONException;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.nav_view) NavigationView navigationView;
+
+    private static final int[] MENU_ITEM_IDS = new int[]{
+            R.id.nav_camera,
+            R.id.nav_gallery
+    };
+
+    private static final String[] MENU_ITEM_AUTH = new String[]{
+            "teacher",
+            "student"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -36,13 +59,12 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        updateNavigationView();
         navigationView.setNavigationItemSelectedListener(this);
 
         checkForLogInMsg();
@@ -50,7 +72,7 @@ public class MainActivity extends AppCompatActivity
 
     private void checkForLogInMsg() {
         // if did login, then show snackbar
-        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_LOGIN, MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_APP, MODE_PRIVATE);
         final boolean didLogin = sharedPreferences.getBoolean(PreferencesList.PREF_DID_LOG_IN, false);
 
         if (didLogin) {
@@ -61,7 +83,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doLogout() {
-        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_LOGIN, MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_APP, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.remove(PreferencesList.PREF_USER_ID);
@@ -75,9 +97,35 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
+    private void updateNavigationView() {
+        final Menu menu = navigationView.getMenu();
+        try {
+            // get user auth
+            final User user = User.getUserFromSharedPref(this);
+
+            for (int i = 0; i < MENU_ITEM_IDS.length; i++) {
+                final MenuItem item = menu.findItem(MENU_ITEM_IDS[i]);
+                // depending on user access, reveal the menu item
+                item.setVisible(user.checkAccess(MENU_ITEM_AUTH[i]));
+            }
+
+            // from here, set also the name of user
+            final View headerView = navigationView.getHeaderView(0);
+            final TextView tvTitle = headerView.findViewById(R.id.nav_title);
+            final TextView tvSubtitle = headerView.findViewById(R.id.nav_subtitle);
+            final ImageView imageView = headerView.findViewById(R.id.nav_image_view);
+            final TextView textView = headerView.findViewById(R.id.nav_no_image_text);
+
+            tvTitle.setText(user.getName());
+            tvSubtitle.setText(user.getNumber());
+            user.loadImage(this, imageView, textView);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -127,7 +175,6 @@ public class MainActivity extends AppCompatActivity
             doLogout();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
