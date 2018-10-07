@@ -27,6 +27,7 @@ public class User {
     private String lastName;
     private String picture;
     private String course;
+    private int level;
     private String access;
 
     public User(JSONObject json) throws JSONException {
@@ -38,6 +39,7 @@ public class User {
         this.picture = json.getString("user_picture");
         this.access = json.getString("user_access");
         this.course = json.getString("user_course");
+        this.level = json.getInt("user_level");
     }
 
     // getters
@@ -62,8 +64,14 @@ public class User {
     }
 
     public String getName() {
+        return getName(true);
+    }
+
+    public String getName(boolean withMiddleName) {
         String name = firstName + " ";
-        name += middleName != null && middleName.length() > 0 ? middleName + " " : "";
+        if (withMiddleName) {
+            name += middleName != null && middleName.length() > 0 ? middleName + " " : "";
+        }
         name += lastName;
         return name;
     }
@@ -80,23 +88,43 @@ public class User {
         return access;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public String getOrdinalLevel() {
+        int mod100 = level % 100;
+        int mod10 = level % 10;
+        if(mod10 == 1 && mod100 != 11) {
+            return level + "st";
+        } else if(mod10 == 2 && mod100 != 12) {
+            return level + "nd";
+        } else if(mod10 == 3 && mod100 != 13) {
+            return level + "rd";
+        } else {
+            return level + "th";
+        }
+    }
+
     public boolean checkAccess(String access) {
         return this.access.trim().toLowerCase().equals(access.trim().toLowerCase());
     }
 
-    public void loadImage(Context context, ImageView imageView, TextView textView) {
+    public void loadImage(Context context, ImageView imageView, @Nullable TextView textView) {
         loadImage(context, imageView, textView, false);
     }
 
-    public void loadImage(final Context context, final ImageView imageView, final TextView textView, boolean forceDefault) {
+    public void loadImage(final Context context, final ImageView imageView, @Nullable final TextView textView, boolean forceDefault) {
         final boolean hasNoPicture = forceDefault || picture == null || picture.trim().isEmpty();
 
         if (hasNoPicture) {
-            textView.setText(String.valueOf(firstName.toUpperCase().charAt(0)));
+            if (textView != null) {
+                textView.setText(String.valueOf(firstName.toUpperCase().charAt(0)));
+            }
         } else {
             Glide
                 .with(context)
-                .load(UrlsConfig.UPLOADED_IMAGES_URL + access + "/" + picture)
+                .load(UrlsConfig.BASE_URL + picture)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -113,7 +141,9 @@ public class User {
                 .into(imageView);
         }
         imageView.setVisibility(hasNoPicture ? View.GONE : View.VISIBLE);
-        textView.setVisibility(!hasNoPicture ? View.GONE: View.VISIBLE);
+        if (textView != null) {
+            textView.setVisibility(!hasNoPicture ? View.GONE: View.VISIBLE);
+        }
     }
 
     // static

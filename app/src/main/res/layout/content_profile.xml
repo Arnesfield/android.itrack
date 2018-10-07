@@ -8,10 +8,31 @@
     tools:context=".ProfileActivity"
     tools:showIn="@layout/activity_profile">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/profile_name"
+            layout="@layout/component_info_view"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <include
+            android:id="@+id/profile_number"
+            layout="@layout/component_info_view" />
+
+        <View
+            style="@style/Divider"
+            android:layout_marginStart="56dp" />
+
+        <include
+            android:id="@+id/profile_level"
+            layout="@layout/component_info_view" />
+        <include
+            android:id="@+id/profile_course"
+            layout="@layout/component_info_view" />
+    </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

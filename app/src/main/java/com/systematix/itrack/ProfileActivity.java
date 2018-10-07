@@ -6,6 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.systematix.itrack.items.User;
@@ -46,7 +48,47 @@ public class ProfileActivity extends AppCompatActivity {
     private void initContent() {
         try {
             final User user = User.getUserFromSharedPref(this);
-            setTitle(user.getName());
+
+            setTitle(user.getName(false));
+
+            final ImageView ivProfile = findViewById(R.id.profile_iv);
+            final View vName = findViewById(R.id.profile_name);
+            final View vNumber = findViewById(R.id.profile_number);
+            final View vLevel = findViewById(R.id.profile_level);
+            final View vCourse = findViewById(R.id.profile_course);
+
+            final TextView vNameTitle = vName.findViewById(R.id.component_info_title);
+            final TextView vNameSubtitle = vName.findViewById(R.id.component_info_subtitle);
+            final ImageView vNameImage = vName.findViewById(R.id.component_info_image);
+
+            final TextView vNumberTitle = vNumber.findViewById(R.id.component_info_title);
+            final TextView vNumberSubtitle = vNumber.findViewById(R.id.component_info_subtitle);
+
+            final TextView vLevelTitle = vLevel.findViewById(R.id.component_info_title);
+            final TextView vLevelSubtitle = vLevel.findViewById(R.id.component_info_subtitle);
+            final ImageView vLevelImage = vLevel.findViewById(R.id.component_info_image);
+
+            final TextView vCourseTitle = vCourse.findViewById(R.id.component_info_title);
+            final TextView vCourseSubtitle = vCourse.findViewById(R.id.component_info_subtitle);
+            final ImageView vCourseImage = vCourse.findViewById(R.id.component_info_image);
+
+            user.loadImage(this, ivProfile, null);
+
+            vNameTitle.setText(user.getName());
+            vNameSubtitle.setText(R.string.profile_name);
+            vNameImage.setImageResource(R.drawable.ic_id_number);
+
+            vNumberTitle.setText(user.getNumber());
+            vNumberSubtitle.setText(R.string.profile_number);
+
+            vLevelTitle.setText(user.getOrdinalLevel() + " Year");
+            vLevelSubtitle.setText(R.string.profile_level);
+            vLevelImage.setImageResource(R.drawable.ic_year_level);
+
+            vCourseTitle.setText(user.getCourse());
+            vCourseSubtitle.setText(R.string.profile_course);
+            vCourseImage.setImageResource(R.drawable.ic_school);
+
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, R.string.error_profile, Toast.LENGTH_SHORT).show();
