@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.nav_view) NavigationView navigationView;
 
     private static final int[] MENU_ITEM_IDS = new int[]{
-            R.id.nav_camera,
             R.id.nav_gallery
     };
 
@@ -161,8 +160,9 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_profile) {
+            final Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
             doLogout();
+            return true;
         }
 
         drawer.closeDrawer(GravityCompat.START);
