@@ -131,6 +131,8 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
                 txtPasswordContainer.setError(msg);
                 Snackbar.make(btnLogin, msg, Snackbar.LENGTH_LONG).show();
             }
+            // but unload here!
+            doLoading(false);
             return;
         }
 

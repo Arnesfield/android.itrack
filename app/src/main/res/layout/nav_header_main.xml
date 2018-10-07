@@ -26,9 +26,10 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:background="@drawable/drawable_circle"
+        android:fontFamily="monospace"
         android:textAlignment="center"
         android:textSize="20sp"
-        android:text="F" />
+        android:text="M" />
 
     <TextView
         android:id="@+id/nav_title"
