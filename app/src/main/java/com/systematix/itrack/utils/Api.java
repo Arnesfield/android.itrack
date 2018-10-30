@@ -14,14 +14,14 @@ import org.json.JSONObject;
 
 public final class Api {
     private static Api instance;
-    private static OnRespondListener listener;
     private static RequestQueue requestQueue;
 
-    private Context context;
     private int method;
     private String url;
     private String tag;
+    private OnRespondListener listener;
 
+    // implement this interface to activity
     public interface OnRespondListener {
         void onResponse(String tag, JSONObject response) throws JSONException;
         void onErrorResponse(String tag, VolleyError error) throws JSONException;
@@ -42,17 +42,21 @@ public final class Api {
         return api;
     }
 
-    private static Api create(Context context) {
+    private static void setListener(Context context) {
         // check if context is an instance of the listener
         if (context instanceof OnRespondListener) {
-            listener = (OnRespondListener) context;
+            instance.listener = (OnRespondListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement OnRespondListener");
         }
+    }
 
+    private static Api create(Context context) {
         if (instance == null) {
             instance = new Api();
         }
+
+        setListener(context);
 
         if (requestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
@@ -60,7 +64,6 @@ public final class Api {
             requestQueue = Volley.newRequestQueue(context.getApplicationContext());
         }
 
-        instance.setContext(context);
         return instance;
     }
 
@@ -69,10 +72,6 @@ public final class Api {
     }
 
     // instance
-    private void setContext(Context context) {
-        this.context = context;
-    }
-
     private void setMethod(int method) {
         this.method = method;
     }
@@ -87,35 +86,39 @@ public final class Api {
         return this;
     }
 
+    public JsonObjectRequest request() {
+        return request(null);
+    }
+
     public JsonObjectRequest request(JSONObject params) {
         final Api api = this;
 
         final JsonObjectRequest request = new JsonObjectRequest(
-            this.method,
-            this.url,
-            params,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        listener.onResponse(api.tag, response);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        listener.onException(e);
+                this.method,
+                this.url,
+                params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            listener.onResponse(api.tag, response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onException(e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        try {
+                            listener.onErrorResponse(api.tag, error);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onException(e);
+                        }
                     }
                 }
-            },
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    try {
-                        listener.onErrorResponse(api.tag, error);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        listener.onException(e);
-                    }
-                }
-            }
         );
 
         requestQueue.add(request);
