@@ -31,11 +31,16 @@ public final class FragmentHelper {
     }
 
     public void setCurrFragment() {
-        setFragment(currFragment);
+        setFragment(currFragment, false);
     }
 
     public void setFragment(Fragment newFragment) {
-        if (newFragment == null) {
+        setFragment(newFragment, true);
+    }
+
+    public void setFragment(Fragment newFragment, boolean strict) {
+        // do not continue if fragment is the same as current
+        if (newFragment == null || (strict && currFragment.getClass().equals(newFragment.getClass()))) {
             return;
         }
 
