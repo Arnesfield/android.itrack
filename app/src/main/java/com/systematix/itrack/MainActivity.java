@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.systematix.itrack.fragments.NfcFragment;
+import com.systematix.itrack.helpers.FragmentHelper;
 import com.systematix.itrack.helpers.NavDrawerHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
@@ -31,11 +33,21 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
 
+    private FragmentHelper fragmentHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        // create fragmentHelper
+        if (fragmentHelper == null) {
+            // NfcFragment is the default fragment to use!
+            fragmentHelper = new FragmentHelper(this, new NfcFragment(), R.id.main_root_layout, true);
+        }
+        // set whatever the current is
+        fragmentHelper.setCurrFragment();
 
         setSupportActionBar(toolbar);
 

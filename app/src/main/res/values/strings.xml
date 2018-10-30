@@ -41,4 +41,7 @@
     <string name="profile_number">ID Number</string>
     <string name="profile_level">Year Level</string>
     <string name="profile_course">Course</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
