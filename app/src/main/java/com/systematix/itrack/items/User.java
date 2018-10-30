@@ -1,7 +1,6 @@
 package com.systematix.itrack.items;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -13,7 +12,6 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.systematix.itrack.config.PreferencesList;
 import com.systematix.itrack.config.UrlsConfig;
 
 import org.json.JSONException;
@@ -29,8 +27,10 @@ public class User {
     private String course;
     private int level;
     private String access;
+    private JSONObject json;
 
     public User(JSONObject json) throws JSONException {
+        this.json = json;
         this.id = json.getInt("user_id");
         this.firstName = json.getString("user_firstname");
         this.middleName = json.getString("user_middlename");
@@ -43,6 +43,10 @@ public class User {
     }
 
     // getters
+    public JSONObject getJson() {
+        return json;
+    }
+
     public int getId() {
         return id;
     }
@@ -144,16 +148,5 @@ public class User {
         if (textView != null) {
             textView.setVisibility(!hasNoPicture ? View.GONE: View.VISIBLE);
         }
-    }
-
-    // static
-    public static User getUserFromSharedPref(Context context) throws JSONException {
-        final SharedPreferences sharedPreferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
-        final String prefUser = sharedPreferences.getString(PreferencesList.PREF_USER_JSON, null);
-        if (prefUser == null) {
-            return null;
-        }
-        final JSONObject jsonUser = new JSONObject(prefUser);
-        return new User(jsonUser);
     }
 }

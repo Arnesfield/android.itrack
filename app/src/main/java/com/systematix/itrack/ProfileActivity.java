@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 
 import org.json.JSONException;
@@ -47,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void initContent() {
         try {
-            final User user = User.getUserFromSharedPref(this);
+            final User user = Auth.getSavedUser(this);
 
             setTitle(user.getName(false));
 

@@ -1,7 +1,6 @@
 package com.systematix.itrack;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
@@ -12,8 +11,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
-import com.systematix.itrack.config.PreferencesList;
 import com.systematix.itrack.config.UrlsConfig;
+import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.utils.Api;
 
@@ -74,8 +73,7 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
     }
 
     private boolean checkForUser() {
-        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_APP, MODE_PRIVATE);
-        int uid = sharedPreferences.getInt(PreferencesList.PREF_USER_ID, -1);
+        int uid = Auth.getSavedUserId(this);
 
         // if no id set, do nothing
         if (uid == -1) {
@@ -90,13 +88,9 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
     }
 
     private void checkForLogOutMsg() {
-        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_APP, MODE_PRIVATE);
-        boolean didLogOut = sharedPreferences.getBoolean(PreferencesList.PREF_DID_LOG_OUT, false);
-        if (didLogOut) {
+        if (Auth.didLogout(this)) {
             Snackbar.make(btnLogin, R.string.msg_log_out, Snackbar.LENGTH_LONG).show();
         }
-        // remove
-        sharedPreferences.edit().remove(PreferencesList.PREF_DID_LOG_OUT).apply();
     }
 
     private void doLoading(boolean loading) {
@@ -137,18 +131,11 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
         }
 
         // get user
-        JSONObject jsonUser = response.getJSONObject("user");
+        final JSONObject jsonUser = response.getJSONObject("user");
         final User user = new User(jsonUser);
 
         // save user to sharedpref
-        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_APP, MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putInt(PreferencesList.PREF_USER_ID, user.getId());
-        editor.putString(PreferencesList.PREF_USER_JSON, jsonUser.toString());
-        editor.putBoolean(PreferencesList.PREF_DID_LOG_IN, true);
-        editor.apply();
-
+        Auth.saveUser(this, user);
         this.checkForUser();
     }
 

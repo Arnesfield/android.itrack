@@ -1,7 +1,6 @@
 package com.systematix.itrack;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -17,7 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.systematix.itrack.config.PreferencesList;
+import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 
 import org.json.JSONException;
@@ -71,25 +70,13 @@ public class MainActivity extends AppCompatActivity
 
     private void checkForLogInMsg() {
         // if did login, then show snackbar
-        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_APP, MODE_PRIVATE);
-        final boolean didLogin = sharedPreferences.getBoolean(PreferencesList.PREF_DID_LOG_IN, false);
-
-        if (didLogin) {
+        if (Auth.didLogin(this)) {
             Snackbar.make(findViewById(R.id.fab), R.string.msg_log_in, Snackbar.LENGTH_LONG).show();
         }
-        // then remove that prop
-        sharedPreferences.edit().remove(PreferencesList.PREF_DID_LOG_IN).apply();
     }
 
     private void doLogout() {
-        final SharedPreferences sharedPreferences = getSharedPreferences(PreferencesList.PREF_APP, MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.remove(PreferencesList.PREF_USER_ID);
-        editor.remove(PreferencesList.PREF_USER_JSON);
-        editor.remove(PreferencesList.PREF_DID_LOG_IN);
-        editor.putBoolean(PreferencesList.PREF_DID_LOG_OUT, true);
-        editor.apply();
+        Auth.removeSavedUser(this);
 
         final Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
@@ -100,7 +87,7 @@ public class MainActivity extends AppCompatActivity
         final Menu menu = navigationView.getMenu();
         try {
             // get user auth
-            final User user = User.getUserFromSharedPref(this);
+            final User user = Auth.getSavedUser(this);
 
             for (int i = 0; i < MENU_ITEM_IDS.length; i++) {
                 final MenuItem item = menu.findItem(MENU_ITEM_IDS[i]);
