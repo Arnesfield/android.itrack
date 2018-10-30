@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
     public void onErrorResponse(String tag, VolleyError error) {
         doLoading(false);
         Log.e("devtag", "LoginActivity@onErrorResponse");
-        Log.e("devtag", error.getMessage());
+        Log.e("devtag", error.toString());
         Snackbar.make(btnLogin, R.string.error, Snackbar.LENGTH_LONG).show();
     }
 

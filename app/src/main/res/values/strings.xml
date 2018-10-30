@@ -9,6 +9,7 @@
     <string name="logo_desc">iTrack Logo</string>
     <string name="avatar_desc">Avatar</string>
     <string name="icon_desc">Icon</string>
+    <string name="nfc_desc">NFC</string>
 
     <!-- errors -->
     <string name="error">An error occurred.</string>
@@ -25,6 +26,8 @@
     <string name="login_btn_login">Login</string>
 
     <!-- main nav drawer -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_nfc">Scan Student ID</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_logout">Logout</string>
 
@@ -41,6 +44,16 @@
     <string name="profile_number">ID Number</string>
     <string name="profile_level">Year Level</string>
     <string name="profile_course">Course</string>
+
+    <!-- nfc -->
+    <!-- nfc@noPermissionState -->
+    <string name="nfc_no_permission_title">Enable NFC to scan</string>
+    <string name="nfc_no_permission_subtitle">You have to enable NFC in order to scan your student\'s ID.</string>
+    <string name="nfc_no_permission_action">Enable NFC</string>
+
+    <!-- nfc@waitingState -->
+    <string name="nfc_waiting_title">Scan Student ID</string>
+    <string name="nfc_waiting_subtitle">You can now scan your student\'s ID and create a violation.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

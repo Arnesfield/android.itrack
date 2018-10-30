@@ -1,5 +1,6 @@
 package com.systematix.itrack.helpers;
 
+import android.content.res.Resources;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +15,7 @@ public final class FragmentHelper {
 
     // implement this to your fragment!
     public interface TitleableFragment {
-        String getTitle();
+        String getTitle(Resources resources);
     }
 
     public FragmentHelper(
@@ -61,7 +62,7 @@ public final class FragmentHelper {
 
         // set dat title
         if (setActivityTitle) {
-            activity.setTitle(((TitleableFragment) newFragment).getTitle());
+            activity.setTitle(((TitleableFragment) newFragment).getTitle(activity.getResources()));
         }
     }
 

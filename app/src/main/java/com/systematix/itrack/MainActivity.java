@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.systematix.itrack.fragments.NfcFragment;
+import com.systematix.itrack.fragments.StudentFragment;
 import com.systematix.itrack.helpers.FragmentHelper;
 import com.systematix.itrack.helpers.NavDrawerHelper;
 import com.systematix.itrack.items.Auth;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
 
+    private User user;
     private FragmentHelper fragmentHelper;
 
     @Override
@@ -41,10 +44,25 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        // get user auth
+        try {
+            user = Auth.getSavedUser(this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (user == null) {
+            // logout when there is no user :/
+            doLogout();
+            return;
+        }
+
         // create fragmentHelper
         if (fragmentHelper == null) {
-            // NfcFragment is the default fragment to use!
-            fragmentHelper = new FragmentHelper(this, new NfcFragment(), R.id.main_root_layout, true);
+            // NfcFragment is the default fragment for teacher
+            // StudentFragment for student
+            final Fragment fragment = user.checkAccess("teacher") ? new NfcFragment() : new StudentFragment();
+            fragmentHelper = new FragmentHelper(this, fragment, R.id.main_root_layout, true);
         }
         // set whatever the current is
         fragmentHelper.setCurrFragment();
@@ -86,24 +104,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateNavigationView() {
-        try {
-            // get user auth
-            final User user = Auth.getSavedUser(this);
-            if (user == null) {
-                return;
-            }
-
-            // set menu to use!
-            final int navMenu = user.checkAccess("teacher") ? R.menu.menu_main_teacher : R.menu.menu_main_student;
-            // from here, set also the name of user
-            // and the menu, duh
-            NavDrawerHelper.setMenu(navigationView, navMenu);
-            NavDrawerHelper.setHeader(this, navigationView, user);
-            // now, update dat menu!
-            invalidateOptionsMenu();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (user == null) {
+            return;
         }
+
+        // set menu to use!
+        final int navMenu = user.checkAccess("teacher") ? R.menu.menu_main_teacher : R.menu.menu_main_student;
+        // from here, set also the name of user
+        // and the menu, duh
+        NavDrawerHelper.setMenu(navigationView, navMenu);
+        NavDrawerHelper.setHeader(this, navigationView, user);
+        // now, update dat menu!
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -143,7 +155,13 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_profile) {
+        Fragment newFragment = null;
+
+        if (id == R.id.nav_dashboard) {
+            newFragment = new StudentFragment();
+        } else if (id == R.id.nav_nfc) {
+            newFragment = new NfcFragment();
+        } else if (id == R.id.nav_profile) {
             final Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
@@ -158,6 +176,9 @@ public class MainActivity extends AppCompatActivity
             doLogout();
             return true;
         }
+
+        // set fragment
+        fragmentHelper.setFragment(newFragment);
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
