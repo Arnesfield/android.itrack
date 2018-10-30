@@ -13,9 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.systematix.itrack.helpers.NavHeaderHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 
@@ -32,14 +31,8 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
 
-    private static final int[] MENU_ITEM_IDS = new int[]{
-            R.id.nav_gallery
-    };
-
-    private static final String[] MENU_ITEM_AUTH = new String[]{
-            "teacher",
-            "student"
-    };
+    // menu to choose :)
+    private int navMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +41,9 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+
+        // set navMenu
+        navMenu = R.menu.menu_main_student;
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,27 +80,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateNavigationView() {
-        final Menu menu = navigationView.getMenu();
         try {
             // get user auth
             final User user = Auth.getSavedUser(this);
-
-            for (int i = 0; i < MENU_ITEM_IDS.length; i++) {
-                final MenuItem item = menu.findItem(MENU_ITEM_IDS[i]);
-                // depending on user access, reveal the menu item
-                item.setVisible(user.checkAccess(MENU_ITEM_AUTH[i]));
+            if (user == null) {
+                return;
             }
 
+            // set menu to use!
+            navMenu = user.checkAccess("teacher") ? R.menu.menu_main_teacher : R.menu.menu_main_student;
             // from here, set also the name of user
-            final View headerView = navigationView.getHeaderView(0);
-            final TextView tvTitle = headerView.findViewById(R.id.nav_title);
-            final TextView tvSubtitle = headerView.findViewById(R.id.nav_subtitle);
-            final ImageView imageView = headerView.findViewById(R.id.nav_image_view);
-            final TextView textView = headerView.findViewById(R.id.nav_no_image_text);
-
-            tvTitle.setText(user.getName());
-            tvSubtitle.setText(user.getNumber());
-            user.loadImage(this, imageView, textView);
+            NavHeaderHelper.setHeader(this, navigationView, user);
+            // now, update dat menu!
+            invalidateOptionsMenu();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -122,7 +110,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(navMenu, menu);
         return true;
     }
 

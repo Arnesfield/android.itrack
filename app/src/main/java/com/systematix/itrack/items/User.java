@@ -12,7 +12,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.systematix.itrack.config.UrlsConfig;
+import com.systematix.itrack.config.UrlsList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -128,7 +128,7 @@ public class User {
         } else {
             Glide
                 .with(context)
-                .load(UrlsConfig.BASE_URL + picture)
+                .load(UrlsList.BASE_URL + picture)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {

@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
-import com.systematix.itrack.config.UrlsConfig;
+import com.systematix.itrack.config.UrlsList;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.utils.Api;
@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
 
                     Api.post(view.getContext())
                         .setTag("login")
-                        .setUrl(UrlsConfig.LOGIN_URL)
+                        .setUrl(UrlsList.LOGIN_URL)
                         .request(params);
                 } catch (JSONException e) {
                     Snackbar.make(view, R.string.error, Snackbar.LENGTH_SHORT).show();
