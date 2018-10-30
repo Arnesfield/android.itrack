@@ -1,6 +1,7 @@
 package com.systematix.itrack.fragments;
 
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ public class NfcFragment extends Fragment
     private FrameLayout rootView;
     private View vWaiting;
     private View vNoPermission;
+    private View currView;
 
     public NfcFragment() {
         // Required empty public constructor
@@ -45,21 +47,42 @@ public class NfcFragment extends Fragment
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateView();
+    }
+
     private void updateView() {
-        // clear all views first
-        rootView.removeAllViews();
+        View currView;
         if (nfc.isEnabled()) {
-            rootView.addView(vWaiting);
-            Toast.makeText(getContext(), "NFC enabled!", Toast.LENGTH_SHORT).show();
+            currView = vWaiting;
+            // if these are different, then show dat toast!
+            if (this.currView != currView) {
+                Toast.makeText(getContext(), "NFC enabled!", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            rootView.addView(vNoPermission);
+            currView = vNoPermission;
+        }
+
+        // if this.currView is different from local currView,
+        // then remove all da views and set
+        if (this.currView != currView) {
+            this.currView = currView;
+            rootView.removeAllViews();
+            rootView.addView(currView);
         }
     }
 
     // NfcNoPermissionStateModel
     @Override
-    public void askPermission() {
-        Toast.makeText(getContext(), "Pretty please :?", Toast.LENGTH_LONG).show();
+    public void noPermissionStateUpdateView() {
+        updateView();
+    }
+
+    @Override
+    public Activity noPermissionStateGetActivity() {
+        return getActivity();
     }
 
     // TitleableFragment

@@ -2,6 +2,7 @@ package com.systematix.itrack;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -15,12 +16,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.systematix.itrack.config.RequestCodesList;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.StudentFragment;
 import com.systematix.itrack.helpers.FragmentHelper;
 import com.systematix.itrack.helpers.NavDrawerHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
+import com.systematix.itrack.models.NfcNoPermissionStateModel;
 
 import org.json.JSONException;
 
@@ -116,6 +119,15 @@ public class MainActivity extends AppCompatActivity
         NavDrawerHelper.setHeader(this, navigationView, user);
         // now, update dat menu!
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case RequestCodesList.NFC:
+                NfcNoPermissionStateModel.onRequestPermissionsResult(this, permissions, grantResults);
+                break;
+        }
     }
 
     @Override
