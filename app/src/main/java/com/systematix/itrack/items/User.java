@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.systematix.itrack.config.UrlsList;
+import com.systematix.itrack.helpers.JSONObjectHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,13 +34,13 @@ public class User {
         this.json = json;
         this.id = json.getInt("user_id");
         this.firstName = json.getString("user_firstname");
-        this.middleName = json.getString("user_middlename");
+        this.middleName = JSONObjectHelper.optString(json, "user_middlename");
         this.lastName = json.getString("user_lastname");
-        this.number = json.getString("user_number");
-        this.picture = json.getString("user_picture");
+        this.number = JSONObjectHelper.optString(json, "user_number");
+        this.picture = JSONObjectHelper.optString(json, "user_picture");
         this.access = json.getString("user_access");
-        this.course = json.getString("user_course");
-        this.level = json.getInt("user_level");
+        this.course = JSONObjectHelper.optString(json, "user_course");
+        this.level = json.optInt("user_level", -1);
     }
 
     // getters
@@ -92,11 +93,15 @@ public class User {
         return access;
     }
 
-    public int getLevel() {
-        return level;
+    public String getLevel() {
+        return level > 0 ? String.valueOf(level) : null;
     }
 
     public String getOrdinalLevel() {
+        if (level < 1) {
+            return null;
+        }
+
         int mod100 = level % 100;
         int mod10 = level % 10;
         if(mod10 == 1 && mod100 != 11) {

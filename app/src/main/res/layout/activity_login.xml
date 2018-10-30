@@ -119,10 +119,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/login_txt_username_hint"
-                            android:inputType="text"
+                            android:inputType="number|numberSigned"
                             android:singleLine="true"
-                            android:textColorLink="@android:color/white"
-                            android:textColor="@android:color/white" />
+                            android:textColor="@android:color/white"
+                            android:textColorLink="@android:color/white" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout

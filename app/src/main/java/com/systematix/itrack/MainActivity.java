@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.systematix.itrack.helpers.NavHeaderHelper;
+import com.systematix.itrack.helpers.NavDrawerHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 
@@ -31,9 +31,6 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
 
-    // menu to choose :)
-    private int navMenu;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +38,6 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-
-        // set navMenu
-        navMenu = R.menu.menu_main_student;
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,9 +82,11 @@ public class MainActivity extends AppCompatActivity
             }
 
             // set menu to use!
-            navMenu = user.checkAccess("teacher") ? R.menu.menu_main_teacher : R.menu.menu_main_student;
+            final int navMenu = user.checkAccess("teacher") ? R.menu.menu_main_teacher : R.menu.menu_main_student;
             // from here, set also the name of user
-            NavHeaderHelper.setHeader(this, navigationView, user);
+            // and the menu, duh
+            NavDrawerHelper.setMenu(navigationView, navMenu);
+            NavDrawerHelper.setHeader(this, navigationView, user);
             // now, update dat menu!
             invalidateOptionsMenu();
         } catch (JSONException e) {
@@ -110,7 +106,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(navMenu, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 

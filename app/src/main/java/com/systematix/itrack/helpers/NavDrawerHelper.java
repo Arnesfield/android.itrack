@@ -1,6 +1,7 @@
 package com.systematix.itrack.helpers;
 
 import android.content.Context;
+import android.support.annotation.MenuRes;
 import android.support.design.widget.NavigationView;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,7 +10,7 @@ import android.widget.TextView;
 import com.systematix.itrack.R;
 import com.systematix.itrack.items.User;
 
-public final class NavHeaderHelper {
+public final class NavDrawerHelper {
     public static void setHeader(Context context, NavigationView navigationView, User user) {
         // from here, set also the name of user
         final View headerView = navigationView.getHeaderView(0);
@@ -21,5 +22,10 @@ public final class NavHeaderHelper {
         tvTitle.setText(user.getName());
         tvSubtitle.setText(user.getNumber());
         user.loadImage(context, imageView, textView);
+    }
+
+    public static void setMenu(NavigationView navigationView, @MenuRes int menu) {
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(menu);
     }
 }

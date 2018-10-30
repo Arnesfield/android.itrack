@@ -39,11 +39,15 @@ public class ProfileActivity extends AppCompatActivity {
         try {
             final User user = Auth.getSavedUser(this);
 
+            final boolean hasNoLevel = user.getLevel() == null;
+            final boolean hasNoCourse = user.getCourse() == null;
+
             setTitle(user.getName(false));
 
             final ImageView ivProfile = findViewById(R.id.profile_iv);
             final View vName = findViewById(R.id.profile_name);
             final View vNumber = findViewById(R.id.profile_number);
+            final View divider = findViewById(R.id.profile_divider);
             final View vLevel = findViewById(R.id.profile_level);
             final View vCourse = findViewById(R.id.profile_course);
 
@@ -71,13 +75,21 @@ public class ProfileActivity extends AppCompatActivity {
             vNumberTitle.setText(user.getNumber());
             vNumberSubtitle.setText(R.string.profile_number);
 
-            vLevelTitle.setText(user.getOrdinalLevel() + " Year");
-            vLevelSubtitle.setText(R.string.profile_level);
-            vLevelImage.setImageResource(R.drawable.ic_year_level);
+            divider.setVisibility(hasNoLevel && hasNoCourse ? View.GONE : View.VISIBLE);
 
-            vCourseTitle.setText(user.getCourse());
-            vCourseSubtitle.setText(R.string.profile_course);
-            vCourseImage.setImageResource(R.drawable.ic_school);
+            vLevel.setVisibility(hasNoLevel ? View.GONE : View.VISIBLE);
+            if (!hasNoLevel) {
+                vLevelTitle.setText(user.getOrdinalLevel() + " Year");
+                vLevelSubtitle.setText(R.string.profile_level);
+                vLevelImage.setImageResource(R.drawable.ic_year_level);
+            }
+
+            vCourse.setVisibility(hasNoCourse ? View.GONE : View.VISIBLE);
+            if (!hasNoCourse) {
+                vCourseTitle.setText(user.getCourse());
+                vCourseSubtitle.setText(R.string.profile_course);
+                vCourseImage.setImageResource(R.drawable.ic_school);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

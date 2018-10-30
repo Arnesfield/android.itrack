@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -142,12 +143,16 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
     @Override
     public void onErrorResponse(String tag, VolleyError error) {
         doLoading(false);
+        Log.e("devtag", "LoginActivity@onErrorResponse");
+        Log.e("devtag", error.getMessage());
         Snackbar.make(btnLogin, R.string.error, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void onException(JSONException e) {
         doLoading(false);
+        Log.e("devtag", "LoginActivity@onException");
+        Log.e("devtag", e.getMessage());
         Snackbar.make(btnLogin, R.string.error, Snackbar.LENGTH_LONG).show();
     }
 }
