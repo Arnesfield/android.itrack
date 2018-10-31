@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.systematix.itrack.R;
 import com.systematix.itrack.helpers.FragmentHelper;
+import com.systematix.itrack.helpers.ViewSwitcherHelper;
 import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
 
@@ -28,7 +29,7 @@ public class NfcFragment extends Fragment
     private FrameLayout rootView;
     private View vEnabled;
     private View vNoPermission;
-    private View currView;
+    private ViewSwitcherHelper viewSwitcher;
 
     public NfcFragment() {
         // Required empty public constructor
@@ -42,6 +43,7 @@ public class NfcFragment extends Fragment
         vEnabled = inflater.inflate(R.layout.nfc_enabled_state, container, false);
         vNoPermission = inflater.inflate(R.layout.nfc_no_permission_state, container, false);
         nfc = NfcAdapter.getDefaultAdapter(getContext());
+        viewSwitcher = new ViewSwitcherHelper(rootView, null);
 
         NfcEnabledStateModel.init(getContext(), nfc);
         NfcNoPermissionStateModel.init(this, vNoPermission);
@@ -67,25 +69,16 @@ public class NfcFragment extends Fragment
     }
 
     private void updateView() {
-        View currView;
-        if (nfc.isEnabled()) {
-            currView = vEnabled;
-            // if these are different, then show dat toast!
-            if (this.currView != currView) {
-                Toast.makeText(getContext(), "NFC enabled!", Toast.LENGTH_SHORT).show();
-                NfcEnabledStateModel.onResume(getActivity());
-            }
-        } else {
-            currView = vNoPermission;
+        final boolean isNfcEnabled = nfc.isEnabled();
+        final View newView = isNfcEnabled ? vEnabled : vNoPermission;
+
+        // if these are different, then show dat toast!
+        if (isNfcEnabled && viewSwitcher.isNotCurrent(newView)) {
+            Toast.makeText(getContext(), R.string.msg_nfc_enabled, Toast.LENGTH_SHORT).show();
+            NfcEnabledStateModel.onResume(getActivity());
         }
 
-        // if this.currView is different from local currView,
-        // then remove all da views and set
-        if (this.currView != currView) {
-            this.currView = currView;
-            rootView.removeAllViews();
-            rootView.addView(currView);
-        }
+        viewSwitcher.switchTo(newView);
     }
 
     // NfcNoPermissionStateModel

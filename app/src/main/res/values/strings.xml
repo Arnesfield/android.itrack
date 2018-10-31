@@ -21,9 +21,10 @@
     <string name="error_profile">Unable to load your profile.</string>
     <string name="error_no_serial">There was no serial detected.</string>
 
-    <!-- msgs -->
+    <!-- messages -->
     <string name="msg_log_in">Logged in successfully.</string>
     <string name="msg_log_out">Logged out successfully.</string>
+    <string name="msg_nfc_enabled">NFC enabled!</string>
 
     <!-- login -->
     <string name="login_txt_username_hint">Username</string>
