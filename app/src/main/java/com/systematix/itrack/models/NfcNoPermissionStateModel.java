@@ -51,13 +51,13 @@ public final class NfcNoPermissionStateModel {
             return;
         }
 
-        if (timer == null) {
-            // create new timer
-            timer = new Timer(true);
-        } else {
+        if (timer != null) {
             // stop timer
             stopTimer();
         }
+
+        // create new timer
+        timer = new Timer(true);
 
         // call this every 3 seconds to check for nfc looooll
         final Runnable runnable = new Runnable() {
