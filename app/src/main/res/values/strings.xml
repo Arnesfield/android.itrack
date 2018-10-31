@@ -20,6 +20,7 @@
     <string name="error_frown">An error occurred :(</string>
     <string name="error_profile">Unable to load your profile.</string>
     <string name="error_no_serial">There was no serial detected.</string>
+    <string name="error_cannot_load_user">Unable to load user information.</string>
 
     <!-- messages -->
     <string name="msg_log_in">Logged in successfully.</string>
@@ -44,11 +45,12 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <!-- profile -->
-    <string name="profile_name">Full Name</string>
-    <string name="profile_number">ID Number</string>
-    <string name="profile_level">Year Level</string>
-    <string name="profile_course">Course</string>
+    <!-- user info -->
+    <string name="user_info_name">Full Name</string>
+    <string name="user_info_number">ID Number</string>
+    <string name="user_info_level">Year Level</string>
+    <string name="user_info_level_number">%1$s Year</string>
+    <string name="user_info_course">Course</string>
 
     <!-- nfc -->
     <!-- nfc@noPermissionState -->
@@ -59,6 +61,12 @@
     <!-- nfc@enabledState -->
     <string name="nfc_enabled_title">Scan Student ID</string>
     <string name="nfc_enabled_subtitle">You can now scan your student\'s ID and create a violation.</string>
+
+    <!-- make report -->
+    <string name="make_report_action">Report Student</string>
+    <!-- nfc@noUserState -->
+    <string name="make_report_no_user_title">Cannot load student :(</string>
+    <string name="make_report_no_user_subtitle">You can still send this report now and it will be sent later.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
