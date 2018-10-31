@@ -11,8 +11,12 @@
     <style name="AppTheme.Login">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorControlNormal">@color/colorControlNormal</item>
+        <item name="colorControlNormal">@android:color/white</item>
         <item name="colorAccent">@android:color/white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

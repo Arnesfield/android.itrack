@@ -5,6 +5,5 @@
     <color name="colorPrimaryDark">#007100</color>
     <color name="colorAccent">#FFDF00</color>
 
-    <color name="colorControlNormal">#FFFFFF</color>
     <color name="colorBackground">#FAFAFA</color>
 </resources>

@@ -6,12 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.util.Log;
-import android.widget.Toast;
 
 public final class NfcEnabledStateModel {
     private NfcAdapter nfc;
     private PendingIntent pendingIntent;
     private static NfcEnabledStateModel model;
+
+    public interface OnDiscoveredListener {
+        void onDiscovered(String serial);
+    }
 
     private NfcEnabledStateModel(NfcAdapter nfc, PendingIntent pendingIntent) {
         this.nfc = nfc;
@@ -49,6 +52,11 @@ public final class NfcEnabledStateModel {
     }
 
     public static void onNewIntent(Activity activity, Intent intent) {
+        // activity should implement OnDiscoveredListener
+        if (!(activity instanceof OnDiscoveredListener)) {
+            throw new RuntimeException(activity.toString() + " must implement OnDiscoveredListener");
+        }
+
         activity.setIntent(intent);
         final String action = intent.getAction();
         Log.d("devtag", "enabledState@onNewIntent");
@@ -64,10 +72,11 @@ public final class NfcEnabledStateModel {
                 }
                 hex.append(x);
             }
-            final String hexStr = hex.toString().toUpperCase();
-            
-            Log.d("devtag", hexStr);
-            Toast.makeText(activity, hexStr, Toast.LENGTH_LONG).show();
+            final String serial = hex.toString().toUpperCase();
+
+            Log.d("devtag", serial);
+            // with serial, go to another activity
+            ((OnDiscoveredListener) activity).onDiscovered(serial);
         }
     }
 }

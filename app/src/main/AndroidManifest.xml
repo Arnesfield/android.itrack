@@ -6,7 +6,9 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -36,6 +38,10 @@
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MakeReportActivity"
+            android:label="@string/title_activity_make_report"
+            android:theme="@style/AppTheme.NoActionBar.DarkStatusBar" />
     </application>
 
 </manifest>

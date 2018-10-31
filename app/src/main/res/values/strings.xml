@@ -4,6 +4,10 @@
     <string name="loading_text">Loading…</string>
     <string name="copyright_text">© Systematix 2018</string>
 
+    <!-- activity titles -->
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_make_report">Report Student</string>
+
     <!-- desc -->
     <string name="background_desc">Background</string>
     <string name="logo_desc">iTrack Logo</string>
@@ -15,6 +19,7 @@
     <string name="error">An error occurred.</string>
     <string name="error_frown">An error occurred :(</string>
     <string name="error_profile">Unable to load your profile.</string>
+    <string name="error_no_serial">There was no serial detected.</string>
 
     <!-- msgs -->
     <string name="msg_log_in">Logged in successfully.</string>
@@ -39,7 +44,6 @@
     <string name="action_settings">Settings</string>
 
     <!-- profile -->
-    <string name="title_activity_profile">Profile</string>
     <string name="profile_name">Full Name</string>
     <string name="profile_number">ID Number</string>
     <string name="profile_level">Year Level</string>
