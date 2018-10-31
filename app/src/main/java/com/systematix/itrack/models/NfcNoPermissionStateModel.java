@@ -20,6 +20,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public final class NfcNoPermissionStateModel {
+    private static Model model;
+    private static Timer timer;
 
     public interface Model {
         void noPermissionStateUpdateView();
@@ -27,14 +29,35 @@ public final class NfcNoPermissionStateModel {
     }
 
     public static void init(final Model model, View view) {
+        NfcNoPermissionStateModel.model = model;
         final Button btn = view.findViewById(R.id.nfc_no_permission_btn);
-
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                askPermission(model);
+                askPermission();
             }
         });
+    }
+
+    public static void stopTimer() {
+        if (timer != null) {
+            timer.cancel();
+        }
+    }
+
+    public static void startTimer() {
+        if (model == null) {
+            stopTimer();
+            return;
+        }
+
+        if (timer == null) {
+            // create new timer
+            timer = new Timer(true);
+        } else {
+            // stop timer
+            stopTimer();
+        }
 
         // call this every 3 seconds to check for nfc looooll
         final Runnable runnable = new Runnable() {
@@ -44,7 +67,6 @@ public final class NfcNoPermissionStateModel {
             }
         };
 
-        final Timer timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -66,7 +88,11 @@ public final class NfcNoPermissionStateModel {
         }
     }
 
-    private static void askPermission(Model model) {
+    private static void askPermission() {
+        if (model == null) {
+            return;
+        }
+
         final Activity activity = model.noPermissionStateGetActivity();
         if (activity == null) {
             return;

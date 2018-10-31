@@ -23,6 +23,7 @@ import com.systematix.itrack.helpers.FragmentHelper;
 import com.systematix.itrack.helpers.NavDrawerHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
+import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
 
 import org.json.JSONException;
@@ -119,6 +120,23 @@ public class MainActivity extends AppCompatActivity
         NavDrawerHelper.setHeader(this, navigationView, user);
         // now, update dat menu!
         invalidateOptionsMenu();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NfcEnabledStateModel.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NfcEnabledStateModel.onPause(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        NfcEnabledStateModel.onNewIntent(this, intent);
     }
 
     @Override
