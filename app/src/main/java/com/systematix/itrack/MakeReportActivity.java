@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -42,8 +43,6 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
             finish();
             return;
         }
-        //! test
-        Toast.makeText(this, serial, Toast.LENGTH_LONG).show();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -71,7 +70,7 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
         final JSONObject params = new JSONObject();
         try {
             params.put("serial", serial);
-            Api.get(this).setUrl(UrlsList.GET_USER_URL).request(params);
+            Api.post(this).setUrl(UrlsList.GET_USER_URL).request(params);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -106,6 +105,8 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
         }
 
         // set the user
+        final ImageView ivUser = findViewById(R.id.make_report_user_iv);
+        user.loadImage(this, ivUser, null);
         UserInfoViewHelper.init(this, user);
     }
 
