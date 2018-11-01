@@ -187,23 +187,25 @@ public class User implements DbEntity {
                 textView.setText(String.valueOf(firstName.toUpperCase().charAt(0)));
             }
         } else {
-            Glide
-                .with(context)
-                .load(UrlsList.BASE_URL + picture)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        // if load failed, force default
-                        User.this.loadImage(context, imageView, textView, true);
-                        return false;
-                    }
+            try {
+                Glide.with(context).load(UrlsList.BASE_URL + picture)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            // if load failed, force default
+                            User.this.loadImage(context, imageView, textView, true);
+                            return false;
+                        }
 
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        return false;
-                    }
-                })
-                .into(imageView);
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into(imageView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         imageView.setVisibility(hasNoPicture ? View.GONE : View.VISIBLE);
         if (textView != null) {

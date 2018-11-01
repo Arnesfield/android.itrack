@@ -7,10 +7,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.systematix.itrack.helpers.ViewHelper;
 import com.systematix.itrack.helpers.UserInfoViewHelper;
 import com.systematix.itrack.helpers.ViewSwitcherHelper;
 import com.systematix.itrack.items.Auth;
@@ -38,10 +38,9 @@ public class ProfileActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        final ViewGroup rootView = findViewById(R.id.profile_root_layout);
-        vLoading = getLayoutInflater().inflate(R.layout.loading_layout, rootView, false);
+        vLoading = ViewHelper.getLoadingView(this, R.id.profile_root_layout);
         vUserInfo = findViewById(R.id.profile_user_info);
-        viewSwitcher = new ViewSwitcherHelper(rootView, null);
+        viewSwitcher = new ViewSwitcherHelper(this, R.id.profile_root_layout);
 
         getUserThenInitContent();
     }
@@ -58,6 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
             @Override
             public void finish(final User result) {
+                // TODO: remove handler
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

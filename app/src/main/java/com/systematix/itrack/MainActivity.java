@@ -2,6 +2,7 @@ package com.systematix.itrack;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -15,12 +16,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.systematix.itrack.config.RequestCodesList;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.StudentFragment;
 import com.systematix.itrack.helpers.FragmentHelper;
+import com.systematix.itrack.helpers.ViewHelper;
 import com.systematix.itrack.helpers.NavDrawerHelper;
 import com.systematix.itrack.helpers.ViewSwitcherHelper;
 import com.systematix.itrack.items.Auth;
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity
 
     private User user;
     private FragmentHelper fragmentHelper;
-    private View vLoading;
     private ViewSwitcherHelper viewSwitcher;
 
     @Override
@@ -52,16 +52,21 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         // make sure to do loading screen first hehehe
-        final ViewGroup rootView = findViewById(R.id.main_root_layout);
-        vLoading = getLayoutInflater().inflate(R.layout.loading_layout, rootView, false);
-        viewSwitcher = new ViewSwitcherHelper(rootView, vLoading);
+        final View vLoading = ViewHelper.getLoadingView(this, R.id.main_root_layout);
+        viewSwitcher = new ViewSwitcherHelper(this, R.id.main_root_layout, vLoading);
 
         // get user auth
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
             @Override
-            public void finish(User result) {
-                user = result;
-                initContent();
+            public void finish(final User result) {
+                // TODO: remove handlers lol
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        user = result;
+                        initContent();
+                    }
+                }, 5000);
             }
         });
     }
@@ -74,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // switch to actual content
-        viewSwitcher.switchTo(null);
+        viewSwitcher.clear();
 
         // create fragmentHelper
         if (fragmentHelper == null) {

@@ -60,13 +60,17 @@ public final class FragmentHelper {
             transaction.replace(res, newFragment);
         }
 
-        transaction.commit();
+        try {
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // new then becomes the current! :)
         currFragment = newFragment;
 
         // set dat title
-        if (setActivityTitle) {
+        if (setActivityTitle && activity != null) {
             activity.setTitle(((TitleableFragment) newFragment).getTitle(activity.getResources()));
         }
     }

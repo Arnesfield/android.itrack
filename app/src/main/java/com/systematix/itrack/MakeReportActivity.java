@@ -1,6 +1,7 @@
 package com.systematix.itrack;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +28,6 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
 
     private String serial;
     private User user;
-    private ViewGroup rootView;
     private View vLoading;
     private View vMakeReport;
     private View vUserInfo;
@@ -55,7 +55,7 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
 
         final LayoutInflater inflater = getLayoutInflater();
 
-        rootView = findViewById(R.id.make_report_root_layout);
+        final ViewGroup rootView = findViewById(R.id.make_report_root_layout);
         vLoading = inflater.inflate(R.layout.loading_layout, rootView, false);
         vMakeReport = inflater.inflate(R.layout.make_report_view, rootView, false);
         vUserInfoSwitcher = vMakeReport.findViewById(R.id.make_report_user_info_switcher);
@@ -72,7 +72,7 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
         });
 
         // set stuff
-        viewSwitcher = new ViewSwitcherHelper(rootView, null);
+        viewSwitcher = new ViewSwitcherHelper(rootView);
         request();
     }
 
@@ -83,7 +83,13 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
         final JSONObject params = new JSONObject();
         try {
             params.put("serial", serial);
-            Api.post(this).setUrl(UrlsList.GET_USER_URL).request(params);
+            // TODO: remove handler
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Api.post(MakeReportActivity.this).setUrl(UrlsList.GET_USER_URL).request(params);
+                }
+            }, 5000);
         } catch (JSONException e) {
             e.printStackTrace();
         }

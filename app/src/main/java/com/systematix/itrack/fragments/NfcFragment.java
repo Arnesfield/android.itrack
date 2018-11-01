@@ -26,7 +26,6 @@ public class NfcFragment extends Fragment
         implements FragmentHelper.TitleableFragment, NfcNoPermissionStateModel.Model {
 
     private NfcAdapter nfc;
-    private FrameLayout rootView;
     private View vEnabled;
     private View vNoPermission;
     private ViewSwitcherHelper viewSwitcher;
@@ -39,17 +38,15 @@ public class NfcFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = (FrameLayout) inflater.inflate(R.layout.fragment_nfc, container, false);
+        final FrameLayout rootView = (FrameLayout) inflater.inflate(R.layout.fragment_nfc, container, false);
         vEnabled = inflater.inflate(R.layout.nfc_enabled_state, container, false);
         vNoPermission = inflater.inflate(R.layout.nfc_no_permission_state, container, false);
         nfc = NfcAdapter.getDefaultAdapter(getContext());
-        viewSwitcher = new ViewSwitcherHelper(rootView, null);
+        viewSwitcher = new ViewSwitcherHelper(rootView);
 
         NfcEnabledStateModel.init(getContext(), nfc);
         NfcNoPermissionStateModel.init(this, vNoPermission);
 
-        // this is called in onResume
-        // updateView();
         return rootView;
     }
 
