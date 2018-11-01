@@ -72,8 +72,8 @@
     <string name="nfc_enabled_subtitle">You can now scan your student\'s ID and create a violation.</string>
 
     <!-- make report -->
-    <string name="make_report_action">Report Student</string>
-    <string name="make_report_action_anyway">Report Anyway</string>
+    <string name="make_report_action">Make Report</string>
+    <string name="make_report_action_anyway">Make Report Anyway</string>
     <!-- nfc@noUserState -->
     <string name="make_report_no_user_title">Cannot load student :(</string>
     <string name="make_report_no_user_subtitle">You can still send this report now and it will be sent later.</string>

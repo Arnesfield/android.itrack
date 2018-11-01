@@ -33,7 +33,8 @@
                     android:id="@+id/make_report_user_iv"
                     android:contentDescription="@string/avatar_desc"
                     android:layout_width="match_parent"
-                    android:layout_height="320dp"
+                    android:layout_height="280dp"
+                    android:background="@color/colorPrimary"
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop" />
 

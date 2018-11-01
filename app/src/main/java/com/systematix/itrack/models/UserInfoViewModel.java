@@ -14,7 +14,7 @@ public final class UserInfoViewModel {
 
         final View vName = userView.findViewById(R.id.user_info_name);
         final View vNumber = userView.findViewById(R.id.user_info_number);
-        final View divider = userView.findViewById(R.id.user_info_divider);
+        // final View divider = userView.findViewById(R.id.user_info_divider);
         final View vLevel = userView.findViewById(R.id.user_info_level);
         final View vCourse = userView.findViewById(R.id.user_info_course);
 
@@ -24,6 +24,7 @@ public final class UserInfoViewModel {
 
         final TextView vNumberTitle = vNumber.findViewById(R.id.component_info_title);
         final TextView vNumberSubtitle = vNumber.findViewById(R.id.component_info_subtitle);
+        final ImageView vNumberImage = vNumber.findViewById(R.id.component_info_image);
 
         final TextView vLevelTitle = vLevel.findViewById(R.id.component_info_title);
         final TextView vLevelSubtitle = vLevel.findViewById(R.id.component_info_subtitle);
@@ -39,8 +40,9 @@ public final class UserInfoViewModel {
 
         vNumberTitle.setText(user.getNumber());
         vNumberSubtitle.setText(R.string.user_info_number);
+        vNumberImage.setImageResource(R.drawable.ic_account_box);
 
-        divider.setVisibility(hasNoLevel && hasNoCourse ? View.GONE : View.VISIBLE);
+        // divider.setVisibility(hasNoLevel && hasNoCourse ? View.GONE : View.VISIBLE);
 
         vLevel.setVisibility(hasNoLevel ? View.GONE : View.VISIBLE);
         if (!hasNoLevel) {

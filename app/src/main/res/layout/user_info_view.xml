@@ -13,12 +13,6 @@
     <include
         android:id="@+id/user_info_number"
         layout="@layout/component_info_view" />
-
-    <View
-        style="@style/Divider"
-        android:id="@+id/user_info_divider"
-        android:layout_marginStart="56dp" />
-
     <include
         android:id="@+id/user_info_level"
         layout="@layout/component_info_view" />

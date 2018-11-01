@@ -65,4 +65,10 @@ public class IncidentReportActivity extends AppCompatActivity {
             }
         }, finishListener).execute();
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        super.onBackPressed();
+        return true;
+    }
 }
