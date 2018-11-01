@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.systematix.itrack.helpers.ViewHelper;
-import com.systematix.itrack.helpers.UserInfoViewHelper;
+import com.systematix.itrack.models.UserInfoViewModel;
 import com.systematix.itrack.helpers.ViewSwitcherHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
@@ -86,6 +86,6 @@ public class ProfileActivity extends AppCompatActivity {
         user.loadImage(this, ivProfile, null);
 
         // set user stuff
-        UserInfoViewHelper.init(this, user);
+        UserInfoViewModel.init(findViewById(R.id.profile_user_info), user);
     }
 }

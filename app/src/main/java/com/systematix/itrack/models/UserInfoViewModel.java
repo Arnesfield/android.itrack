@@ -1,6 +1,5 @@
-package com.systematix.itrack.helpers;
+package com.systematix.itrack.models;
 
-import android.app.Activity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -8,16 +7,16 @@ import android.widget.TextView;
 import com.systematix.itrack.R;
 import com.systematix.itrack.items.User;
 
-public final class UserInfoViewHelper {
-    public static void init(Activity activity, final User user) {
+public final class UserInfoViewModel {
+    public static void init(View userView, final User user) {
         final boolean hasNoLevel = user.getLevelStr() == null;
         final boolean hasNoCourse = user.getCourse() == null;
 
-        final View vName = activity.findViewById(R.id.user_info_name);
-        final View vNumber = activity.findViewById(R.id.user_info_number);
-        final View divider = activity.findViewById(R.id.user_info_divider);
-        final View vLevel = activity.findViewById(R.id.user_info_level);
-        final View vCourse = activity.findViewById(R.id.user_info_course);
+        final View vName = userView.findViewById(R.id.user_info_name);
+        final View vNumber = userView.findViewById(R.id.user_info_number);
+        final View divider = userView.findViewById(R.id.user_info_divider);
+        final View vLevel = userView.findViewById(R.id.user_info_level);
+        final View vCourse = userView.findViewById(R.id.user_info_course);
 
         final TextView vNameTitle = vName.findViewById(R.id.component_info_title);
         final TextView vNameSubtitle = vName.findViewById(R.id.component_info_subtitle);
@@ -45,7 +44,7 @@ public final class UserInfoViewHelper {
 
         vLevel.setVisibility(hasNoLevel ? View.GONE : View.VISIBLE);
         if (!hasNoLevel) {
-            vLevelTitle.setText(activity.getString(R.string.user_info_level_number, user.getOrdinalLevel()));
+            vLevelTitle.setText(userView.getResources().getString(R.string.user_info_level_number, user.getOrdinalLevel()));
             vLevelSubtitle.setText(R.string.user_info_level);
             vLevelImage.setImageResource(R.drawable.ic_year_level);
         }

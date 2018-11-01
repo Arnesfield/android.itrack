@@ -22,7 +22,7 @@ import com.systematix.itrack.config.RequestCodesList;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.StudentFragment;
 import com.systematix.itrack.helpers.FragmentHelper;
-import com.systematix.itrack.helpers.NavDrawerHelper;
+import com.systematix.itrack.models.NavDrawerModel;
 import com.systematix.itrack.helpers.ViewHelper;
 import com.systematix.itrack.helpers.ViewSwitcherHelper;
 import com.systematix.itrack.items.Auth;
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     private User user;
     private FragmentHelper fragmentHelper;
     private ViewSwitcherHelper viewSwitcher;
+    private NavDrawerModel navDrawerModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,21 +161,28 @@ public class MainActivity extends AppCompatActivity
         final int navMenu = user.checkAccess("teacher") ? R.menu.menu_main_teacher : R.menu.menu_main_student;
         // from here, set also the name of user
         // and the menu, duh
-        NavDrawerHelper.setMenu(navigationView, navMenu);
-        NavDrawerHelper.setHeader(this, navigationView, user);
+
+        // set navDrawerModel
+        getNavDrawerModel();
+        navDrawerModel.setMenu(navMenu);
+        navDrawerModel.setHeader(user);
 
         // update nav item selected
-        NavDrawerHelper.setNavItemSelected(navigationView, fragmentHelper);
+        navDrawerModel.setNavItemSelected(fragmentHelper);
 
         // now, update dat menu!
         invalidateOptionsMenu();
+    }
+
+    private NavDrawerModel getNavDrawerModel() {
+        return navDrawerModel = navDrawerModel == null ? new NavDrawerModel(navigationView) : navDrawerModel;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         // update nav item selected
-        NavDrawerHelper.setNavItemSelected(navigationView, fragmentHelper);
+        getNavDrawerModel().setNavItemSelected(fragmentHelper);
         NfcEnabledStateModel.onResume(this);
     }
 

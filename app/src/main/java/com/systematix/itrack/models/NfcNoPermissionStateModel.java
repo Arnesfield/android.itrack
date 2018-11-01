@@ -46,14 +46,9 @@ public final class NfcNoPermissionStateModel {
     }
 
     public static void startTimer() {
+        stopTimer();
         if (model == null) {
-            stopTimer();
             return;
-        }
-
-        if (timer != null) {
-            // stop timer
-            stopTimer();
         }
 
         // create new timer
