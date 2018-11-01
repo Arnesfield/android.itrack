@@ -337,8 +337,7 @@ public class MainActivity extends AppCompatActivity
     // OnApiErrorListener
     @Override
     public void onApiError(String tag, VolleyError error) throws JSONException {
-        // do it again lool
-        getViolations();
+        
     }
 
     // OnApiExceptionListener

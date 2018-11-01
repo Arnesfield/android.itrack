@@ -26,6 +26,8 @@ public final class Violation implements DbEntity {
     @ColumnInfo(name = "violation_hours") private int hours;
     @ColumnInfo(name = "violation_category") private String category;
 
+    public Violation() {}
+
     public Violation(JSONObject json) throws JSONException {
         this.id = json.getInt("violation_id");
         this.name = json.getString("violation_name");
