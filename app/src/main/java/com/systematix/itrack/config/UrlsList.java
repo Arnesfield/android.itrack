@@ -9,4 +9,5 @@ public final class UrlsList {
     public static final String LOGIN_URL = API_URL + "login";
     public static final String UPLOADED_IMAGES_URL = BASE_URL + "images/";
     public static final String GET_USER_URL = API_URL + "user";
+    public static final String GET_MINOR_VIOLATIONS_URL = API_URL + "violation/minor";
 }
