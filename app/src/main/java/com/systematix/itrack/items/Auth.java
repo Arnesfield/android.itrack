@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.systematix.itrack.config.PreferencesList;
+import com.systematix.itrack.database.AppDatabase;
+import com.systematix.itrack.utils.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +21,9 @@ public final class Auth {
         final SharedPreferences.Editor edit = preferences.edit();
 
         edit.putInt(PreferencesList.PREF_USER_ID, user.getId());
-        edit.putString(PreferencesList.PREF_USER_JSON, user.getJson().toString());
+        // edit.putString(PreferencesList.PREF_USER_JSON, user.getJson().toString());
+        // replace user json pref to db
+        user.save(context);
         edit.putBoolean(PreferencesList.PREF_DID_LOG_IN, true);
 
         edit.apply();
@@ -30,23 +34,44 @@ public final class Auth {
         return preferences.getInt(PreferencesList.PREF_USER_ID, -1);
     }
 
-    public static User getSavedUser(Context context) throws JSONException {
-        final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
-        final String stringUser = preferences.getString(PreferencesList.PREF_USER_JSON, null);
+    public static void getSavedUser(Context context, Task.OnTaskFinishListener<User> listener) {
+        final AppDatabase db = AppDatabase.getInstance(context);
 
-        if (stringUser == null) {
-            return null;
+        final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
+        final int uid = preferences.getInt(PreferencesList.PREF_USER_ID, -1);
+
+        if (uid == -1) {
+            return;
         }
 
-        return new User(new JSONObject(stringUser));
+        new Task<>(new Task.OnTaskExecuteListener<User>() {
+            @Override
+            public User execute() {
+                return db.userDao().findById(uid);
+            }
+        }, listener).execute();
     }
 
-    public static void removeSavedUser(Context context) {
+    public static void removeSavedUser(Context context, Task.OnTaskFinishListener<Void> listener) {
+        final AppDatabase db = AppDatabase.getInstance(context);
+
         final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
         final SharedPreferences.Editor edit = preferences.edit();
 
+        final int uid = preferences.getInt(PreferencesList.PREF_USER_ID, -1);
+
         edit.remove(PreferencesList.PREF_USER_ID);
-        edit.remove(PreferencesList.PREF_USER_JSON);
+        // change this to db
+        // edit.remove(PreferencesList.PREF_USER_JSON);
+        if (uid != -1) {
+            new Task<>(new Task.OnTaskExecuteListener<Void>() {
+                @Override
+                public Void execute() {
+                    db.userDao().deleteById(uid);
+                    return null;
+                }
+            }, listener).execute();
+        }
         edit.remove(PreferencesList.PREF_DID_LOG_IN);
         edit.putBoolean(PreferencesList.PREF_DID_LOG_OUT, true);
 

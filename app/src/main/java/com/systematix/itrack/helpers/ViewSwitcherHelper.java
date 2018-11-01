@@ -14,13 +14,15 @@ public final class ViewSwitcherHelper {
         this.currView = currView;
     }
 
-    public void switchTo(@NonNull final View to) {
+    public void switchTo(@Nullable final View to) {
         // if currView is different from to,
         // then remove all da views and set
         if (isNotCurrent(to)) {
             currView = to;
             rootView.removeAllViews();
-            rootView.addView(currView);
+            if (currView != null) {
+                rootView.addView(currView);
+            }
         }
     }
 

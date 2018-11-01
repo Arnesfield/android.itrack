@@ -10,7 +10,7 @@ import com.systematix.itrack.items.User;
 
 public final class UserInfoViewHelper {
     public static void init(Activity activity, final User user) {
-        final boolean hasNoLevel = user.getLevel() == null;
+        final boolean hasNoLevel = user.getLevelStr() == null;
         final boolean hasNoCourse = user.getCourse() == null;
 
         final View vName = activity.findViewById(R.id.user_info_name);

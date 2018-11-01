@@ -15,6 +15,9 @@
     <string name="icon_desc">Icon</string>
     <string name="nfc_desc">NFC</string>
 
+    <!-- actions -->
+    <string name="action_reload">Reload</string>
+
     <!-- errors -->
     <string name="error">An error occurred.</string>
     <string name="error_frown">An error occurred :(</string>

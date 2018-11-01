@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -24,8 +25,10 @@ import org.json.JSONObject;
 
 public class MakeReportActivity extends AppCompatActivity implements Api.OnRespondListener {
 
+    private String serial;
     private User user;
     private ViewGroup rootView;
+    private View vLoading;
     private View vMakeReport;
     private View vUserInfo;
     private View vNoUser;
@@ -37,12 +40,8 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_report);
 
-        final String serial = getIntent().getStringExtra("serial");
-        if (serial == null) {
-            Toast.makeText(this, R.string.error_no_serial, Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
+        serial = getIntent().getStringExtra("serial");
+        if (hasNoSerial()) { return; }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,17 +54,31 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
         }
 
         final LayoutInflater inflater = getLayoutInflater();
-        final View vLoading = inflater.inflate(R.layout.loading_layout, rootView, false);
 
         rootView = findViewById(R.id.make_report_root_layout);
+        vLoading = inflater.inflate(R.layout.loading_layout, rootView, false);
         vMakeReport = inflater.inflate(R.layout.make_report_view, rootView, false);
         vUserInfoSwitcher = vMakeReport.findViewById(R.id.make_report_user_info_switcher);
         vUserInfo = vUserInfoSwitcher.findViewById(R.id.make_report_user_info);
         vNoUser = vUserInfoSwitcher.findViewById(R.id.make_report_no_user);
 
-        // set stuff
-        viewSwitcher = new ViewSwitcherHelper(rootView, vLoading);
+        // add reload action
+        final Button btnNoUserReload = vNoUser.findViewById(R.id.make_report_no_user_reload_btn);
+        btnNoUserReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                request();
+            }
+        });
 
+        // set stuff
+        viewSwitcher = new ViewSwitcherHelper(rootView, null);
+        request();
+    }
+
+    private void request() {
+        if (hasNoSerial()) { return; }
+        viewSwitcher.switchTo(vLoading);
         // get da user with that serial!
         final JSONObject params = new JSONObject();
         try {
@@ -74,6 +87,15 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean hasNoSerial() {
+        if (serial == null) {
+            Toast.makeText(this, R.string.error_no_serial, Toast.LENGTH_LONG).show();
+            finish();
+            return true;
+        }
+        return false;
     }
 
     @Override

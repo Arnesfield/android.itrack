@@ -15,18 +15,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.systematix.itrack.config.RequestCodesList;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.StudentFragment;
 import com.systematix.itrack.helpers.FragmentHelper;
 import com.systematix.itrack.helpers.NavDrawerHelper;
+import com.systematix.itrack.helpers.ViewSwitcherHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
-
-import org.json.JSONException;
+import com.systematix.itrack.utils.Task;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity
 
     private User user;
     private FragmentHelper fragmentHelper;
+    private View vLoading;
+    private ViewSwitcherHelper viewSwitcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,18 +51,30 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        // get user auth
-        try {
-            user = Auth.getSavedUser(this);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        // make sure to do loading screen first hehehe
+        final ViewGroup rootView = findViewById(R.id.main_root_layout);
+        vLoading = getLayoutInflater().inflate(R.layout.loading_layout, rootView, false);
+        viewSwitcher = new ViewSwitcherHelper(rootView, vLoading);
 
+        // get user auth
+        Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
+            @Override
+            public void finish(User result) {
+                user = result;
+                initContent();
+            }
+        });
+    }
+
+    private void initContent() {
         if (user == null) {
             // logout when there is no user :/
             doLogout();
             return;
         }
+
+        // switch to actual content
+        viewSwitcher.switchTo(null);
 
         // create fragmentHelper
         if (fragmentHelper == null) {
@@ -100,11 +115,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doLogout() {
-        Auth.removeSavedUser(this);
-
-        final Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+        // TODO: add loading first
+        Auth.removeSavedUser(this, new Task.OnTaskFinishListener<Void>() {
+            @Override
+            public void finish(Void result) {
+                final MainActivity activity = MainActivity.this;
+                final Intent intent = new Intent(activity, LoginActivity.class);
+                startActivity(intent);
+                activity.finish();
+            }
+        });
     }
 
     private void updateNavigationView() {

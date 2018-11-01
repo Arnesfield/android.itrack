@@ -1,5 +1,8 @@
 package com.systematix.itrack.items;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -13,26 +16,30 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.systematix.itrack.config.UrlsList;
+import com.systematix.itrack.database.AppDatabase;
+import com.systematix.itrack.database.DbEntity;
 import com.systematix.itrack.helpers.JSONObjectHelper;
+import com.systematix.itrack.utils.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class User {
-    private int id;
-    private String number;
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private String picture;
-    private String course;
-    private int level;
-    private String access;
-    private JSONObject json;
+@Entity
+public class User implements DbEntity {
+    @PrimaryKey @ColumnInfo(name = "user_id") private int id;
+    @ColumnInfo(name = "user_number") private String number;
+    @ColumnInfo(name = "user_serial_no") private String serial;
+    @ColumnInfo(name = "user_firstname") private String firstName;
+    @ColumnInfo(name = "user_middlename") private String middleName;
+    @ColumnInfo(name = "user_lastname") private String lastName;
+    @ColumnInfo(name = "user_picture") private String picture;
+    @ColumnInfo(name = "user_course") private String course;
+    @ColumnInfo(name = "user_level") private int level;
+    @ColumnInfo(name = "user_access") private String access;
 
     public User(JSONObject json) throws JSONException {
-        this.json = json;
         this.id = json.getInt("user_id");
+        this.serial = json.getString("user_serial_no");
         this.firstName = json.getString("user_firstname");
         this.middleName = JSONObjectHelper.optString(json, "user_middlename");
         this.lastName = json.getString("user_lastname");
@@ -43,13 +50,58 @@ public class User {
         this.level = json.optInt("user_level", -1);
     }
 
-    // getters
-    public JSONObject getJson() {
-        return json;
+    public User(String serial) {
+        this.serial = serial;
     }
 
+    // setters
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setAccess(String access) {
+        this.access = access;
+    }
+
+    // getters
     public int getId() {
         return id;
+    }
+
+    public String getSerial() {
+        return serial;
     }
 
     public String getNumber() {
@@ -93,7 +145,11 @@ public class User {
         return access;
     }
 
-    public String getLevel() {
+    public int getLevel() {
+        return level;
+    }
+
+    public String getLevelStr() {
         return level > 0 ? String.valueOf(level) : null;
     }
 
@@ -153,5 +209,29 @@ public class User {
         if (textView != null) {
             textView.setVisibility(!hasNoPicture ? View.GONE: View.VISIBLE);
         }
+    }
+
+    // DbEntity
+    @Override
+    public void save(Context context) {
+        final AppDatabase db = AppDatabase.getInstance(context);
+        new Task<>(new Task.OnTaskExecuteListener<Void>() {
+            public Void execute() {
+                db.userDao().insertAll(User.this);
+                return null;
+            }
+        }).execute();
+    }
+
+    @Override
+    public void delete(Context context) {
+        final AppDatabase db = AppDatabase.getInstance(context);
+        new Task<>(new Task.OnTaskExecuteListener<Void>() {
+            @Override
+            public Void execute() {
+                db.userDao().delete(User.this);
+                return null;
+            }
+        }).execute();
     }
 }
