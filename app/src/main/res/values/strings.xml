@@ -11,6 +11,7 @@
     <!-- activity titles -->
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_make_report">Report Student</string>
+    <string name="title_activity_incident_report">Incident Report</string>
 
     <!-- desc -->
     <string name="background_desc">Background</string>
@@ -72,6 +73,7 @@
 
     <!-- make report -->
     <string name="make_report_action">Report Student</string>
+    <string name="make_report_action_anyway">Report Anyway</string>
     <!-- nfc@noUserState -->
     <string name="make_report_no_user_title">Cannot load student :(</string>
     <string name="make_report_no_user_subtitle">You can still send this report now and it will be sent later.</string>

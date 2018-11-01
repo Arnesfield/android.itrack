@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.systematix.itrack.helpers.JSONObjectHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +29,7 @@ public final class Api {
     // implement this interface to activity
     //! screw that! let's implement this anywhere :D
     public interface OnApiSuccessListener {
-        void onApiSuccess(String tag, JSONObject response) throws JSONException;
+        void onApiSuccess(String tag, JSONObject response, boolean success, String msg) throws JSONException;
     }
 
     public interface OnApiErrorListener {
@@ -129,7 +130,10 @@ public final class Api {
                     public void onResponse(JSONObject response) {
                         try {
                             if (successListener != null) {
-                                successListener.onApiSuccess(api.tag, response);
+                                // get success and message
+                                final boolean success = Api.isSuccessful(response);
+                                final String msg = success ? null : JSONObjectHelper.optString(response, "msg");
+                                successListener.onApiSuccess(api.tag, response, success, msg);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

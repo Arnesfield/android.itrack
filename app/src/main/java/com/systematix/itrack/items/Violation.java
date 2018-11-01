@@ -4,13 +4,19 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.database.DbEntity;
+import com.systematix.itrack.utils.Callback;
 import com.systematix.itrack.utils.Task;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public final class Violation implements DbEntity {
@@ -92,5 +98,22 @@ public final class Violation implements DbEntity {
                 return null;
             }
         }).execute();
+    }
+
+    // static
+    public static List<Violation> collection(JSONArray array) throws JSONException {
+        return collection(array, null);
+    }
+
+    public static List<Violation> collection(JSONArray array, @Nullable Callback<Violation> callback) throws JSONException {
+        final ArrayList<Violation> violations = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            final Violation violation = new Violation(array.getJSONObject(i));
+            violations.add(violation);
+            if (callback != null) {
+                callback.call(violation);
+            }
+        }
+        return violations;
     }
 }

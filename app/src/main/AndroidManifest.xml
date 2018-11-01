@@ -43,6 +43,10 @@
             android:name=".MakeReportActivity"
             android:label="@string/title_activity_make_report"
             android:theme="@style/AppTheme.NoActionBar.DarkStatusBar" />
+        <activity
+            android:name=".IncidentReportActivity"
+            android:label="@string/title_activity_incident_report"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

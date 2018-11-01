@@ -115,12 +115,11 @@ public class LoginActivity extends AppCompatActivity implements Api.OnApiRespond
 
     // OnApiSuccessListener
     @Override
-    public void onApiSuccess(String tag, JSONObject response) throws JSONException {
+    public void onApiSuccess(String tag, JSONObject response, boolean success, String msg) throws JSONException {
         // do not unload hehe
 
         // check if successful
-        if (!Api.isSuccessful(response)) {
-            final String msg = response.getString("msg");
+        if (!success) {
             if (msg != null && msg.length() > 0) {
                 txtUsernameContainer.setError("");
                 txtPasswordContainer.setError(msg);

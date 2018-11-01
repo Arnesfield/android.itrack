@@ -1,5 +1,6 @@
 package com.systematix.itrack;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
@@ -15,9 +16,9 @@ import android.widget.ViewSwitcher;
 
 import com.android.volley.VolleyError;
 import com.systematix.itrack.config.UrlsList;
-import com.systematix.itrack.models.UserInfoViewModel;
 import com.systematix.itrack.helpers.ViewSwitcherHelper;
 import com.systematix.itrack.items.User;
+import com.systematix.itrack.models.UserInfoViewModel;
 import com.systematix.itrack.utils.Api;
 
 import org.json.JSONException;
@@ -33,6 +34,8 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
     private View vNoUser;
     private ViewSwitcher vUserInfoSwitcher;
     private ViewSwitcherHelper viewSwitcher;
+    private Button btnMakeReport;
+    private View.OnClickListener onBtnMakeReportClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,28 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
         vUserInfoSwitcher = vMakeReport.findViewById(R.id.make_report_user_info_switcher);
         vUserInfo = vUserInfoSwitcher.findViewById(R.id.make_report_user_info);
         vNoUser = vUserInfoSwitcher.findViewById(R.id.make_report_no_user);
+        btnMakeReport = vMakeReport.findViewById(R.id.make_report_button);
+
+        // click for btn
+        onBtnMakeReportClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user == null) {
+                    Toast.makeText(v.getContext(), R.string.error, Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+
+                final String name = user.getName(false);
+
+                final Intent intent = new Intent(MakeReportActivity.this, IncidentReportActivity.class);
+                intent.putExtra("serial", serial);
+                if (name != null) {
+                    intent.putExtra("userName", name);
+                }
+                startActivity(intent);
+            }
+        };
 
         // add reload action
         final Button btnNoUserReload = vNoUser.findViewById(R.id.make_report_no_user_reload_btn);
@@ -114,10 +139,9 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
 
     // OnApiSuccessListener
     @Override
-    public void onApiSuccess(String tag, JSONObject response) throws JSONException {
+    public void onApiSuccess(String tag, JSONObject response, boolean success, String msg) throws JSONException {
         // check if successful
-        if (!Api.isSuccessful(response)) {
-            final String msg = response.getString("msg");
+        if (!success) {
             if (msg != null && msg.length() > 0) {
                 Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
             }
@@ -134,6 +158,10 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
             vUserInfoSwitcher.showNext();
         }
 
+        // set btn click
+        btnMakeReport.setText(R.string.make_report_action);
+        btnMakeReport.setOnClickListener(onBtnMakeReportClick);
+
         // set the user
         final ImageView ivUser = findViewById(R.id.make_report_user_iv);
         user.loadImage(this, ivUser, null);
@@ -149,6 +177,10 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
         if (vUserInfoSwitcher.getCurrentView() != vNoUser) {
             vUserInfoSwitcher.showNext();
         }
+
+        // set btn click
+        btnMakeReport.setText(R.string.make_report_action_anyway);
+        btnMakeReport.setOnClickListener(onBtnMakeReportClick);
     }
 
     // OnApiExceptionListener

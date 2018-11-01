@@ -125,6 +125,10 @@ public class User implements DbEntity {
     }
 
     public String getName(boolean withMiddleName) {
+        if (firstName == null || lastName == null) {
+            return null;
+        }
+
         String name = firstName + " ";
         if (withMiddleName) {
             name += middleName != null && middleName.length() > 0 ? middleName + " " : "";

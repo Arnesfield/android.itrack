@@ -20,6 +20,12 @@ public interface ViolationDao {
     @Insert
     void insertAll(Violation... violations);
 
+    @Insert
+    void insertAll(List<Violation> violations);
+
     @Delete
     void delete(Violation violation);
+
+    @Query("DELETE FROM violation")
+    void deleteAll();
 }
