@@ -10,11 +10,12 @@ import android.view.ViewGroup;
 
 import com.systematix.itrack.R;
 import com.systematix.itrack.helpers.FragmentHelper;
+import com.systematix.itrack.interfaces.OnNavItemChangeListener;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StudentFragment extends Fragment implements FragmentHelper.TitleableFragment {
+public class StudentFragment extends Fragment implements FragmentHelper.TitleableFragment, OnNavItemChangeListener {
 
 
     public StudentFragment() {
@@ -33,5 +34,11 @@ public class StudentFragment extends Fragment implements FragmentHelper.Titleabl
     @Override
     public String getTitle(Resources resources) {
         return resources.getString(R.string.nav_dashboard);
+    }
+
+    // OnNavItemChangeListener
+    @Override
+    public int getNavId() {
+        return R.id.nav_dashboard;
     }
 }

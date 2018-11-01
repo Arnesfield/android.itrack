@@ -21,8 +21,8 @@ import com.systematix.itrack.config.RequestCodesList;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.StudentFragment;
 import com.systematix.itrack.helpers.FragmentHelper;
-import com.systematix.itrack.helpers.ViewHelper;
 import com.systematix.itrack.helpers.NavDrawerHelper;
+import com.systematix.itrack.helpers.ViewHelper;
 import com.systematix.itrack.helpers.ViewSwitcherHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
@@ -143,6 +143,10 @@ public class MainActivity extends AppCompatActivity
         // and the menu, duh
         NavDrawerHelper.setMenu(navigationView, navMenu);
         NavDrawerHelper.setHeader(this, navigationView, user);
+
+        // update nav item selected
+        NavDrawerHelper.setNavItemSelected(navigationView, fragmentHelper);
+
         // now, update dat menu!
         invalidateOptionsMenu();
     }
@@ -150,6 +154,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        // update nav item selected
+        NavDrawerHelper.setNavItemSelected(navigationView, fragmentHelper);
         NfcEnabledStateModel.onResume(this);
     }
 
