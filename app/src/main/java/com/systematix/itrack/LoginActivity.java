@@ -6,7 +6,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -23,7 +22,7 @@ import org.json.JSONObject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LoginActivity extends AppCompatActivity implements Api.OnRespondListener {
+public class LoginActivity extends AppCompatActivity implements Api.OnApiRespondListener {
 
     @BindView(R.id.login_btn_login) Button btnLogin;
     @BindView(R.id.login_progress_bar) ProgressBar progressBar;
@@ -63,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
                     Api.post(view.getContext())
                         .setTag("login")
                         .setUrl(UrlsList.LOGIN_URL)
+                        .setApiListener(LoginActivity.this)
                         .request(params);
                 } catch (JSONException e) {
                     Snackbar.make(view, R.string.error, Snackbar.LENGTH_SHORT).show();
@@ -113,9 +113,9 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
     }
 
 
-    // OnRespondListener
+    // OnApiSuccessListener
     @Override
-    public void onResponse(String tag, JSONObject response) throws JSONException {
+    public void onApiSuccess(String tag, JSONObject response) throws JSONException {
         // do not unload hehe
 
         // check if successful
@@ -135,24 +135,22 @@ public class LoginActivity extends AppCompatActivity implements Api.OnRespondLis
         final JSONObject jsonUser = response.getJSONObject("user");
         final User user = new User(jsonUser);
 
-        // save user to sharedpref
+        // save user to db
         Auth.saveUser(this, user);
         this.checkForUser();
     }
 
+    // OnApiErrorListener
     @Override
-    public void onErrorResponse(String tag, VolleyError error) {
+    public void onApiError(String tag, VolleyError error) {
         doLoading(false);
-        Log.e("devtag", "LoginActivity@onErrorResponse");
-        Log.e("devtag", error.toString());
         Snackbar.make(btnLogin, R.string.error, Snackbar.LENGTH_LONG).show();
     }
 
+    // OnApiExceptionListener
     @Override
-    public void onException(JSONException e) {
+    public void onApiException(String tag, JSONException e) {
         doLoading(false);
-        Log.e("devtag", "LoginActivity@onException");
-        Log.e("devtag", e.getMessage());
         Snackbar.make(btnLogin, R.string.error, Snackbar.LENGTH_LONG).show();
     }
 }

@@ -24,7 +24,7 @@ import com.systematix.itrack.utils.Api;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MakeReportActivity extends AppCompatActivity implements Api.OnRespondListener {
+public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRespondListener {
 
     private String serial;
     private User user;
@@ -87,7 +87,10 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Api.post(MakeReportActivity.this).setUrl(UrlsList.GET_USER_URL).request(params);
+                    Api.post(MakeReportActivity.this)
+                        .setUrl(UrlsList.GET_USER_URL)
+                        .setApiListener(MakeReportActivity.this)
+                        .request(params);
                 }
             }, 5000);
         } catch (JSONException e) {
@@ -110,9 +113,9 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
         return true;
     }
 
-    // OnRespondListener
+    // OnApiSuccessListener
     @Override
-    public void onResponse(String tag, JSONObject response) throws JSONException {
+    public void onApiSuccess(String tag, JSONObject response) throws JSONException {
         // check if successful
         if (!Api.isSuccessful(response)) {
             final String msg = response.getString("msg");
@@ -138,11 +141,9 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
         UserInfoViewHelper.init(this, user);
     }
 
+    // OnApiErrorListener
     @Override
-    public void onErrorResponse(String tag, VolleyError error) {
-        Log.e("devtag", "MakeReportActivity@onErrorResponse");
-        Log.e("devtag", error.toString());
-
+    public void onApiError(String tag, VolleyError error) {
         Toast.makeText(this, R.string.error_cannot_load_user, Toast.LENGTH_LONG).show();
 
         viewSwitcher.switchTo(vMakeReport);
@@ -151,11 +152,10 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnRespo
         }
     }
 
+    // OnApiExceptionListener
     @Override
-    public void onException(JSONException e) {
+    public void onApiException(String tag, JSONException e) {
         e.printStackTrace();
-        Log.e("devtag", "MakeReportActivity@onException");
-        Log.e("devtag", e.getMessage());
         Toast.makeText(this, R.string.error, Toast.LENGTH_LONG).show();
         finish();
     }

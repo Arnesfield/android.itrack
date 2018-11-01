@@ -1,6 +1,8 @@
 package com.systematix.itrack.utils;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,16 +21,28 @@ public final class Api {
     private int method;
     private String url;
     private String tag;
-    private OnRespondListener listener;
+    private OnApiSuccessListener successListener;
+    private OnApiErrorListener errorListener;
+    private OnApiExceptionListener exceptionListener;
 
     // implement this interface to activity
-    public interface OnRespondListener {
-        void onResponse(String tag, JSONObject response) throws JSONException;
-        void onErrorResponse(String tag, VolleyError error) throws JSONException;
-        void onException(JSONException e);
+    //! screw that! let's implement this anywhere :D
+    public interface OnApiSuccessListener {
+        void onApiSuccess(String tag, JSONObject response) throws JSONException;
     }
 
-    private Api() {}
+    public interface OnApiErrorListener {
+        void onApiError(String tag, VolleyError error) throws JSONException;
+    }
+
+    public interface OnApiExceptionListener {
+        void onApiException(String tag, JSONException e);
+    }
+
+    // use this for all listeners
+    public interface OnApiRespondListener extends OnApiSuccessListener, OnApiErrorListener, OnApiExceptionListener {
+
+    }
 
     public static Api get(Context context) {
         final Api api = create(context);
@@ -42,21 +56,10 @@ public final class Api {
         return api;
     }
 
-    private static void setListener(Context context) {
-        // check if context is an instance of the listener
-        if (context instanceof OnRespondListener) {
-            instance.listener = (OnRespondListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnRespondListener");
-        }
-    }
-
     private static Api create(Context context) {
         if (instance == null) {
             instance = new Api();
         }
-
-        setListener(context);
 
         if (requestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
@@ -72,6 +75,8 @@ public final class Api {
     }
 
     // instance
+    private Api() {}
+
     private void setMethod(int method) {
         this.method = method;
     }
@@ -86,11 +91,33 @@ public final class Api {
         return this;
     }
 
+    public Api setSuccessListener(OnApiSuccessListener successListener) {
+        this.successListener = successListener;
+        return this;
+    }
+
+    public Api setErrorListener(OnApiErrorListener errorListener) {
+        this.errorListener = errorListener;
+        return this;
+    }
+
+    public Api setExceptionListener(OnApiExceptionListener exceptionListener) {
+        this.exceptionListener = exceptionListener;
+        return this;
+    }
+
+    public Api setApiListener(OnApiRespondListener listener) {
+        this.successListener = listener;
+        this.errorListener = listener;
+        this.exceptionListener = listener;
+        return this;
+    }
+
     public JsonObjectRequest request() {
         return request(null);
     }
 
-    public JsonObjectRequest request(JSONObject params) {
+    public JsonObjectRequest request(@Nullable JSONObject params) {
         final Api api = this;
 
         final JsonObjectRequest request = new JsonObjectRequest(
@@ -101,10 +128,16 @@ public final class Api {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            listener.onResponse(api.tag, response);
+                            if (successListener != null) {
+                                successListener.onApiSuccess(api.tag, response);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            listener.onException(e);
+                            Log.e("devtag", "Api@OnApiException");
+                            Log.e("devtag", e.getMessage());
+                            if (exceptionListener != null) {
+                                exceptionListener.onApiException(api.tag, e);
+                            }
                         }
                     }
                 },
@@ -112,10 +145,18 @@ public final class Api {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         try {
-                            listener.onErrorResponse(api.tag, error);
+                            Log.e("devtag", "Api@OnApiError");
+                            Log.e("devtag", error.toString());
+                            if (errorListener != null) {
+                                errorListener.onApiError(api.tag, error);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            listener.onException(e);
+                            Log.e("devtag", "Api@OnApiException");
+                            Log.e("devtag", e.getMessage());
+                            if (exceptionListener != null) {
+                                exceptionListener.onApiException(api.tag, e);
+                            }
                         }
                     }
                 }
