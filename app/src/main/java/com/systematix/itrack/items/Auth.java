@@ -52,7 +52,7 @@ public final class Auth {
         }, listener).execute();
     }
 
-    public static void removeSavedUser(Context context, Task.OnTaskFinishListener<Void> listener) {
+    public static Task<Void> removeSavedUser(Context context) {
         final AppDatabase db = AppDatabase.getInstance(context);
 
         final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
@@ -61,21 +61,23 @@ public final class Auth {
         final int uid = preferences.getInt(PreferencesList.PREF_USER_ID, -1);
 
         edit.remove(PreferencesList.PREF_USER_ID);
+        edit.remove(PreferencesList.PREF_DID_LOG_IN);
+        edit.putBoolean(PreferencesList.PREF_DID_LOG_OUT, true);
+        edit.apply();
+
         // change this to db
         // edit.remove(PreferencesList.PREF_USER_JSON);
+        Task<Void> task = null;
         if (uid != -1) {
-            new Task<>(new Task.OnTaskExecuteListener<Void>() {
+            task = new Task<>(new Task.OnTaskExecuteListener<Void>() {
                 @Override
                 public Void execute() {
                     db.userDao().deleteById(uid);
                     return null;
                 }
-            }, listener).execute();
+            });
         }
-        edit.remove(PreferencesList.PREF_DID_LOG_IN);
-        edit.putBoolean(PreferencesList.PREF_DID_LOG_OUT, true);
-
-        edit.apply();
+        return task;
     }
 
     public static boolean didLogin(Context context) {

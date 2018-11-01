@@ -2,10 +2,16 @@ package com.systematix.itrack.utils;
 
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class Task<T> extends AsyncTask<Void, Void, T> {
-    private OnTaskExecuteListener<T> executingListener;
+    private OnTaskPreExecuteListener preExecuteListener;
+    private OnTaskExecuteListener<T> executeListener;
     private OnTaskFinishListener<T> finishListener;
+
+    public interface OnTaskPreExecuteListener {
+        void preExecute();
+    }
 
     public interface OnTaskExecuteListener<T> {
         T execute();
@@ -15,18 +21,42 @@ public class Task<T> extends AsyncTask<Void, Void, T> {
         void finish(T result);
     }
 
-    public Task(@NonNull OnTaskExecuteListener<T> executingListener) {
-        this(executingListener, null);
+    public Task(@NonNull OnTaskExecuteListener<T> executeListener) {
+        this(executeListener, null);
     }
 
-    public Task(@NonNull OnTaskExecuteListener<T> executingListener, OnTaskFinishListener<T> finishListener) {
-        this.executingListener = executingListener;
+    public Task(@NonNull OnTaskExecuteListener<T> executeListener, OnTaskFinishListener<T> finishListener) {
+        this(null, executeListener, finishListener);
+    }
+
+    public Task(@Nullable OnTaskPreExecuteListener preExecuteListener, @NonNull OnTaskExecuteListener<T> executeListener, OnTaskFinishListener<T> finishListener) {
+        this.preExecuteListener = preExecuteListener;
+        this.executeListener = executeListener;
         this.finishListener = finishListener;
+    }
+
+    // setters
+    public Task<T> setPreExecuteListener(OnTaskPreExecuteListener preExecuteListener) {
+        this.preExecuteListener = preExecuteListener;
+        return this;
+    }
+
+    public Task<T> setFinishListener(OnTaskFinishListener<T> finishListener) {
+        this.finishListener = finishListener;
+        return this;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (preExecuteListener != null) {
+            preExecuteListener.preExecute();
+        }
     }
 
     @Override
     protected T doInBackground(Void... voids) {
-        return executingListener.execute();
+        return executeListener != null ? executeListener.execute() : null;
     }
 
     @Override

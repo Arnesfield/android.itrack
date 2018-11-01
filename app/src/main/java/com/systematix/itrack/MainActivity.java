@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -29,6 +30,7 @@ import com.systematix.itrack.items.User;
 import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
 import com.systematix.itrack.utils.Task;
+import com.systematix.itrack.utils.simple.SimpleLoadingDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -120,16 +122,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doLogout() {
-        // TODO: add loading first
-        Auth.removeSavedUser(this, new Task.OnTaskFinishListener<Void>() {
+        // build dialog
+        final AlertDialog dialog = SimpleLoadingDialog.build(this, R.string.logout_title, R.string.msg_please_wait);
+
+        Task<Void> task = Auth.removeSavedUser(this);
+        task.setPreExecuteListener(new Task.OnTaskPreExecuteListener() {
+            @Override
+            public void preExecute() {
+                // show loading
+                dialog.show();
+            }
+        }).setFinishListener(new Task.OnTaskFinishListener<Void>() {
             @Override
             public void finish(Void result) {
-                final MainActivity activity = MainActivity.this;
-                final Intent intent = new Intent(activity, LoginActivity.class);
-                startActivity(intent);
-                activity.finish();
+                // TODO: remove handler
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        final MainActivity activity = MainActivity.this;
+                        final Intent intent = new Intent(activity, LoginActivity.class);
+
+                        dialog.dismiss();
+                        startActivity(intent);
+                        activity.finish();
+                    }
+                }, 5000);
             }
-        });
+        }).execute();
     }
 
     private void updateNavigationView() {
