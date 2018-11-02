@@ -21,6 +21,7 @@
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,23 +31,27 @@
         </activity>
         <activity
             android:name=".LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Login" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MakeReportActivity"
             android:label="@string/title_activity_make_report"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.DarkStatusBar" />
         <activity
             android:name=".IncidentReportActivity"
             android:label="@string/title_activity_incident_report"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.DarkStatusBar" />
     </application>
-
 </manifest>
