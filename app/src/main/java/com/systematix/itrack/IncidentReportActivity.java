@@ -11,8 +11,11 @@ import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
 import com.google.android.flexbox.FlexboxLayout;
+import com.systematix.itrack.components.chip.Chip;
+import com.systematix.itrack.components.chip.Chipable;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.items.Violation;
+import com.systematix.itrack.models.ButtonStateModel;
 import com.systematix.itrack.models.SelectableChipsModel;
 import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.models.api.GetViolationsApiModel;
@@ -30,6 +33,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
     private String userName;
     private ViewFlipperModel viewFlipperModel;
     private SelectableChipsModel selectableChipsModel;
+    private ButtonStateModel btnStateModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,15 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
             }
         });
 
+        final Button btnReport = findViewById(R.id.incident_report_button);
+        btnReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submit();
+            }
+        });
+        btnStateModel = new ButtonStateModel(btnReport);
+
         final ViewFlipper viewFlipper = findViewById(R.id.incident_report_view_flipper);
         viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.incident_report_loading_layout);
 
@@ -76,6 +89,11 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
     private void fetchViolations() {
         viewFlipperModel.switchTo(R.id.incident_report_loading_layout);
         GetViolationsApiModel.fetch(this, IncidentReportActivity.this);
+    }
+
+    private void submit() {
+        // TODO: handle submit
+        Toast.makeText(this, "Submit!", Toast.LENGTH_SHORT).show();
     }
 
     private void getViolations() {
@@ -116,6 +134,20 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
         final FlexboxLayout layout = findViewById(R.id.incident_report_flexbox_layout);
 
         selectableChipsModel = new SelectableChipsModel<>(layout, violations);
+        // set chip click listener
+        selectableChipsModel.collectionSetListener(new Chip.OnChipClickListener() {
+            @Override
+            public void onChipClick(Chipable chip) {
+                checkForSelected();
+            }
+        });
+        // then check for selected
+        checkForSelected();
+    }
+
+    // update btn model
+    private void checkForSelected() {
+        btnStateModel.setEnabled(selectableChipsModel.hasSelectedChip());
     }
 
     @Override

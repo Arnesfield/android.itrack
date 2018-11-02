@@ -64,7 +64,7 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
             @Override
             public void onClick(View v) {
                 if (user == null) {
-                    Toast.makeText(v.getContext(), R.string.error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), R.string.error_no_serial, Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }
@@ -164,8 +164,6 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
     // OnApiErrorListener
     @Override
     public void onApiError(String tag, VolleyError error) {
-        Toast.makeText(this, R.string.error_cannot_load_user, Toast.LENGTH_LONG).show();
-
         viewFlipperModel.switchTo(R.id.make_report_content_view);
         makeReportFlipperHelper.switchTo(R.id.make_report_no_user);
 

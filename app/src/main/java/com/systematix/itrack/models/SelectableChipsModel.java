@@ -23,6 +23,7 @@ public final class SelectableChipsModel<T> {
         this.layout = layout;
         this.chips = chips;
         this.size = size;
+        this.selected = -1;
         init();
     }
 
@@ -109,11 +110,26 @@ public final class SelectableChipsModel<T> {
     }
 
     // useful stuff
+    public void collectionSetListener(Chip.OnChipClickListener listener) {
+        for (final T gChip : chips) {
+            if (!(gChip instanceof Chipable)) {
+                continue;
+            }
+
+            final Chipable chip = (Chipable) gChip;
+            chip.setOnChipClickListener(listener);
+        }
+    }
+
     public Chipable getSelectedChip() {
-        if (selected < 0) {
+        if (!hasSelectedChip()) {
             return null;
         }
         final T gChip = chips.get(selected);
         return gChip instanceof Chipable ? (Chipable) gChip : null;
+    }
+
+    public boolean hasSelectedChip() {
+        return selected >= 0;
     }
 }
