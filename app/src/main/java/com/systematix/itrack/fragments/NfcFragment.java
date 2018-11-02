@@ -15,7 +15,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.systematix.itrack.R;
-import com.systematix.itrack.helpers.FragmentHelper;
+import com.systematix.itrack.models.FragmentModel;
 import com.systematix.itrack.helpers.ViewFlipperHelper;
 import com.systematix.itrack.interfaces.OnNavItemChangeListener;
 import com.systematix.itrack.models.NfcEnabledStateModel;
@@ -25,7 +25,7 @@ import com.systematix.itrack.models.NfcNoPermissionStateModel;
  * A simple {@link Fragment} subclass.
  */
 public class NfcFragment extends Fragment
-        implements FragmentHelper.TitleableFragment, NfcNoPermissionStateModel.Model, OnNavItemChangeListener {
+        implements FragmentModel.TitleableFragment, NfcNoPermissionStateModel.Model, OnNavItemChangeListener {
 
     private NfcAdapter nfc;
     private ViewFlipperHelper viewFlipperHelper;

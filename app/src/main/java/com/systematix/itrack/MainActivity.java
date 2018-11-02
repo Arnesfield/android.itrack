@@ -27,7 +27,7 @@ import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.database.daos.ViolationDao;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.StudentFragment;
-import com.systematix.itrack.helpers.FragmentHelper;
+import com.systematix.itrack.models.FragmentModel;
 import com.systematix.itrack.helpers.ViewFlipperHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.nav_view) NavigationView navigationView;
 
     private User user;
-    private FragmentHelper fragmentHelper;
+    private FragmentModel fragmentModel;
     private ViewFlipperHelper viewFlipperHelper;
     private NavDrawerModel navDrawerModel;
 
@@ -102,15 +102,15 @@ public class MainActivity extends AppCompatActivity
         // switch to actual content
          viewFlipperHelper.switchTo(R.id.main_content_layout);
 
-        // create fragmentHelper
-        if (fragmentHelper == null) {
+        // create fragmentModel
+        if (fragmentModel == null) {
             // NfcFragment is the default fragment for teacher
             // StudentFragment for student
             final Fragment fragment = isTeacher ? new NfcFragment() : new StudentFragment();
-            fragmentHelper = new FragmentHelper(this, fragment, R.id.main_content_layout, true);
+            fragmentModel = new FragmentModel(this, fragment, R.id.main_content_layout, true);
         }
         // set whatever the current is
-        fragmentHelper.setCurrFragment();
+        fragmentModel.setCurrFragment();
 
         setSupportActionBar(toolbar);
 
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity
         navDrawerModel.setHeader(user);
 
         // update nav item selected
-        navDrawerModel.setNavItemSelected(fragmentHelper);
+        navDrawerModel.setNavItemSelected(fragmentModel);
 
         // now, update dat menu!
         invalidateOptionsMenu();
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         // update nav item selected
-        getNavDrawerModel().setNavItemSelected(fragmentHelper);
+        getNavDrawerModel().setNavItemSelected(fragmentModel);
         NfcEnabledStateModel.onResume(this);
     }
 
@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // set fragment
-        fragmentHelper.setFragment(newFragment);
+        fragmentModel.setFragment(newFragment);
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

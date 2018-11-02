@@ -1,4 +1,4 @@
-package com.systematix.itrack.helpers;
+package com.systematix.itrack.models;
 
 import android.content.res.Resources;
 import android.support.annotation.IdRes;
@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-public final class FragmentHelper {
+public final class FragmentModel {
     private Fragment currFragment;
     private AppCompatActivity activity;
     @IdRes private int res;
@@ -18,7 +18,7 @@ public final class FragmentHelper {
         String getTitle(Resources resources);
     }
 
-    public FragmentHelper(
+    public FragmentModel(
             AppCompatActivity activity,
             Fragment fragment,
             @IdRes int res,

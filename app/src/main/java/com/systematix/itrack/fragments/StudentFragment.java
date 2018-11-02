@@ -9,13 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.systematix.itrack.R;
-import com.systematix.itrack.helpers.FragmentHelper;
+import com.systematix.itrack.models.FragmentModel;
 import com.systematix.itrack.interfaces.OnNavItemChangeListener;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StudentFragment extends Fragment implements FragmentHelper.TitleableFragment, OnNavItemChangeListener {
+public class StudentFragment extends Fragment implements FragmentModel.TitleableFragment, OnNavItemChangeListener {
 
 
     public StudentFragment() {

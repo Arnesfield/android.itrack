@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.systematix.itrack.R;
-import com.systematix.itrack.helpers.FragmentHelper;
 import com.systematix.itrack.interfaces.OnNavItemChangeListener;
 import com.systematix.itrack.items.User;
 
@@ -44,9 +43,9 @@ public final class NavDrawerModel {
         }
     }
 
-    public void setNavItemSelected(FragmentHelper fragmentHelper) {
-        if (fragmentHelper != null) {
-            setNavItemSelected(fragmentHelper.getCurrFragment());
+    public void setNavItemSelected(FragmentModel fragmentModel) {
+        if (fragmentModel != null) {
+            setNavItemSelected(fragmentModel.getCurrFragment());
         }
     }
 }
