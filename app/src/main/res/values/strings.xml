@@ -4,6 +4,7 @@
     <string name="loading_title">Loading</string>
     <string name="loading_text">Loading…</string>
     <string name="copyright_text">© Systematix 2018</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet.</string>
 
     <!-- logout -->
     <string name="logout_title">Logging out</string>
@@ -83,6 +84,9 @@
     <!-- incidentReport@emptyState -->
     <string name="incident_report_empty_title">No violations list :(</string>
     <string name="incident_report_empty_subtitle">Unable to load the list of violations. Please try again.</string>
+    <string name="incident_report_view_title">List of Violations</string>
+    <string name="incident_report_view_subtitle">Below are the list of violations %1$s may have observed. Pick one in order to send this report.</string>
+    <string name="incident_report_view_bottom_text">Choose the violation done by %1$s.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

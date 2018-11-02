@@ -25,7 +25,17 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Some text to make you heppy" />
+                    android:text="@string/incident_report_view_title"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/incident_report_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.65"
+                    android:text="@string/incident_report_view_subtitle" />
             </LinearLayout>
 
             <com.google.android.flexbox.FlexboxLayout
@@ -49,6 +59,18 @@
         android:background="@android:color/white">
 
         <View style="@style/Divider" />
+
+        <TextView
+            android:id="@+id/incident_report_bottom_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:alpha="0.75"
+            android:text="@string/incident_report_view_bottom_text" />
 
         <Button
             android:id="@+id/incident_report_button"

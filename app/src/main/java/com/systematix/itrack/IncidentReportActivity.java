@@ -1,11 +1,13 @@
 package com.systematix.itrack;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -43,7 +45,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
         // get serial
         serial = getIntent().getStringExtra("serial");
         userName = getIntent().getStringExtra("userName");
-        userName = userName == null ? "Unknown" : userName;
+        userName = userName == null ? "this student" : userName;
 
         if (serial == null) {
             Toast.makeText(this, R.string.error_no_serial, Toast.LENGTH_LONG).show();
@@ -78,6 +80,17 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
             }
         });
         btnStateModel = new ButtonStateModel(btnReport);
+
+        // get and set those textViews
+        final TextView tvSubtitle = findViewById(R.id.incident_report_subtitle);
+        final TextView tvBottom = findViewById(R.id.incident_report_bottom_text);
+
+        final Resources resources = getResources();
+        final String subtitleText = resources.getString(R.string.incident_report_view_subtitle, userName);
+        final String bottomText = resources.getString(R.string.incident_report_view_bottom_text, userName);
+
+        tvSubtitle.setText(subtitleText);
+        tvBottom.setText(bottomText);
 
         final ViewFlipper viewFlipper = findViewById(R.id.incident_report_view_flipper);
         viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.incident_report_loading_layout);

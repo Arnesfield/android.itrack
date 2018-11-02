@@ -22,7 +22,7 @@ public final class ButtonStateModel {
         background = button.getBackground();
         elevation = button.getElevation();
         disabledElevation = 0F;
-        disabledDrawable = android.R.drawable.btn_default;
+        disabledDrawable = R.color.colorButtonDisabled;
         disabledColor = ContextCompat.getColor(button.getContext(), R.color.colorButtonTextDisabled);
     }
 
