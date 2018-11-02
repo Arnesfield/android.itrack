@@ -25,6 +25,7 @@ public class IncidentReportActivity extends AppCompatActivity {
         // get serial
         serial = getIntent().getStringExtra("serial");
         userName = getIntent().getStringExtra("userName");
+        userName = userName == null ? "Unknown" : userName;
 
         if (serial == null) {
             Toast.makeText(this, R.string.error_no_serial, Toast.LENGTH_LONG).show();

@@ -96,21 +96,15 @@ public class MainActivity extends AppCompatActivity
         // get violations if teacher hehe
         final boolean isTeacher = user.checkAccess("teacher");
         if (isTeacher) {
-            getViolations();
+            fetchViolations();
         }
 
         // switch to actual content
          viewFlipperModel.switchTo(R.id.main_content_layout);
 
         // create fragmentModel
-        if (fragmentModel == null) {
-            // NfcFragment is the default fragment for teacher
-            // StudentFragment for student
-            final Fragment fragment = isTeacher ? new NfcFragment() : new StudentFragment();
-            fragmentModel = new FragmentModel(this, fragment, R.id.main_content_layout, true);
-        }
         // set whatever the current is
-        fragmentModel.setCurrFragment();
+        getFragmentModel().setCurrFragment();
 
         setSupportActionBar(toolbar);
 
@@ -175,8 +169,10 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
+        final boolean isTeacher = user.checkAccess("teacher");
+
         // set menu to use!
-        final int navMenu = user.checkAccess("teacher") ? R.menu.menu_main_teacher : R.menu.menu_main_student;
+        final int navMenu = isTeacher ? R.menu.menu_main_teacher : R.menu.menu_main_student;
         // from here, set also the name of user
         // and the menu, duh
 
@@ -186,17 +182,32 @@ public class MainActivity extends AppCompatActivity
         navDrawerModel.setHeader(user);
 
         // update nav item selected
-        navDrawerModel.setNavItemSelected(fragmentModel);
+        navDrawerModel.setNavItemSelected(getFragmentModel());
 
         // now, update dat menu!
         invalidateOptionsMenu();
     }
 
+    // model getters
     private NavDrawerModel getNavDrawerModel() {
         return navDrawerModel = navDrawerModel == null ? new NavDrawerModel(navigationView) : navDrawerModel;
     }
 
-    private void getViolations() {
+    private FragmentModel getFragmentModel() {
+        // create fragmentModel
+        assert user != null;
+        if (fragmentModel == null) {
+            // NfcFragment is the default fragment for teacher
+            // StudentFragment for student
+            final boolean isTeacher = user.checkAccess("teacher");
+            final Fragment fragment = isTeacher ? new NfcFragment() : new StudentFragment();
+            fragmentModel = new FragmentModel(this, fragment, R.id.main_content_layout, true);
+        }
+
+        return fragmentModel;
+    }
+
+    private void fetchViolations() {
         Api.post(this)
             .setTag("violations")
             .setUrl(UrlsList.GET_MINOR_VIOLATIONS_URL)
@@ -208,7 +219,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         // update nav item selected
-        getNavDrawerModel().setNavItemSelected(fragmentModel);
+        getNavDrawerModel().setNavItemSelected(getFragmentModel());
         NfcEnabledStateModel.onResume(this);
     }
 
@@ -292,7 +303,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // set fragment
-        fragmentModel.setFragment(newFragment);
+        getFragmentModel().setFragment(newFragment);
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -336,7 +347,7 @@ public class MainActivity extends AppCompatActivity
 
     // OnApiErrorListener
     @Override
-    public void onApiError(String tag, VolleyError error) throws JSONException {
+    public void onApiError(String tag, VolleyError error) {
 
     }
 
