@@ -31,7 +31,7 @@ import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
 import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.utils.Task;
-import com.systematix.itrack.utils.simple.SimpleLoadingDialog;
+import com.systematix.itrack.models.LoadingDialogModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -125,7 +125,8 @@ public class MainActivity extends AppCompatActivity
 
     private void doLogout() {
         // build dialog
-        final AlertDialog dialog = SimpleLoadingDialog.build(this, R.string.logout_title, R.string.msg_please_wait);
+        final LoadingDialogModel dialogModel = new LoadingDialogModel(this, R.string.logout_title, R.string.msg_please_wait);
+        final AlertDialog dialog = dialogModel.getDialog();
 
         Task<Void> task = Auth.removeSavedUser(this);
         task.setPreExecuteListener(new Task.OnTaskPreExecuteListener() {
