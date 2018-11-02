@@ -1,20 +1,20 @@
-package com.systematix.itrack.helpers;
+package com.systematix.itrack.models;
 
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ViewFlipper;
 
-public final class ViewFlipperHelper {
+public final class ViewFlipperModel {
     @IdRes private int res;
     private ViewFlipper viewFlipper;
 
     // constructors
-    public ViewFlipperHelper(@NonNull ViewFlipper viewFlipper) {
+    public ViewFlipperModel(@NonNull ViewFlipper viewFlipper) {
         this.viewFlipper = viewFlipper;
     }
 
-    public ViewFlipperHelper(@NonNull ViewFlipper viewFlipper, @IdRes int res) {
+    public ViewFlipperModel(@NonNull ViewFlipper viewFlipper, @IdRes int res) {
         this(viewFlipper);
         switchTo(res);
     }

@@ -16,7 +16,7 @@ import android.widget.ViewFlipper;
 
 import com.systematix.itrack.R;
 import com.systematix.itrack.models.FragmentModel;
-import com.systematix.itrack.helpers.ViewFlipperHelper;
+import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.interfaces.OnNavItemChangeListener;
 import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
@@ -28,7 +28,7 @@ public class NfcFragment extends Fragment
         implements FragmentModel.TitleableFragment, NfcNoPermissionStateModel.Model, OnNavItemChangeListener {
 
     private NfcAdapter nfc;
-    private ViewFlipperHelper viewFlipperHelper;
+    private ViewFlipperModel viewFlipperModel;
 
     public NfcFragment() {
         // Required empty public constructor
@@ -42,7 +42,7 @@ public class NfcFragment extends Fragment
         final ViewFlipper viewFlipper = rootView.findViewById(R.id.nfc_view_flipper);
         final View vNoPermission = rootView.findViewById(R.id.nfc_no_permission_state_view);
         nfc = NfcAdapter.getDefaultAdapter(getContext());
-        viewFlipperHelper = new ViewFlipperHelper(viewFlipper);
+        viewFlipperModel = new ViewFlipperModel(viewFlipper);
 
         NfcEnabledStateModel.init(getContext(), nfc);
         NfcNoPermissionStateModel.init(this, vNoPermission);
@@ -70,12 +70,12 @@ public class NfcFragment extends Fragment
         final int newView = isNfcEnabled ? R.id.nfc_enabled_state_view : R.id.nfc_no_permission_state_view;
 
         // if these are different, then show dat toast!
-        if (isNfcEnabled && viewFlipperHelper.isNotCurrent(newView)) {
+        if (isNfcEnabled && viewFlipperModel.isNotCurrent(newView)) {
             Toast.makeText(getContext(), R.string.msg_nfc_enabled, Toast.LENGTH_SHORT).show();
             NfcEnabledStateModel.onResume(getActivity());
         }
 
-        viewFlipperHelper.switchTo(newView);
+        viewFlipperModel.switchTo(newView);
     }
 
     // NfcNoPermissionStateModel

@@ -28,7 +28,7 @@ import com.systematix.itrack.database.daos.ViolationDao;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.StudentFragment;
 import com.systematix.itrack.models.FragmentModel;
-import com.systematix.itrack.helpers.ViewFlipperHelper;
+import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.items.Violation;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
 
     private User user;
     private FragmentModel fragmentModel;
-    private ViewFlipperHelper viewFlipperHelper;
+    private ViewFlipperModel viewFlipperModel;
     private NavDrawerModel navDrawerModel;
 
     @Override
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity
 
         // make sure to do loading screen first hehehe
         final ViewFlipper viewFlipper = findViewById(R.id.main_view_flipper);
-        viewFlipperHelper = new ViewFlipperHelper(viewFlipper, R.id.main_loading_layout);
+        viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.main_loading_layout);
 
         // get user auth
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // switch to actual content
-         viewFlipperHelper.switchTo(R.id.main_content_layout);
+         viewFlipperModel.switchTo(R.id.main_content_layout);
 
         // create fragmentModel
         if (fragmentModel == null) {

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.systematix.itrack.helpers.ViewFlipperHelper;
+import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.models.UserInfoViewModel;
@@ -19,7 +19,7 @@ import com.systematix.itrack.utils.Task;
 public class ProfileActivity extends AppCompatActivity {
 
     private ActionBar actionBar;
-    private ViewFlipperHelper viewFlipperHelper;
+    private ViewFlipperModel viewFlipperModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         final ViewFlipper viewFlipper = findViewById(R.id.profile_view_flipper);
-        viewFlipperHelper = new ViewFlipperHelper(viewFlipper, R.id.profile_loading_layout);
+        viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.profile_loading_layout);
 
         getUserThenInitContent();
     }
@@ -49,7 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void getUserThenInitContent() {
         // show loading first as always
-        viewFlipperHelper.switchTo(R.id.profile_loading_layout);
+        viewFlipperModel.switchTo(R.id.profile_loading_layout);
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
             @Override
             public void finish(final User result) {
@@ -57,7 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        viewFlipperHelper.switchTo(R.id.profile_user_info);
+                        viewFlipperModel.switchTo(R.id.profile_user_info);
                         initContent(result);
                     }
                 }, 5000);

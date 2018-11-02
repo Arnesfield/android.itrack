@@ -14,7 +14,7 @@ import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
 import com.systematix.itrack.config.UrlsList;
-import com.systematix.itrack.helpers.ViewFlipperHelper;
+import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.models.UserInfoViewModel;
 import com.systematix.itrack.utils.Api;
@@ -27,8 +27,8 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
     private String serial;
     private User user;
     private View vUserInfo;
-    private ViewFlipperHelper viewFlipperHelper;
-    private ViewFlipperHelper makeReportFlipperHelper;
+    private ViewFlipperModel viewFlipperModel;
+    private ViewFlipperModel makeReportFlipperHelper;
     private Button btnMakeReport;
     private View.OnClickListener onBtnMakeReportClick;
 
@@ -90,14 +90,14 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
         });
 
         // set stuff
-        viewFlipperHelper = new ViewFlipperHelper(viewFlipper);
-        makeReportFlipperHelper = new ViewFlipperHelper(vUserInfoFlipper, R.id.make_report_no_user);
+        viewFlipperModel = new ViewFlipperModel(viewFlipper);
+        makeReportFlipperHelper = new ViewFlipperModel(vUserInfoFlipper, R.id.make_report_no_user);
         request();
     }
 
     private void request() {
         if (hasNoSerial()) { return; }
-        viewFlipperHelper.switchTo(R.id.make_report_loading_layout);
+        viewFlipperModel.switchTo(R.id.make_report_loading_layout);
         // get da user with that serial!
         final JSONObject params = new JSONObject();
         try {
@@ -148,7 +148,7 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
         final JSONObject jsonUser = response.getJSONObject("user");
         user = new User(jsonUser);
 
-        viewFlipperHelper.switchTo(R.id.make_report_make_report_view);
+        viewFlipperModel.switchTo(R.id.make_report_make_report_view);
         makeReportFlipperHelper.switchTo(R.id.make_report_user_info);
 
         // set btn click
@@ -166,7 +166,7 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
     public void onApiError(String tag, VolleyError error) {
         Toast.makeText(this, R.string.error_cannot_load_user, Toast.LENGTH_LONG).show();
 
-        viewFlipperHelper.switchTo(R.id.make_report_make_report_view);
+        viewFlipperModel.switchTo(R.id.make_report_make_report_view);
         makeReportFlipperHelper.switchTo(R.id.make_report_no_user);
 
         // set btn click
