@@ -1,5 +1,6 @@
 package com.systematix.itrack;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,16 +23,17 @@ import android.widget.ViewFlipper;
 import com.systematix.itrack.config.RequestCodesList;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.StudentFragment;
+import com.systematix.itrack.helpers.AlertDialogHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.models.FragmentModel;
-import com.systematix.itrack.models.api.GetViolationsApiModel;
+import com.systematix.itrack.models.LoadingDialogModel;
 import com.systematix.itrack.models.NavDrawerModel;
 import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
 import com.systematix.itrack.models.ViewFlipperModel;
+import com.systematix.itrack.models.api.GetViolationsApiModel;
 import com.systematix.itrack.utils.Task;
-import com.systematix.itrack.models.LoadingDialogModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity
         final ViewFlipper viewFlipper = findViewById(R.id.main_view_flipper);
         viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.main_loading_layout);
 
+        checkForIncidentReportSent();
+
         // get user auth
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
             @Override
@@ -73,6 +77,34 @@ public class MainActivity extends AppCompatActivity
                 }, 5000);
             }
         });
+    }
+
+    // check for incident report sent
+    private void checkForIncidentReportSent() {
+        final Intent intent = getIntent();
+        if (intent.getBooleanExtra("incidentReportSent", false)) {
+            // if sent successfully
+            final boolean success = intent.getBooleanExtra("incidentReportSuccess", false);
+
+            final int title = success ? R.string.incident_report_sent_success_dialog_title: R.string.incident_report_sent_fail_dialog_title;
+            final int message = success ? R.string.incident_report_sent_success_dialog_message: R.string.incident_report_sent_fail_dialog_message;
+
+            final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(R.string.action_dismiss, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+
+            AlertDialogHelper.setPositiveColorPrimary(dialog);
+
+            // show et
+            dialog.show();
+        }
     }
 
     private void initContent() {

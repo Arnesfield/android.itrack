@@ -23,6 +23,7 @@
 
     <!-- actions -->
     <string name="action_reload">Reload</string>
+    <string name="action_dismiss">Dismiss</string>
 
     <!-- errors -->
     <string name="error">An error occurred.</string>
@@ -87,6 +88,15 @@
     <string name="incident_report_view_title">List of Violations</string>
     <string name="incident_report_view_subtitle">Below are the list of violations %1$s may have observed. Pick one in order to send this report.</string>
     <string name="incident_report_view_bottom_text">Choose the violation done by %1$s.</string>
+    <!-- incidentReport@send -->
+    <string name="incident_report_send_dialog_title">Sending Report</string>
+    <string name="incident_report_send_dialog_message">Reporting %1$s for the violation: \"%2$s\"</string>
+    <!-- incidentReport@sent -->
+    <string name="incident_report_sent_success_dialog_title">Report Sent</string>
+    <string name="incident_report_sent_success_dialog_message">Your report has been sent.</string>
+    <string name="incident_report_sent_fail_dialog_title">Report Saved</string>
+    <string name="incident_report_sent_fail_dialog_message">Your report has been saved. It will be sent the next time the network service is available.</string>
+    <string name="incident_report_sent_exception_msg">Unable to send report.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

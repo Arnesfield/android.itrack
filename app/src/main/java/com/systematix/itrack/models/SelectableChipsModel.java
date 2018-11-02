@@ -121,12 +121,8 @@ public final class SelectableChipsModel<T> {
         }
     }
 
-    public Chipable getSelectedChip() {
-        if (!hasSelectedChip()) {
-            return null;
-        }
-        final T gChip = chips.get(selected);
-        return gChip instanceof Chipable ? (Chipable) gChip : null;
+    public T getSelectedChip() {
+        return hasSelectedChip() ? chips.get(selected) : null;
     }
 
     public boolean hasSelectedChip() {
