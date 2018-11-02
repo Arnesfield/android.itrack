@@ -6,23 +6,20 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
-import com.systematix.itrack.helpers.ViewHelper;
-import com.systematix.itrack.models.UserInfoViewModel;
-import com.systematix.itrack.helpers.ViewSwitcherHelper;
+import com.systematix.itrack.helpers.ViewFlipperHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
+import com.systematix.itrack.models.UserInfoViewModel;
 import com.systematix.itrack.utils.Task;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private View vLoading;
-    private View vUserInfo;
-    private ViewSwitcherHelper viewSwitcher;
     private ActionBar actionBar;
+    private ViewFlipperHelper viewFlipperHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +35,8 @@ public class ProfileActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        vLoading = ViewHelper.getLoadingView(this, R.id.profile_root_layout);
-        vUserInfo = findViewById(R.id.profile_user_info);
-        viewSwitcher = new ViewSwitcherHelper(this, R.id.profile_root_layout);
+        final ViewFlipper viewFlipper = findViewById(R.id.profile_view_flipper);
+        viewFlipperHelper = new ViewFlipperHelper(viewFlipper, R.id.profile_loading_layout);
 
         getUserThenInitContent();
     }
@@ -53,7 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void getUserThenInitContent() {
         // show loading first as always
-        viewSwitcher.switchTo(vLoading);
+        viewFlipperHelper.switchTo(R.id.profile_loading_layout);
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
             @Override
             public void finish(final User result) {
@@ -61,7 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        viewSwitcher.switchTo(vUserInfo);
+                        viewFlipperHelper.switchTo(R.id.profile_user_info);
                         initContent(result);
                     }
                 }, 5000);

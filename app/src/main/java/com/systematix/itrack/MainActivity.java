@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
 import com.systematix.itrack.config.RequestCodesList;
@@ -27,12 +28,11 @@ import com.systematix.itrack.database.daos.ViolationDao;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.StudentFragment;
 import com.systematix.itrack.helpers.FragmentHelper;
-import com.systematix.itrack.items.Violation;
-import com.systematix.itrack.models.NavDrawerModel;
-import com.systematix.itrack.helpers.ViewHelper;
-import com.systematix.itrack.helpers.ViewSwitcherHelper;
+import com.systematix.itrack.helpers.ViewFlipperHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
+import com.systematix.itrack.items.Violation;
+import com.systematix.itrack.models.NavDrawerModel;
 import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
 import com.systematix.itrack.utils.Api;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
 
     private User user;
     private FragmentHelper fragmentHelper;
-    private ViewSwitcherHelper viewSwitcher;
+    private ViewFlipperHelper viewFlipperHelper;
     private NavDrawerModel navDrawerModel;
 
     @Override
@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         // make sure to do loading screen first hehehe
-        final View vLoading = ViewHelper.getLoadingView(this, R.id.main_root_layout);
-        viewSwitcher = new ViewSwitcherHelper(this, R.id.main_root_layout, vLoading);
+        final ViewFlipper viewFlipper = findViewById(R.id.main_view_flipper);
+        viewFlipperHelper = new ViewFlipperHelper(viewFlipper, R.id.main_loading_layout);
 
         // get user auth
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
@@ -100,14 +100,14 @@ public class MainActivity extends AppCompatActivity
         }
 
         // switch to actual content
-        viewSwitcher.clear();
+         viewFlipperHelper.switchTo(R.id.main_content_layout);
 
         // create fragmentHelper
         if (fragmentHelper == null) {
             // NfcFragment is the default fragment for teacher
             // StudentFragment for student
             final Fragment fragment = isTeacher ? new NfcFragment() : new StudentFragment();
-            fragmentHelper = new FragmentHelper(this, fragment, R.id.main_root_layout, true);
+            fragmentHelper = new FragmentHelper(this, fragment, R.id.main_content_layout, true);
         }
         // set whatever the current is
         fragmentHelper.setCurrFragment();

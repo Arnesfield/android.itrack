@@ -10,8 +10,8 @@
         android:layout_weight="1"
         android:fillViewport="true">
 
-        <ViewSwitcher
-            android:id="@+id/make_report_user_info_switcher"
+        <ViewFlipper
+            android:id="@+id/make_report_user_info_view_flipper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:measureAllChildren="false">
@@ -40,7 +40,7 @@
 
                 <include layout="@layout/user_info_view" />
             </LinearLayout>
-        </ViewSwitcher>
+        </ViewFlipper>
     </ScrollView>
 
     <LinearLayout

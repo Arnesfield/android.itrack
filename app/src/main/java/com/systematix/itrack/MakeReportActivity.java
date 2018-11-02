@@ -6,17 +6,15 @@ import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
+import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
 import com.systematix.itrack.config.UrlsList;
-import com.systematix.itrack.helpers.ViewSwitcherHelper;
+import com.systematix.itrack.helpers.ViewFlipperHelper;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.models.UserInfoViewModel;
 import com.systematix.itrack.utils.Api;
@@ -28,12 +26,9 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
 
     private String serial;
     private User user;
-    private View vLoading;
-    private View vMakeReport;
     private View vUserInfo;
-    private View vNoUser;
-    private ViewSwitcher vUserInfoSwitcher;
-    private ViewSwitcherHelper viewSwitcher;
+    private ViewFlipperHelper viewFlipperHelper;
+    private ViewFlipperHelper makeReportFlipperHelper;
     private Button btnMakeReport;
     private View.OnClickListener onBtnMakeReportClick;
 
@@ -55,15 +50,14 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        final LayoutInflater inflater = getLayoutInflater();
+        final ViewFlipper viewFlipper = findViewById(R.id.make_report_view_flipper);
 
-        final ViewGroup rootView = findViewById(R.id.make_report_root_layout);
-        vLoading = inflater.inflate(R.layout.loading_layout, rootView, false);
-        vMakeReport = inflater.inflate(R.layout.make_report_view, rootView, false);
-        vUserInfoSwitcher = vMakeReport.findViewById(R.id.make_report_user_info_switcher);
-        vUserInfo = vUserInfoSwitcher.findViewById(R.id.make_report_user_info);
-        vNoUser = vUserInfoSwitcher.findViewById(R.id.make_report_no_user);
+        final View vMakeReport = findViewById(R.id.make_report_make_report_view);
+        final ViewFlipper vUserInfoFlipper = vMakeReport.findViewById(R.id.make_report_user_info_view_flipper);
+        final View vNoUser = vUserInfoFlipper.findViewById(R.id.make_report_no_user);
+
         btnMakeReport = vMakeReport.findViewById(R.id.make_report_button);
+        vUserInfo = vUserInfoFlipper.findViewById(R.id.make_report_user_info);
 
         // click for btn
         onBtnMakeReportClick = new View.OnClickListener() {
@@ -96,13 +90,14 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
         });
 
         // set stuff
-        viewSwitcher = new ViewSwitcherHelper(rootView);
+        viewFlipperHelper = new ViewFlipperHelper(viewFlipper);
+        makeReportFlipperHelper = new ViewFlipperHelper(vUserInfoFlipper, R.id.make_report_no_user);
         request();
     }
 
     private void request() {
         if (hasNoSerial()) { return; }
-        viewSwitcher.switchTo(vLoading);
+        viewFlipperHelper.switchTo(R.id.make_report_loading_layout);
         // get da user with that serial!
         final JSONObject params = new JSONObject();
         try {
@@ -153,10 +148,8 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
         final JSONObject jsonUser = response.getJSONObject("user");
         user = new User(jsonUser);
 
-        viewSwitcher.switchTo(vMakeReport);
-        if (vUserInfoSwitcher.getCurrentView() != vUserInfo) {
-            vUserInfoSwitcher.showNext();
-        }
+        viewFlipperHelper.switchTo(R.id.make_report_make_report_view);
+        makeReportFlipperHelper.switchTo(R.id.make_report_user_info);
 
         // set btn click
         btnMakeReport.setText(R.string.make_report_action);
@@ -173,10 +166,8 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
     public void onApiError(String tag, VolleyError error) {
         Toast.makeText(this, R.string.error_cannot_load_user, Toast.LENGTH_LONG).show();
 
-        viewSwitcher.switchTo(vMakeReport);
-        if (vUserInfoSwitcher.getCurrentView() != vNoUser) {
-            vUserInfoSwitcher.showNext();
-        }
+        viewFlipperHelper.switchTo(R.id.make_report_make_report_view);
+        makeReportFlipperHelper.switchTo(R.id.make_report_no_user);
 
         // set btn click
         btnMakeReport.setText(R.string.make_report_action_anyway);

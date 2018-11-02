@@ -9,7 +9,16 @@
     tools:context=".ProfileActivity"
     tools:showIn="@layout/activity_profile">
 
-    <include
-        android:id="@+id/profile_user_info"
-        layout="@layout/user_info_view" />
+    <ViewFlipper
+        android:id="@+id/profile_view_flipper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            layout="@layout/loading_layout"
+            android:id="@+id/profile_loading_layout"/>
+        <include
+            layout="@layout/user_info_view"
+            android:id="@+id/profile_user_info" />
+    </ViewFlipper>
 </android.support.v4.widget.NestedScrollView>

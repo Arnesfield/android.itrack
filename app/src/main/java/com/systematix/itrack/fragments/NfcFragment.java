@@ -12,10 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.systematix.itrack.R;
 import com.systematix.itrack.helpers.FragmentHelper;
-import com.systematix.itrack.helpers.ViewSwitcherHelper;
+import com.systematix.itrack.helpers.ViewFlipperHelper;
 import com.systematix.itrack.interfaces.OnNavItemChangeListener;
 import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
@@ -27,9 +28,7 @@ public class NfcFragment extends Fragment
         implements FragmentHelper.TitleableFragment, NfcNoPermissionStateModel.Model, OnNavItemChangeListener {
 
     private NfcAdapter nfc;
-    private View vEnabled;
-    private View vNoPermission;
-    private ViewSwitcherHelper viewSwitcher;
+    private ViewFlipperHelper viewFlipperHelper;
 
     public NfcFragment() {
         // Required empty public constructor
@@ -40,10 +39,10 @@ public class NfcFragment extends Fragment
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final FrameLayout rootView = (FrameLayout) inflater.inflate(R.layout.fragment_nfc, container, false);
-        vEnabled = inflater.inflate(R.layout.nfc_enabled_state, container, false);
-        vNoPermission = inflater.inflate(R.layout.nfc_no_permission_state, container, false);
+        final ViewFlipper viewFlipper = rootView.findViewById(R.id.nfc_view_flipper);
+        final View vNoPermission = rootView.findViewById(R.id.nfc_no_permission_state_view);
         nfc = NfcAdapter.getDefaultAdapter(getContext());
-        viewSwitcher = new ViewSwitcherHelper(rootView);
+        viewFlipperHelper = new ViewFlipperHelper(viewFlipper);
 
         NfcEnabledStateModel.init(getContext(), nfc);
         NfcNoPermissionStateModel.init(this, vNoPermission);
@@ -68,15 +67,15 @@ public class NfcFragment extends Fragment
 
     private void updateView() {
         final boolean isNfcEnabled = nfc.isEnabled();
-        final View newView = isNfcEnabled ? vEnabled : vNoPermission;
+        final int newView = isNfcEnabled ? R.id.nfc_enabled_state_view : R.id.nfc_no_permission_state_view;
 
         // if these are different, then show dat toast!
-        if (isNfcEnabled && viewSwitcher.isNotCurrent(newView)) {
+        if (isNfcEnabled && viewFlipperHelper.isNotCurrent(newView)) {
             Toast.makeText(getContext(), R.string.msg_nfc_enabled, Toast.LENGTH_SHORT).show();
             NfcEnabledStateModel.onResume(getActivity());
         }
 
-        viewSwitcher.switchTo(newView);
+        viewFlipperHelper.switchTo(newView);
     }
 
     // NfcNoPermissionStateModel

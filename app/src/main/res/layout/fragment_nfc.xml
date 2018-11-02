@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nfc_view_flipper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.NfcFragment" />
+    android:measureAllChildren="false"
+    tools:context=".fragments.NfcFragment">
+
+    <include
+        layout="@layout/nfc_enabled_state"
+        android:id="@+id/nfc_enabled_state_view" />
+    <include
+        layout="@layout/nfc_no_permission_state"
+        android:id="@+id/nfc_no_permission_state_view" />
+</ViewFlipper>
