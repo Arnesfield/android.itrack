@@ -203,6 +203,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        // set fragment here also
+        if (user != null) {
+            getFragmentModel().setCurrFragment();
+        }
         // update nav item selected
         getNavDrawerModel().setNavItemSelected(getFragmentModel());
         NfcEnabledStateModel.onResume(this);

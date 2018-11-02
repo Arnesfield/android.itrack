@@ -20,8 +20,7 @@
                 layout="@layout/make_report_no_user_state"
                 android:id="@+id/make_report_no_user"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="32dp" />
+                android:layout_height="match_parent" />
 
             <LinearLayout
                 android:id="@+id/make_report_user_info"

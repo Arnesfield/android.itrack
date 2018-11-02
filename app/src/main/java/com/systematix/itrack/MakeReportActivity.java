@@ -169,6 +169,9 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
         viewFlipperModel.switchTo(R.id.make_report_content_view);
         makeReportFlipperHelper.switchTo(R.id.make_report_no_user);
 
+        // set serial only for user
+        user = new User(serial);
+
         // set btn click
         btnMakeReport.setText(R.string.make_report_action_anyway);
         btnMakeReport.setOnClickListener(onBtnMakeReportClick);
