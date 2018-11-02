@@ -39,7 +39,7 @@ public class Task<T> extends AsyncTask<Void, Void, T> {
         this.finishListener = finishListener;
     }
 
-    public Task(OnTaskListener listener) {
+    public Task(OnTaskListener<T> listener) {
         this(listener, listener, listener);
     }
 

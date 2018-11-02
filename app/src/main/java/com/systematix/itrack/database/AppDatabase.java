@@ -10,7 +10,7 @@ import com.systematix.itrack.database.daos.ViolationDao;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.items.Violation;
 
-@Database(entities = { User.class, Violation.class }, version = 1)
+@Database(entities = { User.class, Violation.class }, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract ViolationDao violationDao();

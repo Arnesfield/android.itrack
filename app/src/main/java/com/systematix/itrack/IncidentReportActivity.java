@@ -10,8 +10,10 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
+import com.google.android.flexbox.FlexboxLayout;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.items.Violation;
+import com.systematix.itrack.models.SelectableChipsModel;
 import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.models.api.GetViolationsApiModel;
 import com.systematix.itrack.utils.Api;
@@ -27,6 +29,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
     private String serial;
     private String userName;
     private ViewFlipperModel viewFlipperModel;
+    private SelectableChipsModel selectableChipsModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +96,6 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
 
             @Override
             public void finish(List<Violation> result) {
-                // TODO: show em results
                 // also handle if there are no results :(
                 if (result.isEmpty()) {
                     // show empty state
@@ -111,9 +113,9 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
     // finally got results!
     private void gotResults(List<Violation> violations) {
         viewFlipperModel.switchTo(R.id.incident_report_content_view);
+        final FlexboxLayout layout = findViewById(R.id.incident_report_flexbox_layout);
 
-        // TODO: update got results
-        Toast.makeText(this, "Finally!", Toast.LENGTH_SHORT).show();
+        selectableChipsModel = new SelectableChipsModel<>(layout, violations);
     }
 
     @Override
@@ -124,7 +126,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
 
     // OnApiSuccessListener
     @Override
-    public void onApiSuccess(String tag, JSONObject response, boolean success, String msg) throws JSONException {
+    public void onApiSuccess(String tag, JSONObject response, boolean success, String msg) {
         // whatever happens, getViolations :D
         getViolations();
     }
@@ -140,6 +142,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
     @Override
     public void onApiException(String tag, JSONException e) {
         // whatever happens, getViolations :D
+        // unlikely it will pass here
         getViolations();
     }
 }

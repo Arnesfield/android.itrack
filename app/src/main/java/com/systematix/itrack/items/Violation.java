@@ -6,6 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
+import com.systematix.itrack.components.chip.Chip;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.database.DbEntity;
 import com.systematix.itrack.utils.Callback;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public final class Violation implements DbEntity {
+public final class Violation extends Chip implements DbEntity {
     @PrimaryKey @ColumnInfo(name = "violation_id") private int id;
     @ColumnInfo(name = "violation_name") private String name;
     @ColumnInfo(name = "violation_type") private String type;
@@ -117,5 +118,16 @@ public final class Violation implements DbEntity {
             }
         }
         return violations;
+    }
+
+    // Chip
+    @Override
+    public String getChipText() {
+        return name;
+    }
+
+    @Override
+    public boolean isChipClickable() {
+        return true;
     }
 }

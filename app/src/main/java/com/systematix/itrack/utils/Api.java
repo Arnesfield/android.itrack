@@ -132,8 +132,14 @@ public final class Api {
                             if (successListener != null) {
                                 // get success and message
                                 final boolean success = Api.isSuccessful(response);
-                                final String msg = success ? null : JSONObjectHelper.optString(response, "msg");
-                                successListener.onApiSuccess(api.tag, response, success, msg);
+                                final String logMsg = JSONObjectHelper.optString(response, "msg");
+                                final String outMsg = success ? null : logMsg;
+                                Log.d("devtag", "Api@OnApiSuccess");
+                                Log.d("devtag", String.valueOf(success));
+                                if (logMsg != null) {
+                                    Log.d("devtag", logMsg);
+                                }
+                                successListener.onApiSuccess(api.tag, response, success, outMsg);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

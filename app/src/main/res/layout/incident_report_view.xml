@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ScrollView
@@ -15,13 +16,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Some text to make you heppy" />
+            </LinearLayout>
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/incident_report_flexbox_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="0dp"
+                android:paddingBottom="12dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                app:flexWrap="wrap"
+                app:flexDirection="row"
+                app:alignItems="flex_start" />
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@android:color/white">
 
         <View style="@style/Divider" />
 

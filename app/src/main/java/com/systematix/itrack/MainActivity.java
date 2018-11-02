@@ -184,8 +184,7 @@ public class MainActivity extends AppCompatActivity
 
     private FragmentModel getFragmentModel() {
         // create fragmentModel
-        assert user != null;
-        if (fragmentModel == null) {
+        if (user != null && fragmentModel == null) {
             // NfcFragment is the default fragment for teacher
             // StudentFragment for student
             final boolean isTeacher = user.checkAccess("teacher");
