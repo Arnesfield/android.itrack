@@ -17,38 +17,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.android.volley.VolleyError;
 import com.systematix.itrack.config.RequestCodesList;
-import com.systematix.itrack.config.UrlsList;
-import com.systematix.itrack.database.AppDatabase;
-import com.systematix.itrack.database.daos.ViolationDao;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.StudentFragment;
-import com.systematix.itrack.models.FragmentModel;
-import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
-import com.systematix.itrack.items.Violation;
+import com.systematix.itrack.models.FragmentModel;
+import com.systematix.itrack.models.api.GetViolationsApiModel;
 import com.systematix.itrack.models.NavDrawerModel;
 import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
-import com.systematix.itrack.utils.Api;
+import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.utils.Task;
 import com.systematix.itrack.utils.simple.SimpleLoadingDialog;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, NfcEnabledStateModel.OnDiscoveredListener, Api.OnApiRespondListener {
+        implements NavigationView.OnNavigationItemSelectedListener, NfcEnabledStateModel.OnDiscoveredListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.fab) FloatingActionButton fab;
@@ -208,11 +197,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void fetchViolations() {
-        Api.post(this)
-            .setTag("violations")
-            .setUrl(UrlsList.GET_MINOR_VIOLATIONS_URL)
-            .setApiListener(this)
-            .request();
+        // no need to handle callbacks
+        GetViolationsApiModel.fetch(this);
     }
 
     @Override
@@ -315,45 +301,5 @@ public class MainActivity extends AppCompatActivity
         final Intent intent = new Intent(this, MakeReportActivity.class);
         intent.putExtra("serial", serial);
         startActivity(intent);
-    }
-
-    // OnApiSuccessListener
-    @Override
-    public void onApiSuccess(String tag, JSONObject response, boolean success, String msg) throws JSONException {
-        if (!success) {
-            if (msg != null || !msg.isEmpty()) {
-                Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-            }
-            finish();
-            return;
-        }
-
-        final List<Violation> violations = Violation.collection(response.getJSONArray("violations"));
-        final AppDatabase db = AppDatabase.getInstance(this);
-        // task
-        new Task<>(new Task.OnTaskExecuteListener<Void>() {
-            @Override
-            public Void execute() {
-                final ViolationDao dao = db.violationDao();
-                // clear all violations hehe
-                // then insert new ones just to make sure
-                // you also don't need to tell your user about this i think
-                dao.deleteAll();
-                dao.insertAll(violations);
-                return null;
-            }
-        }).execute();
-    }
-
-    // OnApiErrorListener
-    @Override
-    public void onApiError(String tag, VolleyError error) {
-
-    }
-
-    // OnApiExceptionListener
-    @Override
-    public void onApiException(String tag, JSONException e) {
-
     }
 }

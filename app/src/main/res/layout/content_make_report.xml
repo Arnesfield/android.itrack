@@ -21,6 +21,6 @@
             android:id="@+id/make_report_loading_layout" />
         <include
             layout="@layout/make_report_view"
-            android:id="@+id/make_report_make_report_view" />
+            android:id="@+id/make_report_content_view" />
     </ViewFlipper>
 </ScrollView>

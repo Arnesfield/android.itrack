@@ -21,6 +21,10 @@ public class Task<T> extends AsyncTask<Void, Void, T> {
         void finish(T result);
     }
 
+    public interface OnTaskListener<T> extends OnTaskPreExecuteListener, OnTaskExecuteListener<T>, OnTaskFinishListener<T> {
+
+    }
+
     public Task(@NonNull OnTaskExecuteListener<T> executeListener) {
         this(executeListener, null);
     }
@@ -33,6 +37,10 @@ public class Task<T> extends AsyncTask<Void, Void, T> {
         this.preExecuteListener = preExecuteListener;
         this.executeListener = executeListener;
         this.finishListener = finishListener;
+    }
+
+    public Task(OnTaskListener listener) {
+        this(listener, listener, listener);
     }
 
     // setters

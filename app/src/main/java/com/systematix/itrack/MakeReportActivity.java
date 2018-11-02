@@ -52,7 +52,7 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
 
         final ViewFlipper viewFlipper = findViewById(R.id.make_report_view_flipper);
 
-        final View vMakeReport = findViewById(R.id.make_report_make_report_view);
+        final View vMakeReport = findViewById(R.id.make_report_content_view);
         final ViewFlipper vUserInfoFlipper = vMakeReport.findViewById(R.id.make_report_user_info_view_flipper);
         final View vNoUser = vUserInfoFlipper.findViewById(R.id.make_report_no_user);
 
@@ -148,7 +148,7 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
         final JSONObject jsonUser = response.getJSONObject("user");
         user = new User(jsonUser);
 
-        viewFlipperModel.switchTo(R.id.make_report_make_report_view);
+        viewFlipperModel.switchTo(R.id.make_report_content_view);
         makeReportFlipperHelper.switchTo(R.id.make_report_user_info);
 
         // set btn click
@@ -166,7 +166,7 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
     public void onApiError(String tag, VolleyError error) {
         Toast.makeText(this, R.string.error_cannot_load_user, Toast.LENGTH_LONG).show();
 
-        viewFlipperModel.switchTo(R.id.make_report_make_report_view);
+        viewFlipperModel.switchTo(R.id.make_report_content_view);
         makeReportFlipperHelper.switchTo(R.id.make_report_no_user);
 
         // set btn click

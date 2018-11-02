@@ -78,6 +78,12 @@
     <string name="make_report_no_user_title">Cannot load student :(</string>
     <string name="make_report_no_user_subtitle">You can still send this report now and it will be sent later.</string>
 
+    <!-- incident report -->
+    <string name="incident_report_action">Report Incident</string>
+    <!-- incidentReport@emptyState -->
+    <string name="incident_report_empty_title">No violations list :(</string>
+    <string name="incident_report_empty_subtitle">Unable to load the list of violations. Please try again.</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
