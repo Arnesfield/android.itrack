@@ -11,6 +11,7 @@
     <color name="colorButtonTextDisabled">#BDBDBD</color>
     <color name="colorSecondaryTextLight">#757575</color>
     <color name="colorWarning">#FB8C00</color>
+    <color name="colorWarningDarker">#FF7043</color>
     <color name="colorError">#F44336</color>
     <color name="colorBackground">#FAFAFA</color>
     <color name="colorBackgroundDarker">#EEEEEE</color>

@@ -3,9 +3,7 @@ package com.systematix.itrack;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -18,7 +16,6 @@ import com.android.volley.VolleyError;
 import com.google.android.flexbox.FlexboxLayout;
 import com.systematix.itrack.components.chip.Chip;
 import com.systematix.itrack.components.chip.Chipable;
-import com.systematix.itrack.config.UrlsList;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.items.Violation;
 import com.systematix.itrack.models.ButtonStateModel;
@@ -49,8 +46,9 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
         setContentView(R.layout.activity_minor_violation);
 
         // get serial
-        serial = getIntent().getStringExtra("serial");
-        userName = getIntent().getStringExtra("userName");
+        final Intent intent = getIntent();
+        serial = intent.getStringExtra("serial");
+        userName = intent.getStringExtra("userName");
         userName = userName == null ? "this student" : userName;
 
         if (serial == null) {
@@ -78,14 +76,14 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
             }
         });
 
-        final Button btnReport = findViewById(R.id.minor_violation_button);
-        btnReport.setOnClickListener(new View.OnClickListener() {
+        final Button btnNext = findViewById(R.id.minor_violation_button);
+        btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submit();
+                next();
             }
         });
-        btnStateModel = new ButtonStateModel(btnReport);
+        btnStateModel = new ButtonStateModel(btnNext);
 
         // get and set those textViews
         final TextView tvSubtitle = findViewById(R.id.minor_violation_subtitle);
@@ -107,54 +105,22 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
 
     private void fetchViolations() {
         viewFlipperModel.switchTo(R.id.minor_violation_loading_layout);
-        GetViolationsApiModel.fetch(this, MinorViolationActivity.this);
+        GetViolationsApiModel.fetch(this, this);
     }
 
-    private void submit() {
+    private void next() {
         final Violation violation = selectableChipsModel.getSelectedChip();
         if (violation == null) {
             return;
         }
 
-        // show dialog first
-        getLoadingDialog(violation).show();
+        final Intent intent = new Intent(this, MinorViolationExtrasActivity.class);
+        intent.putExtra("serial", serial);
+        intent.putExtra("userName", userName);
+        intent.putExtra("violationId", violation.getId());
+        intent.putExtra("violationText", violation.getName());
 
-        // request
-        final JSONObject params = new JSONObject();
-        try {
-            params.put("serial", serial);
-            params.put("violation_id", violation.getId());
-
-            // TODO: remove handler
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Api.post(MinorViolationActivity.this)
-                        .setTag("minorViolation")
-                        .setUrl(UrlsList.SEND_MINOR_VIOLATION_URL)
-                        .setApiListener(MinorViolationActivity.this)
-                        .request(params);
-                }
-            }, 5000);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private AlertDialog getLoadingDialog(Chipable chip) {
-        if (loadingDialogModel == null) {
-            loadingDialogModel = new LoadingDialogModel(this);
-            final AlertDialog dialog = loadingDialogModel.getDialog();
-            final TextView tvMessage = loadingDialogModel.getMessageTextView();
-
-            final String violationText = chip.getChipText();
-            final String msg = getResources().getString(R.string.minor_violation_send_dialog_message, userName, violationText);
-
-            dialog.setTitle(R.string.minor_violation_send_dialog_title);
-            tvMessage.setText(msg);
-        }
-
-        return loadingDialogModel.getDialog();
+        startActivity(intent);
     }
 
     private void getViolations() {
@@ -211,17 +177,6 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
         btnStateModel.setEnabled(selectableChipsModel.hasSelectedChip());
     }
 
-    // intent after submit
-    private Intent getOnSubmitIntent(boolean success) {
-        final Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("minorViolationSent", true);
-        intent.putExtra("minorViolationSuccess", success);
-        return intent;
-    }
-
     @Override
     public boolean onSupportNavigateUp() {
         super.onBackPressed();
@@ -231,28 +186,15 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
     // OnApiSuccessListener
     @Override
     public void onApiSuccess(String tag, JSONObject response, boolean success, String msg) {
-        if (tag.equals("violations")) {
-            // whatever happens, getViolations :D
-            getViolations();
-        } else if (tag.equals("minorViolation")) {
-            loadingDialogModel.getDialog().dismiss();
-            startActivity(getOnSubmitIntent(true));
-            finish();
-        }
+        // whatever happens, getViolations :D
+        getViolations();
     }
 
     // OnApiErrorListener
     @Override
     public void onApiError(String tag, VolleyError error) {
-        if (tag.equals("violations")) {
-            // whatever happens, getViolations :D
-            getViolations();
-        } else if (tag.equals("minorViolation")) {
-            // TODO: save to db
-            loadingDialogModel.getDialog().dismiss();
-            startActivity(getOnSubmitIntent(false));
-            finish();
-        }
+        // whatever happens, getViolations :D
+        getViolations();
     }
 
     // OnApiExceptionListener
@@ -260,11 +202,6 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
     public void onApiException(String tag, JSONException e) {
         // whatever happens, getViolations :D
         // unlikely it will pass here
-        if (tag.equals("violations")) {
-            getViolations();
-        } else if (tag.equals("minorViolation")) {
-            loadingDialogModel.getDialog().dismiss();
-            Toast.makeText(this, R.string.minor_violation_sent_exception_msg, Toast.LENGTH_SHORT).show();
-        }
+        getViolations();
     }
 }

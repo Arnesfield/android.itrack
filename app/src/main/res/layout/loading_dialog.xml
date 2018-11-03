@@ -12,7 +12,8 @@
         <ProgressBar
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:indeterminate="true" />
+            android:indeterminate="true"
+            android:indeterminateTint="@color/colorAccent" />
 
         <LinearLayout
             android:layout_width="0dp"

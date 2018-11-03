@@ -53,5 +53,11 @@
             android:label="@string/title_activity_minor_violation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.DarkStatusBar" />
+        <activity
+            android:name=".MinorViolationExtrasActivity"
+            android:label="@string/title_activity_minor_violation_extras"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.DarkStatusBar.AccentIsPrimary" />
     </application>
+
 </manifest>
