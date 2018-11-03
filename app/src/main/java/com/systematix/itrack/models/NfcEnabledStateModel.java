@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.util.Log;
 
+import com.systematix.itrack.config.AppConfig;
+
 public final class NfcEnabledStateModel {
     private NfcAdapter nfc;
     private PendingIntent pendingIntent;
@@ -37,7 +39,7 @@ public final class NfcEnabledStateModel {
 
     public static void onResume(Activity activity) {
         if (model != null) {
-            Log.d("devtag", "enabledState@onResume");
+            Log.i(AppConfig.TAG, "nfc:enabledState@onResume");
             final NfcAdapter nfc = model.getNfc();
             final PendingIntent pendingIntent = model.getPendingIntent();
             nfc.enableForegroundDispatch(activity, pendingIntent, null, null);
@@ -46,7 +48,7 @@ public final class NfcEnabledStateModel {
 
     public static void onPause(Activity activity) {
         if (model != null) {
-            Log.d("devtag", "enabledState@onPause");
+            Log.i(AppConfig.TAG, "nfc:enabledState@onPause");
             model.getNfc().disableForegroundDispatch(activity);
         }
     }
@@ -59,8 +61,8 @@ public final class NfcEnabledStateModel {
 
         activity.setIntent(intent);
         final String action = intent.getAction();
-        Log.d("devtag", "enabledState@onNewIntent");
-        Log.d("devtag", action);
+        Log.d(AppConfig.TAG, "nfc:enabledState@onNewIntent:" + action);
+
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
             final StringBuilder hex = new StringBuilder();
             final byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
@@ -74,7 +76,7 @@ public final class NfcEnabledStateModel {
             }
             final String serial = hex.toString().toUpperCase();
 
-            Log.d("devtag", serial);
+            Log.d(AppConfig.TAG, "nfc:enabledState@gotSerial:" + serial);
             // with serial, go to another activity
             ((OnDiscoveredListener) activity).onDiscovered(serial);
         }

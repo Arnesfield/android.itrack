@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
+import com.systematix.itrack.config.AppConfig;
 import com.systematix.itrack.config.UrlsList;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.items.MinorReport;
@@ -28,7 +29,7 @@ public final class SendMinorReportsApiModel {
                 if (!success) {
                     return;
                 }
-                Log.i("devtag", "syncModel@Synced!");
+                Log.i(AppConfig.TAG, "syncModel@Synced");
                 new Task<>(new Task.OnTaskExecuteListener<Void>() {
                     @Override
                     public Void execute() {

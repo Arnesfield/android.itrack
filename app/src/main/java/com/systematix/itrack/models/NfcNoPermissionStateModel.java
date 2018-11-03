@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.systematix.itrack.R;
+import com.systematix.itrack.config.AppConfig;
 import com.systematix.itrack.config.RequestCodesList;
 
 import java.util.Timer;
@@ -93,7 +94,7 @@ public final class NfcNoPermissionStateModel {
             return;
         }
 
-        Log.d("devtag", "askPermission");
+        Log.i(AppConfig.TAG, "nfc:noPermissionState@askPermission");
 
         // Here, activity is the current activity
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.NFC)
@@ -108,7 +109,7 @@ public final class NfcNoPermissionStateModel {
                     RequestCodesList.NFC);
         } else {
             // Permission has already been granted
-            Log.d("devtag", "askPermission@granted");
+            Log.i(AppConfig.TAG, "nfc:askPermission@granted");
             activity.startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
         }
     }

@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.systematix.itrack.config.AppConfig;
 import com.systematix.itrack.helpers.JSONObjectHelper;
 
 import org.json.JSONArray;
@@ -155,17 +156,21 @@ public final class Api {
                                 final boolean success = Api.isSuccessful(response);
                                 final String logMsg = JSONObjectHelper.optString(response, "msg");
                                 final String outMsg = success ? null : logMsg;
-                                Log.d("devtag", "Api@OnApiSuccess:" + tag);
-                                Log.d("devtag", String.valueOf(success));
+
+                                Log.d(AppConfig.TAG, "Api@OnApiSuccess:" + tag);
+                                Log.d(AppConfig.TAG, String.valueOf(success));
+
                                 if (logMsg != null) {
-                                    Log.d("devtag", logMsg);
+                                    Log.d(AppConfig.TAG, logMsg);
                                 }
                                 successListener.onApiSuccess(api.tag, response, success, outMsg);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.e("devtag", "Api@OnApiException:" + tag);
-                            Log.e("devtag", e.getMessage());
+
+                            Log.e(AppConfig.TAG, "Api@OnApiException:" + tag);
+                            Log.e(AppConfig.TAG, e.getMessage());
+
                             if (exceptionListener != null) {
                                 exceptionListener.onApiException(api.tag, e);
                             }
@@ -176,15 +181,17 @@ public final class Api {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         try {
-                            Log.e("devtag", "Api@OnApiError:" + tag);
-                            Log.e("devtag", error.toString());
+                            Log.e(AppConfig.TAG, "Api@OnApiError:" + tag);
+                            Log.e(AppConfig.TAG, error.toString());
+
                             if (errorListener != null) {
                                 errorListener.onApiError(api.tag, error);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.e("devtag", "Api@OnApiException:" + tag);
-                            Log.e("devtag", e.getMessage());
+                            Log.e(AppConfig.TAG, "Api@OnApiException:" + tag);
+                            Log.e(AppConfig.TAG, e.getMessage());
+
                             if (exceptionListener != null) {
                                 exceptionListener.onApiException(api.tag, e);
                             }

@@ -8,13 +8,15 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
+import com.systematix.itrack.config.AppConfig;
+
 public final class NetworkSchedulerService extends JobService implements ConnectivityReceiver.OnNetworkConnectionChangedListener {
     private ConnectivityReceiver receiver;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i("devtag", "Service created");
+        Log.i(AppConfig.TAG, "service@created");
         receiver = new ConnectivityReceiver(this);
     }
 
@@ -24,20 +26,20 @@ public final class NetworkSchedulerService extends JobService implements Connect
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("devtag", "onStartCommand");
+        Log.i(AppConfig.TAG, "service@onStartCommand");
         return START_NOT_STICKY;
     }
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        Log.i("devtag", "onStartJob" + receiver);
+        Log.i(AppConfig.TAG, "service@onStartJob:" + receiver);
         registerReceiver(receiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         return true;
     }
 
     @Override
     public boolean onStopJob(JobParameters params) {
-        Log.i("devtag", "onStopJob");
+        Log.i(AppConfig.TAG, "service@onStopJob");
         unregisterReceiver(receiver);
         return true;
     }
