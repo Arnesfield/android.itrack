@@ -47,6 +47,7 @@ public final class NetworkSchedulerService extends JobService implements Connect
     // OnNetworkConnectionChangedListener
     @Override
     public void onNetworkConnectionChanged(Context context, boolean isConnected) {
+        Log.i(AppConfig.TAG, "service@onNetworkConnectionChanged:" + isConnected);
         Sync.onNetworkConnectionChanged(context, isConnected);
     }
 }
