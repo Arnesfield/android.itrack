@@ -32,6 +32,7 @@ import com.systematix.itrack.models.LoadingDialogModel;
 import com.systematix.itrack.models.NavDrawerModel;
 import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
+import com.systematix.itrack.models.SyncModel;
 import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.models.api.GetViolationsApiModel;
 import com.systematix.itrack.utils.Task;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity
 
         // make sync
         sync = new Sync(this);
+        Sync.setSyncListener(new SyncModel());
 
         // get user auth
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
