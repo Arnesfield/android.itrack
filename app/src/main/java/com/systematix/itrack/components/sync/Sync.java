@@ -51,13 +51,13 @@ public final class Sync {
     }
 
     // useful stuff
-    private static SyncListener syncListener;
+    private static OnSyncListener syncListener;
 
-    public interface SyncListener {
+    public interface OnSyncListener {
         void onSync(Context context, boolean isConnected);
     }
 
-    public static void setSyncListener(SyncListener listener) {
+    public static void setSyncListener(OnSyncListener listener) {
         syncListener = listener;
     }
 

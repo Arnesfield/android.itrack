@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public final class SyncModel implements Sync.SyncListener {
+public final class SyncModel implements Sync.OnSyncListener {
     @Override
     public void onSync(Context context, boolean isConnected) {
         if (isConnected) {

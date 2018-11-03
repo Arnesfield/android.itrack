@@ -126,8 +126,7 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
     private void getViolations() {
         // get from db
         final AppDatabase db = AppDatabase.getInstance(this);
-
-        final Task.OnTaskListener<List<Violation>> listener = new Task.OnTaskListener<List<Violation>>() {
+        new Task<>(new Task.OnTaskListener<List<Violation>>() {
             @Override
             public void preExecute() {
                 // make sure to show loading screen first
@@ -150,9 +149,7 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
                     gotResults(result);
                 }
             }
-        };
-
-        new Task<>(listener).execute();
+        }).execute();
     }
 
     // finally got results!
