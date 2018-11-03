@@ -7,6 +7,7 @@ import android.content.Context;
 
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.database.DbEntity;
+import com.systematix.itrack.database.daos.MinorReportDao;
 import com.systematix.itrack.interfaces.ApiRequestable;
 import com.systematix.itrack.utils.Task;
 
@@ -90,10 +91,11 @@ public final class MinorReport implements DbEntity, ApiRequestable {
         final AppDatabase db = AppDatabase.getInstance(context);
         new Task<>(new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
-                if (id == 0) {
-                    db.minorReportDao().insertAll(MinorReport.this);
+                final MinorReportDao dao = db.minorReportDao();
+                if (id == 0 || dao.findById(id) == null) {
+                    dao.insertAll(MinorReport.this);
                 } else {
-                    db.minorReportDao().update(MinorReport.this);
+                    dao.update(MinorReport.this);
                 }
                 return null;
             }

@@ -18,6 +18,7 @@ import com.bumptech.glide.request.target.Target;
 import com.systematix.itrack.config.UrlsList;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.database.DbEntity;
+import com.systematix.itrack.database.daos.UserDao;
 import com.systematix.itrack.helpers.JSONObjectHelper;
 import com.systematix.itrack.utils.Task;
 
@@ -223,10 +224,12 @@ public class User implements DbEntity {
         final AppDatabase db = AppDatabase.getInstance(context);
         new Task<>(new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
-                if (id == 0) {
-                    db.userDao().insertAll(User.this);
+                // insert if no id, and if obj does not exist
+                final UserDao dao = db.userDao();
+                if (id == 0 || dao.findById(id) == null) {
+                    dao.insertAll(User.this);
                 } else {
-                    db.userDao().update(User.this);
+                    dao.update(User.this);
                 }
                 return null;
             }

@@ -36,9 +36,7 @@ public final class Auth {
 
     public static void getSavedUser(Context context, Task.OnTaskFinishListener<User> listener) {
         final AppDatabase db = AppDatabase.getInstance(context);
-
-        final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
-        final int uid = preferences.getInt(PreferencesList.PREF_USER_ID, -1);
+        final int uid = getSavedUserId(context);
 
         if (uid == -1) {
             return;
@@ -58,7 +56,7 @@ public final class Auth {
         final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
         final SharedPreferences.Editor edit = preferences.edit();
 
-        final int uid = preferences.getInt(PreferencesList.PREF_USER_ID, -1);
+        final int uid = getSavedUserId(context);
 
         edit.remove(PreferencesList.PREF_USER_ID);
         edit.remove(PreferencesList.PREF_DID_LOG_IN);

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import com.systematix.itrack.components.chip.Chip;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.database.DbEntity;
+import com.systematix.itrack.database.daos.ViolationDao;
 import com.systematix.itrack.utils.Callback;
 import com.systematix.itrack.utils.Task;
 
@@ -85,10 +86,11 @@ public final class Violation extends Chip implements DbEntity {
         final AppDatabase db = AppDatabase.getInstance(context);
         new Task<>(new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
-                if (id == 0) {
-                    db.violationDao().insertAll(Violation.this);
+                final ViolationDao dao = db.violationDao();
+                if (id == 0 || dao.findById(id) == null) {
+                    dao.insertAll(Violation.this);
                 } else {
-                    db.violationDao().update(Violation.this);
+                    dao.update(Violation.this);
                 }
                 return null;
             }
