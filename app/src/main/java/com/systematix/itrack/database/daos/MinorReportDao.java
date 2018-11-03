@@ -29,4 +29,7 @@ public interface MinorReportDao {
 
     @Query("DELETE FROM minor_report WHERE id = :id")
     void deleteById(int id);
+
+    @Query("DELETE FROM minor_report")
+    void deleteAll();
 }

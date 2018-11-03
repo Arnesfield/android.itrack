@@ -11,4 +11,5 @@ public final class UrlsList {
     public static final String GET_USER_URL = API_URL + "user";
     public static final String GET_MINOR_VIOLATIONS_URL = API_URL + "violation/index/minor";
     public static final String SEND_MINOR_VIOLATION_URL = API_URL + "minorviolation/make";
+    public static final String SEND_MINOR_VIOLATION_BATCH_URL = API_URL + "minorviolation/batch";
 }

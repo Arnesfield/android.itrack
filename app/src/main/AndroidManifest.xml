@@ -6,6 +6,16 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- !!! for syncing !!! -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- Always required on api < 21, needed to keep a wake lock while your job is running -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- Required on api < 21 if you are using setRequiredNetworkType(int) -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- Required on all api levels if you are using setPersisted(true) -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true" />
@@ -58,6 +68,10 @@
             android:label="@string/title_activity_minor_violation_extras"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.DarkStatusBar.AccentIsPrimary" />
+
+        <service
+            android:name=".components.sync.NetworkSchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

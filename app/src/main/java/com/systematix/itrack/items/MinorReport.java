@@ -8,14 +8,14 @@ import android.content.Context;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.database.DbEntity;
 import com.systematix.itrack.database.daos.MinorReportDao;
-import com.systematix.itrack.interfaces.ApiRequestable;
+import com.systematix.itrack.utils.Api;
 import com.systematix.itrack.utils.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity(tableName = "minor_report")
-public final class MinorReport implements DbEntity, ApiRequestable {
+public final class MinorReport implements DbEntity, Api.ApiRequestable {
     @PrimaryKey(autoGenerate = true) private int id;
     @ColumnInfo(name = "violation_id") private int violationId;
     @ColumnInfo private String serial;

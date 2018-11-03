@@ -12,8 +12,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.systematix.itrack.helpers.JSONObjectHelper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public final class Api {
     private static Api instance;
@@ -25,6 +28,11 @@ public final class Api {
     private OnApiSuccessListener successListener;
     private OnApiErrorListener errorListener;
     private OnApiExceptionListener exceptionListener;
+
+    // for your objects
+    public interface ApiRequestable {
+        JSONObject toApiJson();
+    }
 
     // implement this interface to activity
     //! screw that! let's implement this anywhere :D
@@ -73,6 +81,19 @@ public final class Api {
 
     public static boolean isSuccessful(JSONObject response) throws JSONException {
         return response.getBoolean("success");
+    }
+
+    // arrayify your requestables
+    public static JSONArray collectionRequest(final List<?> requestables) {
+        // super cast
+        @SuppressWarnings("unchecked")
+        final List<ApiRequestable> apiRequestables = (List<ApiRequestable>) requestables;
+
+        final JSONArray array = new JSONArray();
+        for (final ApiRequestable requestable : apiRequestables) {
+            array.put(requestable.toApiJson());
+        }
+        return array;
     }
 
     // instance

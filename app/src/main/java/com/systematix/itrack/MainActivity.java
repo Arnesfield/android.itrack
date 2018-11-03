@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ViewFlipper;
 
+import com.systematix.itrack.components.sync.Sync;
 import com.systematix.itrack.config.RequestCodesList;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.StudentFragment;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
 
+    private Sync sync;
     private User user;
     private FragmentModel fragmentModel;
     private ViewFlipperModel viewFlipperModel;
@@ -62,6 +64,9 @@ public class MainActivity extends AppCompatActivity
         viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.main_loading_layout);
 
         checkForMinorViolationSent();
+
+        // make sync
+        sync = new Sync(this);
 
         // get user auth
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
@@ -263,6 +268,19 @@ public class MainActivity extends AppCompatActivity
                 NfcNoPermissionStateModel.onRequestPermissionsResult(this, permissions, grantResults);
                 break;
         }
+    }
+
+    // sync
+    @Override
+    protected void onStop() {
+        sync.onActivityStop();
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        sync.onActivityStart();
     }
 
     @Override
