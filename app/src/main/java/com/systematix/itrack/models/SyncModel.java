@@ -2,7 +2,6 @@ package com.systematix.itrack.models;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.systematix.itrack.components.sync.Sync;
@@ -37,8 +36,7 @@ public final class SyncModel implements Sync.SyncListener {
                 if (!success) {
                     return;
                 }
-                Log.e("devtag", "FINALLY");
-                Toast.makeText(context, "FINALLY", Toast.LENGTH_LONG).show();
+                Log.i("devtag", "syncModel@Synced!");
                 new Task<>(new Task.OnTaskExecuteListener<Void>() {
                     @Override
                     public Void execute() {
