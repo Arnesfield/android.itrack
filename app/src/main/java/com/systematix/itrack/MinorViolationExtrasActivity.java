@@ -14,9 +14,11 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.systematix.itrack.config.UrlsList;
+import com.systematix.itrack.items.MinorReport;
 import com.systematix.itrack.models.EditTextModel;
 import com.systematix.itrack.models.LoadingDialogModel;
 import com.systematix.itrack.utils.Api;
+import com.systematix.itrack.utils.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +32,7 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
     private LoadingDialogModel loadingDialogModel;
     private TextInputEditText txtLocation;
     private TextInputEditText txtMessage;
+    private MinorReport minorReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,31 +91,33 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
         getLoadingDialog().show();
 
         // request
-        final JSONObject params = new JSONObject();
         final String location = txtLocation.getText().toString();
         final String message = txtMessage.getText().toString();
         final long timestamp = System.currentTimeMillis() / 1000;
-        try {
-            params.put("serial", serial);
-            params.put("violation_id", violationId);
-            params.put("location", location);
-            params.put("message", message);
-            params.put("timestamp", timestamp);
 
-            // TODO: remove handler
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Api.post(MinorViolationExtrasActivity.this)
-                        .setTag("minorViolation")
-                        .setUrl(UrlsList.SEND_MINOR_VIOLATION_URL)
-                        .setApiListener(MinorViolationExtrasActivity.this)
-                        .request(params);
-                }
-            }, 5000);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        // make sure there is only one instance
+        if (minorReport == null) {
+            minorReport = new MinorReport();
         }
+
+        minorReport.setSerial(serial);
+        minorReport.setViolationId(violationId);
+        minorReport.setLocation(location);
+        minorReport.setMessage(message);
+        minorReport.setTimestamp(timestamp);
+
+        final JSONObject params = minorReport.toApiJson();
+
+        // TODO: remove handler
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Api.post(MinorViolationExtrasActivity.this)
+                    .setUrl(UrlsList.SEND_MINOR_VIOLATION_URL)
+                    .setApiListener(MinorViolationExtrasActivity.this)
+                    .request(params);
+            }
+        }, 5000);
     }
 
     private AlertDialog getLoadingDialog() {
@@ -163,9 +168,27 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
     @Override
     public void onApiError(String tag, VolleyError error) {
         // TODO: save to db
-        getLoadingDialog().dismiss();
-        startActivity(getOnSubmitIntent(false));
-        finish();
+        final Task.OnTaskListener<Void> listener = new Task.OnTaskListener<Void>() {
+            @Override
+            public void preExecute() {
+
+            }
+
+            @Override
+            public Void execute() {
+                minorReport.save(MinorViolationExtrasActivity.this);
+                return null;
+            }
+
+            @Override
+            public void finish(Void result) {
+                getLoadingDialog().dismiss();
+                startActivity(getOnSubmitIntent(false));
+                MinorViolationExtrasActivity.this.finish();
+            }
+        };
+
+        new Task<>(listener).execute();
     }
 
     // OnApiExceptionListener

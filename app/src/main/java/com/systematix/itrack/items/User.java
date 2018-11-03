@@ -223,7 +223,11 @@ public class User implements DbEntity {
         final AppDatabase db = AppDatabase.getInstance(context);
         new Task<>(new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
-                db.userDao().insertAll(User.this);
+                if (id == 0) {
+                    db.userDao().insertAll(User.this);
+                } else {
+                    db.userDao().update(User.this);
+                }
                 return null;
             }
         }).execute();

@@ -85,7 +85,11 @@ public final class Violation extends Chip implements DbEntity {
         final AppDatabase db = AppDatabase.getInstance(context);
         new Task<>(new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
-                db.violationDao().insertAll(Violation.this);
+                if (id == 0) {
+                    db.violationDao().insertAll(Violation.this);
+                } else {
+                    db.violationDao().update(Violation.this);
+                }
                 return null;
             }
         }).execute();

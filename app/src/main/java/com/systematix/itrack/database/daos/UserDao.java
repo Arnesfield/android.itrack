@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.systematix.itrack.items.User;
 
@@ -19,6 +20,9 @@ public interface UserDao {
 
     @Insert
     void insertAll(User... users);
+
+    @Update
+    void update(User user);
 
     @Delete
     void delete(User user);
