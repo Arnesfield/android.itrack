@@ -2,7 +2,6 @@ package com.systematix.itrack;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -108,17 +107,11 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
 
         final JSONObject params = minorReport.toApiJson();
 
-        // TODO: remove handler
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Api.post(MinorViolationExtrasActivity.this)
-                    .setTag("sendMinorViolation")
-                    .setUrl(UrlsList.SEND_MINOR_VIOLATION_URL)
-                    .setApiListener(MinorViolationExtrasActivity.this)
-                    .request(params);
-            }
-        }, 5000);
+        Api.post(MinorViolationExtrasActivity.this)
+            .setTag("sendMinorViolation")
+            .setUrl(UrlsList.SEND_MINOR_VIOLATION_URL)
+            .setApiListener(MinorViolationExtrasActivity.this)
+            .request(params);
     }
 
     private AlertDialog getLoadingDialog() {

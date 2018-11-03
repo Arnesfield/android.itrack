@@ -1,7 +1,6 @@
 package com.systematix.itrack;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.models.UserInfoViewModel;
+import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.utils.Task;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -53,15 +52,8 @@ public class ProfileActivity extends AppCompatActivity {
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
             @Override
             public void finish(final User result) {
-                // TODO: remove handler
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewFlipperModel.switchTo(R.id.profile_user_info);
-                        initContent(result);
-                    }
-                }, 5000);
-
+                viewFlipperModel.switchTo(R.id.profile_user_info);
+                initContent(result);
             }
         });
     }

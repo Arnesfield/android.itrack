@@ -2,7 +2,6 @@ package com.systematix.itrack;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,9 +13,9 @@ import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
 import com.systematix.itrack.config.UrlsList;
-import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.models.UserInfoViewModel;
+import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.utils.Api;
 
 import org.json.JSONException;
@@ -102,17 +101,11 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
         final JSONObject params = new JSONObject();
         try {
             params.put("serial", serial);
-            // TODO: remove handler
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Api.post(MakeReportActivity.this)
-                        .setTag("makeReportGetUser")
-                        .setUrl(UrlsList.GET_USER_URL)
-                        .setApiListener(MakeReportActivity.this)
-                        .request(params);
-                }
-            }, 5000);
+            Api.post(MakeReportActivity.this)
+                .setTag("makeReportGetUser")
+                .setUrl(UrlsList.GET_USER_URL)
+                .setApiListener(MakeReportActivity.this)
+                .request(params);
         } catch (JSONException e) {
             e.printStackTrace();
         }

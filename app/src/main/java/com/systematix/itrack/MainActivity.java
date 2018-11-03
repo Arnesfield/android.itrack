@@ -3,7 +3,6 @@ package com.systematix.itrack;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -73,14 +72,8 @@ public class MainActivity extends AppCompatActivity
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
             @Override
             public void finish(final User result) {
-                // TODO: remove handlers lol
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        user = result;
-                        initContent();
-                    }
-                }, 5000);
+                user = result;
+                initContent();
             }
         });
     }
@@ -173,18 +166,12 @@ public class MainActivity extends AppCompatActivity
         }).setFinishListener(new Task.OnTaskFinishListener<Void>() {
             @Override
             public void finish(Void result) {
-                // TODO: remove handler
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        final MainActivity activity = MainActivity.this;
-                        final Intent intent = new Intent(activity, LoginActivity.class);
+                final MainActivity activity = MainActivity.this;
+                final Intent intent = new Intent(activity, LoginActivity.class);
 
-                        dialog.dismiss();
-                        startActivity(intent);
-                        activity.finish();
-                    }
-                }, 5000);
+                dialog.dismiss();
+                startActivity(intent);
+                activity.finish();
             }
         }).execute();
     }
