@@ -25,21 +25,21 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/incident_report_view_title"
+                    android:text="@string/minor_violation_view_title"
                     android:textSize="17sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/black" />
 
                 <TextView
-                    android:id="@+id/incident_report_subtitle"
+                    android:id="@+id/minor_violation_subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:alpha="0.65"
-                    android:text="@string/incident_report_view_subtitle" />
+                    android:text="@string/minor_violation_view_subtitle" />
             </LinearLayout>
 
             <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/incident_report_flexbox_layout"
+                android:id="@+id/minor_violation_flexbox_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="0dp"
@@ -61,7 +61,7 @@
         <View style="@style/Divider" />
 
         <TextView
-            android:id="@+id/incident_report_bottom_text"
+            android:id="@+id/minor_violation_bottom_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
@@ -70,16 +70,16 @@
             android:textSize="12sp"
             android:textAlignment="center"
             android:alpha="0.75"
-            android:text="@string/incident_report_view_bottom_text" />
+            android:text="@string/minor_violation_view_bottom_text" />
 
         <Button
-            android:id="@+id/incident_report_button"
+            android:id="@+id/minor_violation_button"
             android:layout_margin="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorError"
             android:enabled="false"
-            android:text="@string/incident_report_action"
+            android:text="@string/minor_violation_action"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@android:color/white" />

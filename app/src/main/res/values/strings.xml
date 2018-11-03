@@ -12,7 +12,7 @@
     <!-- activity titles -->
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_make_report">Report Student</string>
-    <string name="title_activity_incident_report">Incident Report</string>
+    <string name="title_activity_minor_violation">Violation Report</string>
 
     <!-- desc -->
     <string name="background_desc">Background</string>
@@ -80,23 +80,23 @@
     <string name="make_report_no_user_title">Cannot load student :(</string>
     <string name="make_report_no_user_subtitle">You can still send this report now and it will be sent later.</string>
 
-    <!-- incident report -->
-    <string name="incident_report_action">Report Incident</string>
-    <!-- incidentReport@emptyState -->
-    <string name="incident_report_empty_title">No violations list :(</string>
-    <string name="incident_report_empty_subtitle">Unable to load the list of violations. Please try again.</string>
-    <string name="incident_report_view_title">List of Violations</string>
-    <string name="incident_report_view_subtitle">Below are the list of violations %1$s may have observed. Pick one in order to send this report.</string>
-    <string name="incident_report_view_bottom_text">Choose the violation done by %1$s.</string>
-    <!-- incidentReport@send -->
-    <string name="incident_report_send_dialog_title">Sending Report</string>
-    <string name="incident_report_send_dialog_message">Reporting %1$s for the violation: \"%2$s\"</string>
-    <!-- incidentReport@sent -->
-    <string name="incident_report_sent_success_dialog_title">Report Sent</string>
-    <string name="incident_report_sent_success_dialog_message">Your report has been sent.</string>
-    <string name="incident_report_sent_fail_dialog_title">Report Saved</string>
-    <string name="incident_report_sent_fail_dialog_message">Your report has been saved. It will be sent the next time the network service is available.</string>
-    <string name="incident_report_sent_exception_msg">Unable to send report.</string>
+    <!-- minor violation -->
+    <string name="minor_violation_action">Report Violation</string>
+    <!-- minorViolation@emptyState -->
+    <string name="minor_violation_empty_title">No violations list :(</string>
+    <string name="minor_violation_empty_subtitle">Unable to load the list of violations. Please try again.</string>
+    <string name="minor_violation_view_title">List of Violations</string>
+    <string name="minor_violation_view_subtitle">Below are the list of violations %1$s may have observed. Pick one in order to send this report.</string>
+    <string name="minor_violation_view_bottom_text">Choose the violation done by %1$s.</string>
+    <!-- minorViolation@send -->
+    <string name="minor_violation_send_dialog_title">Sending Report</string>
+    <string name="minor_violation_send_dialog_message">Reporting %1$s for the violation: \"%2$s\"</string>
+    <!-- minorViolation@sent -->
+    <string name="minor_violation_sent_success_dialog_title">Report Sent</string>
+    <string name="minor_violation_sent_success_dialog_message">Your report has been sent.</string>
+    <string name="minor_violation_sent_fail_dialog_title">Report Saved</string>
+    <string name="minor_violation_sent_fail_dialog_message">Your report has been saved. It will be sent the next time the network service is available.</string>
+    <string name="minor_violation_sent_exception_msg">Unable to send report.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

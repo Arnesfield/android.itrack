@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         final ViewFlipper viewFlipper = findViewById(R.id.main_view_flipper);
         viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.main_loading_layout);
 
-        checkForIncidentReportSent();
+        checkForMinorViolationSent();
 
         // get user auth
         Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
@@ -79,15 +79,15 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    // check for incident report sent
-    private void checkForIncidentReportSent() {
+    // check for minor violation sent
+    private void checkForMinorViolationSent() {
         final Intent intent = getIntent();
-        if (intent.getBooleanExtra("incidentReportSent", false)) {
+        if (intent.getBooleanExtra("minorViolationSent", false)) {
             // if sent successfully
-            final boolean success = intent.getBooleanExtra("incidentReportSuccess", false);
+            final boolean success = intent.getBooleanExtra("minorViolationSuccess", false);
 
-            final int title = success ? R.string.incident_report_sent_success_dialog_title: R.string.incident_report_sent_fail_dialog_title;
-            final int message = success ? R.string.incident_report_sent_success_dialog_message: R.string.incident_report_sent_fail_dialog_message;
+            final int title = success ? R.string.minor_violation_sent_success_dialog_title : R.string.minor_violation_sent_fail_dialog_title;
+            final int message = success ? R.string.minor_violation_sent_success_dialog_message : R.string.minor_violation_sent_fail_dialog_message;
 
             final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(title)

@@ -71,7 +71,7 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
 
                 final String name = user.getName(false);
 
-                final Intent intent = new Intent(MakeReportActivity.this, IncidentReportActivity.class);
+                final Intent intent = new Intent(MakeReportActivity.this, MinorViolationActivity.class);
                 intent.putExtra("serial", serial);
                 if (name != null) {
                     intent.putExtra("userName", name);

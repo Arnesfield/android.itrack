@@ -49,8 +49,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.DarkStatusBar" />
         <activity
-            android:name=".IncidentReportActivity"
-            android:label="@string/title_activity_incident_report"
+            android:name=".MinorViolationActivity"
+            android:label="@string/title_activity_minor_violation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.DarkStatusBar" />
     </application>

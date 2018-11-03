@@ -34,7 +34,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class IncidentReportActivity extends AppCompatActivity implements Api.OnApiRespondListener {
+public class MinorViolationActivity extends AppCompatActivity implements Api.OnApiRespondListener {
 
     private String serial;
     private String userName;
@@ -46,7 +46,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_incident_report);
+        setContentView(R.layout.activity_minor_violation);
 
         // get serial
         serial = getIntent().getStringExtra("serial");
@@ -70,7 +70,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
         }
 
         // set empty state btn listener
-        final Button btnEmptyState = findViewById(R.id.incident_report_empty_reload_btn);
+        final Button btnEmptyState = findViewById(R.id.minor_violation_empty_reload_btn);
         btnEmptyState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +78,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
             }
         });
 
-        final Button btnReport = findViewById(R.id.incident_report_button);
+        final Button btnReport = findViewById(R.id.minor_violation_button);
         btnReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,26 +88,26 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
         btnStateModel = new ButtonStateModel(btnReport);
 
         // get and set those textViews
-        final TextView tvSubtitle = findViewById(R.id.incident_report_subtitle);
-        final TextView tvBottom = findViewById(R.id.incident_report_bottom_text);
+        final TextView tvSubtitle = findViewById(R.id.minor_violation_subtitle);
+        final TextView tvBottom = findViewById(R.id.minor_violation_bottom_text);
 
         final Resources resources = getResources();
-        final String subtitleText = resources.getString(R.string.incident_report_view_subtitle, userName);
-        final String bottomText = resources.getString(R.string.incident_report_view_bottom_text, userName);
+        final String subtitleText = resources.getString(R.string.minor_violation_view_subtitle, userName);
+        final String bottomText = resources.getString(R.string.minor_violation_view_bottom_text, userName);
 
         tvSubtitle.setText(subtitleText);
         tvBottom.setText(bottomText);
 
-        final ViewFlipper viewFlipper = findViewById(R.id.incident_report_view_flipper);
-        viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.incident_report_loading_layout);
+        final ViewFlipper viewFlipper = findViewById(R.id.minor_violation_view_flipper);
+        viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.minor_violation_loading_layout);
 
         // get violations here
         getViolations();
     }
 
     private void fetchViolations() {
-        viewFlipperModel.switchTo(R.id.incident_report_loading_layout);
-        GetViolationsApiModel.fetch(this, IncidentReportActivity.this);
+        viewFlipperModel.switchTo(R.id.minor_violation_loading_layout);
+        GetViolationsApiModel.fetch(this, MinorViolationActivity.this);
     }
 
     private void submit() {
@@ -129,10 +129,10 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Api.post(IncidentReportActivity.this)
-                        .setTag("incidentReport")
-                        .setUrl(UrlsList.SEND_INCIDENT_REPORT_URL)
-                        .setApiListener(IncidentReportActivity.this)
+                    Api.post(MinorViolationActivity.this)
+                        .setTag("minorViolation")
+                        .setUrl(UrlsList.SEND_MINOR_VIOLATION_URL)
+                        .setApiListener(MinorViolationActivity.this)
                         .request(params);
                 }
             }, 5000);
@@ -148,9 +148,9 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
             final TextView tvMessage = loadingDialogModel.getMessageTextView();
 
             final String violationText = chip.getChipText();
-            final String msg = getResources().getString(R.string.incident_report_send_dialog_message, userName, violationText);
+            final String msg = getResources().getString(R.string.minor_violation_send_dialog_message, userName, violationText);
 
-            dialog.setTitle(R.string.incident_report_send_dialog_title);
+            dialog.setTitle(R.string.minor_violation_send_dialog_title);
             tvMessage.setText(msg);
         }
 
@@ -165,7 +165,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
             @Override
             public void preExecute() {
                 // make sure to show loading screen first
-                viewFlipperModel.switchTo(R.id.incident_report_loading_layout);
+                viewFlipperModel.switchTo(R.id.minor_violation_loading_layout);
             }
 
             @Override
@@ -178,7 +178,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
                 // also handle if there are no results :(
                 if (result.isEmpty()) {
                     // show empty state
-                    viewFlipperModel.switchTo(R.id.incident_report_empty_state_view);
+                    viewFlipperModel.switchTo(R.id.minor_violation_empty_state_view);
                     // fetch api via button and call this method again
                 } else {
                     gotResults(result);
@@ -191,8 +191,8 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
 
     // finally got results!
     private void gotResults(List<Violation> violations) {
-        viewFlipperModel.switchTo(R.id.incident_report_content_view);
-        final FlexboxLayout layout = findViewById(R.id.incident_report_flexbox_layout);
+        viewFlipperModel.switchTo(R.id.minor_violation_content_view);
+        final FlexboxLayout layout = findViewById(R.id.minor_violation_flexbox_layout);
 
         selectableChipsModel = new SelectableChipsModel<>(layout, violations);
         // set chip click listener
@@ -217,8 +217,8 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("incidentReportSent", true);
-        intent.putExtra("incidentReportSuccess", success);
+        intent.putExtra("minorViolationSent", true);
+        intent.putExtra("minorViolationSuccess", success);
         return intent;
     }
 
@@ -234,7 +234,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
         if (tag.equals("violations")) {
             // whatever happens, getViolations :D
             getViolations();
-        } else if (tag.equals("incidentReport")) {
+        } else if (tag.equals("minorViolation")) {
             loadingDialogModel.getDialog().dismiss();
             startActivity(getOnSubmitIntent(true));
             finish();
@@ -247,7 +247,7 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
         if (tag.equals("violations")) {
             // whatever happens, getViolations :D
             getViolations();
-        } else if (tag.equals("incidentReport")) {
+        } else if (tag.equals("minorViolation")) {
             // TODO: save to db
             loadingDialogModel.getDialog().dismiss();
             startActivity(getOnSubmitIntent(false));
@@ -262,9 +262,9 @@ public class IncidentReportActivity extends AppCompatActivity implements Api.OnA
         // unlikely it will pass here
         if (tag.equals("violations")) {
             getViolations();
-        } else if (tag.equals("incidentReport")) {
+        } else if (tag.equals("minorViolation")) {
             loadingDialogModel.getDialog().dismiss();
-            Toast.makeText(this, R.string.incident_report_sent_exception_msg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.minor_violation_sent_exception_msg, Toast.LENGTH_SHORT).show();
         }
     }
 }

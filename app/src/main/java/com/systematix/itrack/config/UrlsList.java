@@ -10,5 +10,5 @@ public final class UrlsList {
     public static final String UPLOADED_IMAGES_URL = BASE_URL + "images/";
     public static final String GET_USER_URL = API_URL + "user";
     public static final String GET_MINOR_VIOLATIONS_URL = API_URL + "violation/index/minor";
-    public static final String SEND_INCIDENT_REPORT_URL = API_URL + "incident/make";
+    public static final String SEND_MINOR_VIOLATION_URL = API_URL + "minorviolation/make";
 }
