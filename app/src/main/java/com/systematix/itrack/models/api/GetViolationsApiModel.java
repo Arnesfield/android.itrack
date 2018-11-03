@@ -25,29 +25,48 @@ public final class GetViolationsApiModel {
     private static Api.OnApiSuccessListener buildSuccessListener(final Context context, @Nullable final Api.OnApiSuccessListener listener) {
         return new Api.OnApiSuccessListener() {
             @Override
-            public void onApiSuccess(String tag, JSONObject response, boolean success, String msg) throws JSONException {
-                if (success) {
-                    final List<Violation> violations = Violation.collection(response.getJSONArray("violations"));
-                    final AppDatabase db = AppDatabase.getInstance(context);
-                    // task
-                    new Task<>(new Task.OnTaskExecuteListener<Void>() {
-                        @Override
-                        public Void execute() {
-                            final ViolationDao dao = db.violationDao();
-                            // clear all violations hehe
-                            // then insert new ones just to make sure
-                            // you also don't need to tell your user about this i think
-                            dao.deleteAll();
-                            dao.insertAll(violations);
-                            return null;
-                        }
-                    }).execute();
+            public void onApiSuccess(final String tag, final JSONObject response, final boolean success, final String msg) throws JSONException {
+                //! only call listener when task is finished to avoid possible conflicts
+                // also call if not success
+                if (!success) {
+                    if (listener != null) {
+                        listener.onApiSuccess(tag, response, success, msg);
+                    }
+                    return;
                 }
 
-                // call this last
-                if (listener != null) {
-                    listener.onApiSuccess(tag, response, success, msg);
-                }
+                final List<Violation> violations = Violation.collection(response.getJSONArray("violations"));
+                final AppDatabase db = AppDatabase.getInstance(context);
+                // task
+                new Task<>(new Task.OnTaskListener<Void>() {
+                    @Override
+                    public void preExecute() {
+
+                    }
+
+                    @Override
+                    public Void execute() {
+                        final ViolationDao dao = db.violationDao();
+                        // clear all violations hehe
+                        // then insert new ones just to make sure
+                        // you also don't need to tell your user about this i think
+                        dao.deleteAll();
+                        dao.insertAll(violations);
+                        return null;
+                    }
+
+                    @Override
+                    public void finish(Void result) {
+                        if (listener != null) {
+                            try {
+                                // yea call this here hehe
+                                listener.onApiSuccess(tag, response, success, msg);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }).execute();
             }
         };
     }

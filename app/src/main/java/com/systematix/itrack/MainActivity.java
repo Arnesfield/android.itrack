@@ -34,7 +34,6 @@ import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
 import com.systematix.itrack.models.SyncModel;
 import com.systematix.itrack.models.ViewFlipperModel;
-import com.systematix.itrack.models.api.GetViolationsApiModel;
 import com.systematix.itrack.utils.Task;
 
 import butterknife.BindView;
@@ -123,9 +122,6 @@ public class MainActivity extends AppCompatActivity
 
         // get violations if teacher hehe
         final boolean isTeacher = user.checkAccess("teacher");
-        if (isTeacher) {
-            fetchViolations();
-        }
 
         // switch to actual content
          viewFlipperModel.switchTo(R.id.main_content_layout);
@@ -233,11 +229,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return fragmentModel;
-    }
-
-    private void fetchViolations() {
-        // no need to handle callbacks
-        GetViolationsApiModel.fetch(this);
     }
 
     @Override
