@@ -113,6 +113,7 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
             @Override
             public void run() {
                 Api.post(MinorViolationExtrasActivity.this)
+                    .setTag("sendMinorViolation")
                     .setUrl(UrlsList.SEND_MINOR_VIOLATION_URL)
                     .setApiListener(MinorViolationExtrasActivity.this)
                     .request(params);

@@ -107,6 +107,7 @@ public class MakeReportActivity extends AppCompatActivity implements Api.OnApiRe
                 @Override
                 public void run() {
                     Api.post(MakeReportActivity.this)
+                        .setTag("makeReportGetUser")
                         .setUrl(UrlsList.GET_USER_URL)
                         .setApiListener(MakeReportActivity.this)
                         .request(params);

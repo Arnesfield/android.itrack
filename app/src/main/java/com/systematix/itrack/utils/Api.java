@@ -155,7 +155,7 @@ public final class Api {
                                 final boolean success = Api.isSuccessful(response);
                                 final String logMsg = JSONObjectHelper.optString(response, "msg");
                                 final String outMsg = success ? null : logMsg;
-                                Log.d("devtag", "Api@OnApiSuccess");
+                                Log.d("devtag", "Api@OnApiSuccess:" + tag);
                                 Log.d("devtag", String.valueOf(success));
                                 if (logMsg != null) {
                                     Log.d("devtag", logMsg);
@@ -164,7 +164,7 @@ public final class Api {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.e("devtag", "Api@OnApiException");
+                            Log.e("devtag", "Api@OnApiException:" + tag);
                             Log.e("devtag", e.getMessage());
                             if (exceptionListener != null) {
                                 exceptionListener.onApiException(api.tag, e);
@@ -176,14 +176,14 @@ public final class Api {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         try {
-                            Log.e("devtag", "Api@OnApiError");
+                            Log.e("devtag", "Api@OnApiError:" + tag);
                             Log.e("devtag", error.toString());
                             if (errorListener != null) {
                                 errorListener.onApiError(api.tag, error);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.e("devtag", "Api@OnApiException");
+                            Log.e("devtag", "Api@OnApiException:" + tag);
                             Log.e("devtag", e.getMessage());
                             if (exceptionListener != null) {
                                 exceptionListener.onApiException(api.tag, e);

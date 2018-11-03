@@ -89,6 +89,7 @@ public final class SyncModel implements Sync.OnSyncListener {
                     params.put("minorReports", array);
 
                     Api.post(context)
+                        .setTag("sendMinorViolationBatch")
                         .setUrl(UrlsList.SEND_MINOR_VIOLATION_BATCH_URL)
                         .setApiListener(apiRespondListener)
                         .request(params);
