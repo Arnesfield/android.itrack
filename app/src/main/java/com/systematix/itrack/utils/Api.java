@@ -20,7 +20,6 @@ import org.json.JSONObject;
 import java.util.List;
 
 public final class Api {
-    private static Api instance;
     private static RequestQueue requestQueue;
 
     private int method;
@@ -67,17 +66,15 @@ public final class Api {
     }
 
     private static Api create(Context context) {
-        if (instance == null) {
-            instance = new Api();
-        }
-
+        Log.i(AppConfig.TAG, "Api@create");
         if (requestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.
             requestQueue = Volley.newRequestQueue(context.getApplicationContext());
         }
 
-        return instance;
+        // RETURN NEW INSTANCE
+        return new Api();
     }
 
     public static boolean isSuccessful(JSONObject response) throws JSONException {
@@ -153,11 +150,10 @@ public final class Api {
                                 final String logMsg = JSONObjectHelper.optString(response, "msg");
                                 final String outMsg = success ? null : logMsg;
 
-                                Log.d(AppConfig.TAG, "Api@OnApiSuccess:" + tag);
-                                Log.d(AppConfig.TAG, String.valueOf(success));
+                                Log.d(AppConfig.TAG, "Api@OnApiSuccess:" + success + "::" + tag);
 
                                 if (logMsg != null) {
-                                    Log.d(AppConfig.TAG, logMsg);
+                                    Log.d(AppConfig.TAG, "Api@successMsg:" + tag + "::" + logMsg);
                                 }
                                 successListener.onApiSuccess(api.tag, response, success, outMsg);
                             }

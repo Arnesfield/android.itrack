@@ -26,10 +26,10 @@ public final class SendMinorReportsApiModel {
             public void onApiSuccess(String tag, JSONObject response, boolean success, String msg) {
                 // after sending the request,
                 // empty the minor reports!
+                Log.i(AppConfig.TAG, "syncModel@synced:" + success);
                 if (!success) {
                     return;
                 }
-                Log.i(AppConfig.TAG, "syncModel@Synced");
                 new Task<>(new Task.OnTaskExecuteListener<Void>() {
                     @Override
                     public Void execute() {
@@ -42,6 +42,7 @@ public final class SendMinorReportsApiModel {
             @Override
             public void onApiError(String tag, VolleyError error) {
                 // if error, do it again hehehe
+                Log.e(AppConfig.TAG, "syncModel@repeat:" + error.toString());
                 send(context);
             }
 
@@ -83,6 +84,7 @@ public final class SendMinorReportsApiModel {
                         .setApiListener(apiRespondListener)
                         .request(params);
                 } catch (JSONException e) {
+                    // unlikely to error
                     e.printStackTrace();
                 }
             }

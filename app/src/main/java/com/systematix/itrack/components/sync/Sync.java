@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
+
+import com.systematix.itrack.config.AppConfig;
 
 public final class Sync {
     private Context context;
@@ -62,8 +65,12 @@ public final class Sync {
     }
 
     static void onNetworkConnectionChanged(Context context, boolean isConnected) {
+        Log.i(AppConfig.TAG, "Sync@connectionChanged:" + isConnected);
         if (syncListener != null) {
+            Log.i(AppConfig.TAG, "Sync@connectionChanged:hasListener");
             syncListener.onSync(context, isConnected);
+        } else {
+            Log.w(AppConfig.TAG, "Sync@connectionChanged:noListener");
         }
     }
 }
