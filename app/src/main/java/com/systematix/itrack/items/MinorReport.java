@@ -18,17 +18,15 @@ import org.json.JSONObject;
 public final class MinorReport implements DbEntity, Api.ApiRequestable {
     @PrimaryKey(autoGenerate = true) private int id;
     @ColumnInfo(name = "violation_id") private int violationId;
+    @ColumnInfo(name = "reporter_id") private int reporterId;
     @ColumnInfo private String serial;
     @ColumnInfo private String location;
     @ColumnInfo private String message;
     @ColumnInfo(typeAffinity = ColumnInfo.INTEGER) private long timestamp;
 
-    public MinorReport() {
-
-    }
-
-    public MinorReport(int violationId, String serial, String location, String message, long timestamp) {
+    public MinorReport(int violationId, int reporterId, String serial, String location, String message, long timestamp) {
         this.violationId = violationId;
+        this.reporterId = reporterId;
         this.serial = serial;
         this.location = location;
         this.message = message;
@@ -44,6 +42,10 @@ public final class MinorReport implements DbEntity, Api.ApiRequestable {
         return violationId;
     }
 
+    public int getReporterId() {
+        return reporterId;
+    }
+
     public String getSerial() {
         return serial;
     }
@@ -56,6 +58,10 @@ public final class MinorReport implements DbEntity, Api.ApiRequestable {
         return message;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+
     // setters
     public void setId(int id) {
         this.id = id;
@@ -63,6 +69,10 @@ public final class MinorReport implements DbEntity, Api.ApiRequestable {
 
     public void setViolationId(int violationId) {
         this.violationId = violationId;
+    }
+
+    public void setReporterId(int reporterId) {
+        this.reporterId = reporterId;
     }
 
     public void setSerial(String serial) {
@@ -79,10 +89,6 @@ public final class MinorReport implements DbEntity, Api.ApiRequestable {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
     }
 
     // DbEntity
@@ -120,6 +126,7 @@ public final class MinorReport implements DbEntity, Api.ApiRequestable {
         try {
             params.put("serial", serial);
             params.put("violation_id", violationId);
+            params.put("reporter_id", reporterId);
             params.put("location", location);
             params.put("message", message);
             params.put("timestamp", timestamp);

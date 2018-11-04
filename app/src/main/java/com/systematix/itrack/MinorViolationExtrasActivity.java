@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.systematix.itrack.config.UrlsList;
+import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.MinorReport;
 import com.systematix.itrack.models.EditTextModel;
 import com.systematix.itrack.models.LoadingDialogModel;
@@ -24,14 +25,15 @@ import org.json.JSONObject;
 
 public class MinorViolationExtrasActivity extends AppCompatActivity implements Api.OnApiRespondListener {
 
+    private MinorReport minorReport;
     private String serial;
     private String userName;
     private String violationText;
     private int violationId;
+    private int reporterId;
     private LoadingDialogModel loadingDialogModel;
     private TextInputEditText txtLocation;
     private TextInputEditText txtMessage;
-    private MinorReport minorReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +45,13 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
         serial = intent.getStringExtra("serial");
         userName = intent.getStringExtra("userName");
         violationId = intent.getIntExtra("violationId", -1);
+        reporterId = Auth.getSavedUserId(this);
         violationText = intent.getStringExtra("violationText");
 
         // just to make sure hehe
-        if (violationId == -1) {
-            Toast.makeText(this, R.string.error_no_violation_selected, Toast.LENGTH_SHORT).show();
+        if (violationId == -1 || reporterId == -1) {
+            final int msg = violationId == -1 ? R.string.error_no_violation_selected : R.string.error_no_auth_user;
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -94,23 +98,14 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
         final String message = txtMessage.getText().toString();
         final long timestamp = System.currentTimeMillis() / 1000;
 
-        // make sure there is only one instance
-        if (minorReport == null) {
-            minorReport = new MinorReport();
-        }
-
-        minorReport.setSerial(serial);
-        minorReport.setViolationId(violationId);
-        minorReport.setLocation(location);
-        minorReport.setMessage(message);
-        minorReport.setTimestamp(timestamp);
-
+        // make report
+        minorReport = new MinorReport(violationId, reporterId, serial, location, message, timestamp);
         final JSONObject params = minorReport.toApiJson();
 
-        Api.post(MinorViolationExtrasActivity.this)
+        Api.post(this)
             .setTag("sendMinorViolation")
             .setUrl(UrlsList.SEND_MINOR_VIOLATION_URL)
-            .setApiListener(MinorViolationExtrasActivity.this)
+            .setApiListener(this)
             .request(params);
     }
 
@@ -186,6 +181,7 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
     // OnApiExceptionListener
     @Override
     public void onApiException(String tag, JSONException e) {
+        // unlikely to pass here
         getLoadingDialog().dismiss();
         Toast.makeText(this, R.string.minor_violation_extras_sent_exception_msg, Toast.LENGTH_SHORT).show();
     }

@@ -2,6 +2,7 @@ package com.systematix.itrack.items;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 
 import com.systematix.itrack.config.PreferencesList;
 import com.systematix.itrack.database.AppDatabase;
@@ -35,6 +36,10 @@ public final class Auth {
     }
 
     public static void getSavedUser(Context context, Task.OnTaskFinishListener<User> listener) {
+        getSavedUser(context, listener, null);
+    }
+
+    public static void getSavedUser(Context context, Task.OnTaskFinishListener<User> finishListener, @Nullable Task.OnTaskPreExecuteListener preExecuteListener) {
         final AppDatabase db = AppDatabase.getInstance(context);
         final int uid = getSavedUserId(context);
 
@@ -42,12 +47,12 @@ public final class Auth {
             return;
         }
 
-        new Task<>(new Task.OnTaskExecuteListener<User>() {
+        new Task<>(preExecuteListener, new Task.OnTaskExecuteListener<User>() {
             @Override
             public User execute() {
                 return db.userDao().findById(uid);
             }
-        }, listener).execute();
+        }, finishListener).execute();
     }
 
     public static Task<Void> removeSavedUser(Context context) {

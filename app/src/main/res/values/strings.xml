@@ -32,6 +32,7 @@
     <string name="error_profile">Unable to load your profile.</string>
     <string name="error_no_serial">There was no serial number detected.</string>
     <string name="error_no_violation_selected">No violation selected.</string>
+    <string name="error_no_auth_user">No logged in user.</string>
     <string name="error_cannot_load_user">Unable to load user information.</string>
 
     <!-- messages -->

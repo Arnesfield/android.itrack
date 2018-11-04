@@ -19,7 +19,6 @@ import com.systematix.itrack.components.chip.Chipable;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.items.Violation;
 import com.systematix.itrack.models.ButtonStateModel;
-import com.systematix.itrack.models.LoadingDialogModel;
 import com.systematix.itrack.models.SelectableChipsModel;
 import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.models.api.GetViolationsApiModel;
@@ -38,7 +37,6 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
     private ViewFlipperModel viewFlipperModel;
     private SelectableChipsModel<Violation> selectableChipsModel;
     private ButtonStateModel btnStateModel;
-    private LoadingDialogModel loadingDialogModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
