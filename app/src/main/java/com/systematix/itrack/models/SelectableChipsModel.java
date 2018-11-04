@@ -9,7 +9,7 @@ import com.systematix.itrack.components.chip.Chipable;
 
 import java.util.List;
 
-public final class SelectableChipsModel<T> {
+public final class SelectableChipsModel<T extends Chipable> {
     private List<T> chips;
     private FlexboxLayout layout;
     private int size;
@@ -47,12 +47,7 @@ public final class SelectableChipsModel<T> {
 
         // then start adding the views hehe
         for (int i = 0; i < getVisibleSize(); i++) {
-            final T gChip = chips.get(i);
-            // skip if not Chipable
-            if (!(gChip instanceof Chipable)) {
-                continue;
-            }
-            final Chipable chip = (Chipable) gChip;
+            final Chipable chip = chips.get(i);
             final TextView tvChip = new TextView(layout.getContext());
 
             chip.setChipView(tvChip);
@@ -83,15 +78,10 @@ public final class SelectableChipsModel<T> {
                 }
 
                 // when chip is clicked, unselect everything
+                // assert that layout.getChildCount() is the same as getVisibleSize()
                 int newSelected = -1;
                 for (int i = 0; i < layout.getChildCount(); i++) {
-                    final T gChip = chips.get(i);
-                    // skip if not Chipable
-                    if (!(gChip instanceof Chipable)) {
-                        continue;
-                    }
-                    final Chipable lChip = (Chipable) gChip;
-
+                    final Chipable lChip = chips.get(i);
                     // if this is the current chip
                     // and if it is not yet selected, select it!
                     final boolean selectIt = chip == lChip && !lChip.isChipSelected();
@@ -111,12 +101,7 @@ public final class SelectableChipsModel<T> {
 
     // useful stuff
     public void collectionSetListener(Chip.OnChipClickListener listener) {
-        for (final T gChip : chips) {
-            if (!(gChip instanceof Chipable)) {
-                continue;
-            }
-
-            final Chipable chip = (Chipable) gChip;
+        for (final Chipable chip : chips) {
             chip.setOnChipClickListener(listener);
         }
     }

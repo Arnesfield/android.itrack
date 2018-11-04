@@ -85,13 +85,9 @@ public final class Api {
     }
 
     // arrayify your requestables
-    public static JSONArray collectionRequest(final List<?> requestables) {
-        // super cast
-        @SuppressWarnings("unchecked")
-        final List<ApiRequestable> apiRequestables = (List<ApiRequestable>) requestables;
-
+    public static <T extends ApiRequestable> JSONArray collectionRequest(final List<T> requestables) {
         final JSONArray array = new JSONArray();
-        for (final ApiRequestable requestable : apiRequestables) {
+        for (final ApiRequestable requestable : requestables) {
             array.put(requestable.toApiJson());
         }
         return array;
