@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.systematix.itrack.config.UrlsList;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
+import com.systematix.itrack.models.ButtonStateModel;
 import com.systematix.itrack.utils.Api;
 
 import org.json.JSONException;
@@ -25,11 +26,12 @@ import butterknife.ButterKnife;
 public class LoginActivity extends AppCompatActivity implements Api.OnApiRespondListener {
 
     @BindView(R.id.login_btn_login) Button btnLogin;
-    @BindView(R.id.login_progress_bar) ProgressBar progressBar;
     @BindView(R.id.login_txt_username) TextInputEditText txtUsername;
     @BindView(R.id.login_txt_password) TextInputEditText txtPassword;
     @BindView(R.id.login_txt_username_container) TextInputLayout txtUsernameContainer;
     @BindView(R.id.login_txt_password_container) TextInputLayout txtPasswordContainer;
+
+    private ButtonStateModel buttonStateModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +44,6 @@ public class LoginActivity extends AppCompatActivity implements Api.OnApiRespond
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
-        // hide loading first
-        progressBar.setVisibility(View.GONE);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,11 +69,15 @@ public class LoginActivity extends AppCompatActivity implements Api.OnApiRespond
             }
         });
 
+        // set button state
+        final ProgressBar progressBar = findViewById(R.id.login_progress_bar);
+        buttonStateModel = new ButtonStateModel(btnLogin, progressBar);
+
         checkForLogOutMsg();
     }
 
     private boolean checkForUser() {
-        int uid = Auth.getSavedUserId(this);
+        final int uid = Auth.getSavedUserId(this);
 
         // if no id set, do nothing
         if (uid == -1) {
@@ -96,19 +99,15 @@ public class LoginActivity extends AppCompatActivity implements Api.OnApiRespond
 
     private void doLoading(boolean loading) {
         // disable input fields and button
-        boolean enable = !loading;
+        final boolean enable = !loading;
         txtUsernameContainer.setEnabled(enable);
         txtPasswordContainer.setEnabled(enable);
-        btnLogin.setEnabled(enable);
-        progressBar.setVisibility(enable ? View.GONE : View.VISIBLE);
+        buttonStateModel.setLoading(loading, R.string.login_btn_login);
 
         // if loading, remove errors
         if (loading) {
-            btnLogin.setText(R.string.loading_text);
             txtUsernameContainer.setError(null);
             txtPasswordContainer.setError(null);
-        } else {
-            btnLogin.setText(R.string.login_btn_login);
         }
     }
 
@@ -143,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements Api.OnApiRespond
     @Override
     public void onApiError(String tag, VolleyError error) {
         doLoading(false);
-        Snackbar.make(btnLogin, R.string.error, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(btnLogin, R.string.error_service_unavailable, Snackbar.LENGTH_LONG).show();
     }
 
     // OnApiExceptionListener
