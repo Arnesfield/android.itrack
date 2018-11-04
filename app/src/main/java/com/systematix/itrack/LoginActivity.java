@@ -16,6 +16,7 @@ import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.models.ButtonStateModel;
 import com.systematix.itrack.utils.Api;
+import com.systematix.itrack.utils.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -134,8 +135,15 @@ public class LoginActivity extends AppCompatActivity implements Api.OnApiRespond
         final User user = new User(jsonUser);
 
         // save user to db
-        Auth.saveUser(this, user);
-        this.checkForUser();
+        Auth.saveUser(this, user, new Task.OnTaskFinishListener<Void>() {
+            @Override
+            public void finish(Void result) {
+                if (!checkForUser()) {
+                    // also stop loading if ever it didn't save
+                    doLoading(false);
+                }
+            }
+        });
     }
 
     // OnApiErrorListener

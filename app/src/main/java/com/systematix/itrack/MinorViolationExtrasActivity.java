@@ -156,26 +156,15 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
     // OnApiErrorListener
     @Override
     public void onApiError(String tag, VolleyError error) {
-        new Task<>(new Task.OnTaskListener<Void>() {
-            @Override
-            public void preExecute() {
-
-            }
-
-            @Override
-            public Void execute() {
-                // save to db
-                minorReport.save(MinorViolationExtrasActivity.this);
-                return null;
-            }
-
+        // save properly!
+        minorReport.save(this, null, new Task.OnTaskFinishListener<Void>() {
             @Override
             public void finish(Void result) {
                 getLoadingDialog().dismiss();
                 startActivity(getOnSubmitIntent(false));
                 MinorViolationExtrasActivity.this.finish();
             }
-        }).execute();
+        });
     }
 
     // OnApiExceptionListener

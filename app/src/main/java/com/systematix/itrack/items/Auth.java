@@ -18,35 +18,48 @@ public final class Auth {
     }
 
     public static void saveUser(Context context, User user) {
-        final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
-        final SharedPreferences.Editor edit = preferences.edit();
+        saveUser(context, user, null, null);
+    }
 
-        edit.putInt(PreferencesList.PREF_USER_ID, user.getId());
-        // edit.putString(PreferencesList.PREF_USER_JSON, user.getJson().toString());
-        // replace user json pref to db
-        user.save(context);
-        edit.putBoolean(PreferencesList.PREF_DID_LOG_IN, true);
+    public static void saveUser(Context context, User user, @Nullable Task.OnTaskPreExecuteListener preExecuteListener) {
+        saveUser(context, user, preExecuteListener, null);
+    }
 
-        edit.apply();
+    public static void saveUser(Context context, User user, @Nullable Task.OnTaskFinishListener<Void> finishListener) {
+        saveUser(context, user, null, finishListener);
+    }
+
+    public static void saveUser(final Context context, final User user, @Nullable Task.OnTaskPreExecuteListener preExecuteListener, @Nullable final Task.OnTaskFinishListener<Void> finishListener) {
+        user.save(context, preExecuteListener, new Task.OnTaskFinishListener<Void>() {
+            @Override
+            public void finish(Void result) {
+                //! ONLY THEN SAVE SHARED PREFS STUFF WHEN FINISHED SAVING!
+                final SharedPreferences.Editor edit = getSharedPrefsEditor(context);
+
+                edit.putInt(PreferencesList.PREF_USER_ID, user.getId());
+                edit.putBoolean(PreferencesList.PREF_DID_LOG_IN, true);
+                edit.apply();
+
+                if (finishListener != null) {
+                    finishListener.finish(result);
+                }
+            }
+        });
     }
 
     public static int getSavedUserId(Context context) {
-        final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
-        return preferences.getInt(PreferencesList.PREF_USER_ID, -1);
+        return getSharedPrefs(context).getInt(PreferencesList.PREF_USER_ID, -1);
     }
 
     public static void getSavedUser(Context context, Task.OnTaskFinishListener<User> listener) {
-        getSavedUser(context, listener, null);
+        getSavedUser(context, null, listener);
     }
 
-    public static void getSavedUser(Context context, Task.OnTaskFinishListener<User> finishListener, @Nullable Task.OnTaskPreExecuteListener preExecuteListener) {
+    public static void getSavedUser(Context context, @Nullable Task.OnTaskPreExecuteListener preExecuteListener, Task.OnTaskFinishListener<User> finishListener) {
         final AppDatabase db = AppDatabase.getInstance(context);
         final int uid = getSavedUserId(context);
 
-        if (uid == -1) {
-            return;
-        }
-
+        // continue even if uid is -1 so callbacks can be called
         new Task<>(preExecuteListener, new Task.OnTaskExecuteListener<User>() {
             @Override
             public User execute() {
@@ -57,9 +70,7 @@ public final class Auth {
 
     public static Task<Void> removeSavedUser(Context context) {
         final AppDatabase db = AppDatabase.getInstance(context);
-
-        final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
-        final SharedPreferences.Editor edit = preferences.edit();
+        final SharedPreferences.Editor edit = getSharedPrefsEditor(context);
 
         final int uid = getSavedUserId(context);
 
@@ -84,7 +95,7 @@ public final class Auth {
     }
 
     public static boolean didLogin(Context context) {
-        final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
+        final SharedPreferences preferences = getSharedPrefs(context);
         final boolean didLogin = preferences.getBoolean(PreferencesList.PREF_DID_LOG_IN, false);
 
         // remove didLogin
@@ -94,12 +105,21 @@ public final class Auth {
     }
 
     public static boolean didLogout(Context context) {
-        final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
+        final SharedPreferences preferences = getSharedPrefs(context);
         final boolean didLogout = preferences.getBoolean(PreferencesList.PREF_DID_LOG_OUT, false);
 
         // remove didLogout
         preferences.edit().remove(PreferencesList.PREF_DID_LOG_OUT).apply();
 
         return didLogout;
+    }
+
+    // helpers
+    private static SharedPreferences getSharedPrefs(Context context) {
+        return context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
+    }
+
+    private static SharedPreferences.Editor getSharedPrefsEditor(Context context) {
+        return getSharedPrefs(context).edit();
     }
 }

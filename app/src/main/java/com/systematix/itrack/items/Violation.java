@@ -82,9 +82,9 @@ public final class Violation extends Chip implements DbEntity {
 
     // DbEntity
     @Override
-    public void save(Context context) {
+    public void save(Context context, @Nullable Task.OnTaskPreExecuteListener preExecuteListener, @Nullable Task.OnTaskFinishListener<Void> finishListener) {
         final AppDatabase db = AppDatabase.getInstance(context);
-        new Task<>(new Task.OnTaskExecuteListener<Void>() {
+        new Task<>(preExecuteListener, new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
                 final ViolationDao dao = db.violationDao();
                 if (id == 0 || dao.findById(id) == null) {
@@ -94,19 +94,19 @@ public final class Violation extends Chip implements DbEntity {
                 }
                 return null;
             }
-        }).execute();
+        }, finishListener).execute();
     }
 
     @Override
-    public void delete(Context context) {
+    public void delete(Context context, @Nullable Task.OnTaskPreExecuteListener preExecuteListener, @Nullable Task.OnTaskFinishListener<Void> finishListener) {
         final AppDatabase db = AppDatabase.getInstance(context);
-        new Task<>(new Task.OnTaskExecuteListener<Void>() {
+        new Task<>(preExecuteListener, new Task.OnTaskExecuteListener<Void>() {
             @Override
             public Void execute() {
                 db.violationDao().delete(Violation.this);
                 return null;
             }
-        }).execute();
+        }, finishListener).execute();
     }
 
     // static

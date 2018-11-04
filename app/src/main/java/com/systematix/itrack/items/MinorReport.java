@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.database.DbEntity;
@@ -93,9 +94,9 @@ public final class MinorReport implements DbEntity, Api.ApiRequestable {
 
     // DbEntity
     @Override
-    public void save(Context context) {
+    public void save(Context context, @Nullable Task.OnTaskPreExecuteListener preExecuteListener, @Nullable Task.OnTaskFinishListener<Void> finishListener) {
         final AppDatabase db = AppDatabase.getInstance(context);
-        new Task<>(new Task.OnTaskExecuteListener<Void>() {
+        new Task<>(preExecuteListener, new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
                 final MinorReportDao dao = db.minorReportDao();
                 if (id == 0 || dao.findById(id) == null) {
@@ -105,18 +106,18 @@ public final class MinorReport implements DbEntity, Api.ApiRequestable {
                 }
                 return null;
             }
-        }).execute();
+        }, finishListener).execute();
     }
 
     @Override
-    public void delete(Context context) {
+    public void delete(Context context, @Nullable Task.OnTaskPreExecuteListener preExecuteListener, @Nullable Task.OnTaskFinishListener<Void> finishListener) {
         final AppDatabase db = AppDatabase.getInstance(context);
-        new Task<>(new Task.OnTaskExecuteListener<Void>() {
+        new Task<>(preExecuteListener, new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
                 db.minorReportDao().delete(MinorReport.this);
                 return null;
             }
-        }).execute();
+        }, finishListener).execute();
     }
 
     // ApiRequestable
