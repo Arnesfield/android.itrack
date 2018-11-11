@@ -114,4 +114,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="attendance_empty_subtitle">Congratulations! You have no hours to render :)</string>
+    <string name="attendance_empty_title">Oh yeah!</string>
+    <string name="attendance_error_title">No attendance</string>
+    <string name="attendance_error_subtitle">Unable to load your attendance. Please try again.</string>
 </resources>

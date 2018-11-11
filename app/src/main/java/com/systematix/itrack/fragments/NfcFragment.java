@@ -10,16 +10,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.systematix.itrack.R;
-import com.systematix.itrack.models.FragmentModel;
-import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.interfaces.OnNavItemChangeListener;
+import com.systematix.itrack.models.FragmentModel;
 import com.systematix.itrack.models.NfcEnabledStateModel;
 import com.systematix.itrack.models.NfcNoPermissionStateModel;
+import com.systematix.itrack.models.ViewFlipperModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +37,7 @@ public class NfcFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final FrameLayout rootView = (FrameLayout) inflater.inflate(R.layout.fragment_nfc, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_nfc, container, false);
         final ViewFlipper viewFlipper = rootView.findViewById(R.id.nfc_view_flipper);
         final View vNoPermission = rootView.findViewById(R.id.nfc_no_permission_state_view);
         nfc = NfcAdapter.getDefaultAdapter(getContext());
