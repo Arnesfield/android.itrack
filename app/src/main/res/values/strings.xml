@@ -112,10 +112,13 @@
     <string name="minor_violation_extras_sent_fail_dialog_message">Your report has been saved. It will be sent the next time the network service is available.</string>
     <string name="minor_violation_extras_sent_exception_msg">Unable to send report.</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- attendance -->
+    <string name="attendance_view_title">Attendance Progress</string>
+    <string name="attendance_view_subtitle">of %1$d hours rendered</string>
+    <!-- attendance@emptyState -->
     <string name="attendance_empty_subtitle">Congratulations! You have no hours to render :)</string>
     <string name="attendance_empty_title">Oh yeah!</string>
+    <!-- attendance@errorState -->
     <string name="attendance_error_title">No attendance</string>
     <string name="attendance_error_subtitle">Unable to load your attendance. Please try again.</string>
 </resources>

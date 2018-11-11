@@ -23,4 +23,12 @@
 
     <color name="colorBackground">#FAFAFA</color>
     <color name="colorBackgroundDarker">#EEEEEE</color>
+
+    <!-- progress colors -->
+    <color name="colorProgressBackground">#D6D6D6</color>
+    <color name="colorProgress1">#FF6F31</color>
+    <color name="colorProgress2">#FF9F02</color>
+    <color name="colorProgress3">#FFCF02</color>
+    <color name="colorProgress4">#99CC00</color>
+    <color name="colorProgress5">#88B131</color>
 </resources>
