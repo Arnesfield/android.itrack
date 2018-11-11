@@ -5,6 +5,7 @@ import android.content.Context;
 import com.systematix.itrack.components.sync.Sync;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
+import com.systematix.itrack.models.api.GetAttendanceApiModel;
 import com.systematix.itrack.models.api.GetViolationsApiModel;
 import com.systematix.itrack.models.api.SendMinorReportsApiModel;
 import com.systematix.itrack.utils.Task;
@@ -15,6 +16,7 @@ public final class SyncModel implements Sync.OnSyncListener {
         if (isConnected) {
             syncMinorReports(context);
             syncViolations(context);
+            syncAttendance(context);
         }
     }
 
@@ -32,5 +34,9 @@ public final class SyncModel implements Sync.OnSyncListener {
                 }
             }
         });
+    }
+
+    private void syncAttendance(Context context) {
+        GetAttendanceApiModel.fetch(context);
     }
 }

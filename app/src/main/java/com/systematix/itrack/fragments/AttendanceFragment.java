@@ -4,6 +4,7 @@ package com.systematix.itrack.fragments;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,6 @@ import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
 import com.systematix.itrack.R;
-import com.systematix.itrack.config.UrlsList;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.interfaces.OnNavItemChangeListener;
 import com.systematix.itrack.items.Attendance;
@@ -23,6 +23,7 @@ import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.models.FragmentModel;
 import com.systematix.itrack.models.ProgressTextModel;
 import com.systematix.itrack.models.ViewFlipperModel;
+import com.systematix.itrack.models.api.GetAttendanceApiModel;
 import com.systematix.itrack.utils.Api;
 import com.systematix.itrack.utils.Callback;
 import com.systematix.itrack.utils.Task;
@@ -45,6 +46,7 @@ public class AttendanceFragment extends Fragment
     private Callback<Attendance> fetchCallback;
     private Callback<Attendance> emptyCallback;
     private Callback<Attendance> errorCallback;
+    private Task.OnTaskFinishListener<Void> fetchListener;
 
     public AttendanceFragment() {
         // Required empty public constructor
@@ -61,9 +63,9 @@ public class AttendanceFragment extends Fragment
         final View vEmpty = viewFlipper.findViewById(R.id.attendance_empty_state_view);
         final View vError = viewFlipper.findViewById(R.id.attendance_error_state_view);
 
-        viewSwipeLayout = vAttendance.findViewById(R.id.attendance_view_swipe_layout);
-        emptySwipeLayout = vEmpty.findViewById(R.id.attendance_empty_swipe_layout);
-        errorSwipeLayout = vError.findViewById(R.id.attendance_error_swipe_layout);
+        viewSwipeLayout = (SwipeRefreshLayout) vAttendance;
+        emptySwipeLayout = (SwipeRefreshLayout) vEmpty;
+        errorSwipeLayout = (SwipeRefreshLayout) vError;
 
         buildCallbacks();
 
@@ -98,6 +100,7 @@ public class AttendanceFragment extends Fragment
         emptyCallback = new Callback<Attendance>() {
             @Override
             public void call(Attendance obj) {
+                doRefresh(false);
                 if (obj == null) {
                     viewFlipperModel.switchTo(R.id.attendance_empty_state_view);
                 }
@@ -106,14 +109,23 @@ public class AttendanceFragment extends Fragment
         errorCallback = new Callback<Attendance>() {
             @Override
             public void call(Attendance obj) {
+                doRefresh(false);
                 if (obj == null) {
                     viewFlipperModel.switchTo(R.id.attendance_error_state_view);
                 }
             }
         };
+        fetchListener = new Task.OnTaskFinishListener<Void>() {
+            @Override
+            public void finish(Void result) {
+                // display stuff
+                attemptToShowAttendance(emptyCallback);
+            }
+        };
     }
 
     private void doRefresh(boolean refresh) {
+        viewSwipeLayout.setRefreshing(refresh);
         emptySwipeLayout.setRefreshing(refresh);
         errorSwipeLayout.setRefreshing(refresh);
     }
@@ -129,12 +141,16 @@ public class AttendanceFragment extends Fragment
             return;
         }
 
-        doRefresh(true);
-        Api.post(context)
-            .setTag("attendance")
-            .setUrl(UrlsList.GET_ATTENDANCE_HOURS_URL(uid))
-            .setApiListener(this)
-            .request();
+        // execute stuff finish listener
+        GetAttendanceApiModel.setOnFetchListener(fetchListener);
+
+        // TODO: remove handler
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                GetAttendanceApiModel.fetch(context, AttendanceFragment.this);
+            }
+        }, 5000);
     }
 
     private void attemptToShowAttendance(final Callback<Attendance> callback) {
@@ -199,35 +215,16 @@ public class AttendanceFragment extends Fragment
 
     // OnApiSuccessListener
     @Override
-    public void onApiSuccess(String tag, JSONObject response, boolean success, String msg) throws JSONException {
+    public void onApiSuccess(String tag, JSONObject response, boolean success, String msg) {
         if (!success) {
             doRefresh(false);
             attemptToShowAttendance(errorCallback);
-            return;
-        }
-
-        // execute stuff finish listener
-        final Task.OnTaskFinishListener<Void> finishListener = new Task.OnTaskFinishListener<Void>() {
-            @Override
-            public void finish(Void result) {
-                // display stuff
-                attemptToShowAttendance(emptyCallback);
-            }
-        };
-
-        // attempt to get attendance
-        if (response.has("attendance")) {
-            // save attendance
-            final JSONObject jsonAttendance = response.getJSONObject("attendance");
-            new Attendance(jsonAttendance).save(getContext(), null, finishListener);
-        } else {
-            finishListener.finish(null);
         }
     }
 
     // OnApiErrorListener
     @Override
-    public void onApiError(String tag, VolleyError error) throws JSONException {
+    public void onApiError(String tag, VolleyError error) {
         attemptToShowAttendance(errorCallback);
     }
 
