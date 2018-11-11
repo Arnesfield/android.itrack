@@ -25,9 +25,13 @@ public final class ProgressTextModel {
     }
 
     public void setProgress(final float value, final float total) {
+        setProgress(value, total, 0);
+    }
+
+    public void setProgress(final float value, final float total, final int startAt) {
         setSubtitleValue(total);
         // some animation
-        for (int i = 0; i <= Math.round(value); i++) {
+        for (int i = startAt; i <= Math.round(value); i++) {
             final int currValue = i;
             final int progress = getProgress(i, total);
             final Runnable runnable = new Runnable() {
@@ -40,7 +44,7 @@ public final class ProgressTextModel {
                 // slow down when higher
             };
 
-            if (i == 0) {
+            if (i == startAt) {
                 runnable.run();
             } else {
                 new Handler().postDelayed(runnable, (progress * (progress / 8)) + 100);

@@ -27,6 +27,6 @@ public interface AttendanceDao {
     @Delete
     void delete(Attendance attendance);
 
-    @Query("DELETE FROM attendance WHERE id = :id")
-    void deleteById(int id);
+    @Query("DELETE FROM attendance")
+    void deleteAll();
 }

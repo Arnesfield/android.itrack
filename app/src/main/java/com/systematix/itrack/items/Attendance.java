@@ -64,13 +64,10 @@ public final class Attendance implements DbEntity {
         final AppDatabase db = AppDatabase.getInstance(context);
         new Task<>(preExecuteListener, new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
-                // insert if no id, and if obj does not exist
+                // make sure only 1 row in table :)
                 final AttendanceDao dao = db.attendanceDao();
-                if (id == 0 || dao.findById(id) == null) {
-                    dao.insertAll(Attendance.this);
-                } else {
-                    dao.update(Attendance.this);
-                }
+                dao.deleteAll();
+                dao.insertAll(Attendance.this);
                 return null;
             }
         }, finishListener).execute();

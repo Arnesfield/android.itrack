@@ -38,6 +38,7 @@ public class AttendanceFragment extends Fragment
         implements FragmentModel.TitleableFragment, OnNavItemChangeListener, Api.OnApiRespondListener {
 
 
+    private Attendance currAttendance;
     private ViewFlipperModel viewFlipperModel;
     private ProgressTextModel progressTextModel;
     private SwipeRefreshLayout viewSwipeLayout;
@@ -189,7 +190,13 @@ public class AttendanceFragment extends Fragment
         if (attendance != null) {
             doRefresh(false);
             viewFlipperModel.switchTo(R.id.attendance_view);
-            progressTextModel.setProgress(attendance.getHoursRendered(), attendance.getViolationHours());
+
+            // make sure to start progress on last attendance record :D
+            final int startAt = currAttendance == null ? 0 : currAttendance.getHoursRendered();
+            progressTextModel.setProgress(attendance.getHoursRendered(), attendance.getViolationHours(), startAt);
+
+            // then set this to currAttendance
+            currAttendance = attendance;
         }
     }
 
