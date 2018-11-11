@@ -4,7 +4,6 @@ package com.systematix.itrack.fragments;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -144,27 +143,20 @@ public class AttendanceFragment extends Fragment
 
         // execute stuff finish listener
         GetAttendanceApiModel.setOnFetchListener(fetchListener);
-
-        // TODO: remove handler
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                GetAttendanceApiModel.fetch(context, AttendanceFragment.this);
-            }
-        }, 5000);
+        GetAttendanceApiModel.fetch(context, AttendanceFragment.this);
     }
 
     private void attemptToShowAttendance(final Callback<Attendance> callback) {
         final Context context = getContext();
-        final AppDatabase db = AppDatabase.getInstance(context);
-        final int uid = Auth.getSavedUserId(context);
-
-        if (uid == -1) {
+        if (context == null || Auth.getSavedUserId(context) == -1) {
             doRefresh(false);
             errorCallback.call(null);
             return;
         }
 
+        final int uid = Auth.getSavedUserId(context);
+
+        final AppDatabase db = AppDatabase.getInstance(context);
         new Task<>(new Task.OnTaskListener<Attendance>() {
             @Override
             public void preExecute() {

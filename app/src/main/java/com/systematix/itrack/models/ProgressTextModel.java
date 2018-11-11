@@ -28,10 +28,15 @@ public final class ProgressTextModel {
         setProgress(value, total, 0);
     }
 
-    public void setProgress(final float value, final float total, final int startAt) {
+    public void setProgress(final float value, final float total, int startAt) {
         setSubtitleValue(total);
         // some animation
-        for (int i = startAt; i <= Math.round(value); i++) {
+
+        // make sure startAt is less than value!
+        final int iValue = Math.round(value);
+        startAt = startAt > iValue ? 0 : startAt;
+
+        for (int i = startAt; i <= iValue; i++) {
             final int currValue = i;
             final int progress = getProgress(i, total);
             final Runnable runnable = new Runnable() {
