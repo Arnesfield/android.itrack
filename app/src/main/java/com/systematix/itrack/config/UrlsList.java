@@ -12,4 +12,12 @@ public final class UrlsList {
     public static final String GET_MINOR_VIOLATIONS_URL = API_URL + "Violation/index/minor";
     public static final String SEND_MINOR_VIOLATION_URL = API_URL + "MinorViolation/make";
     public static final String SEND_MINOR_VIOLATION_BATCH_URL = API_URL + "MinorViolation/batch";
+
+    public static String PICTURE_URL(String picture) {
+        return BASE_URL + picture;
+    }
+
+    public static String GET_ATTENDANCE_HOURS_URL(int uid) {
+        return API_URL + "Attendance/hours/" + uid;
+    }
 }

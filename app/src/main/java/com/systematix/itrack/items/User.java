@@ -193,7 +193,7 @@ public class User implements DbEntity {
             }
         } else {
             try {
-                Glide.with(context).load(UrlsList.BASE_URL + picture)
+                Glide.with(context).load(UrlsList.PICTURE_URL(picture))
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {

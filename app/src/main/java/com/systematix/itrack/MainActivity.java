@@ -22,7 +22,7 @@ import android.widget.ViewFlipper;
 import com.systematix.itrack.components.sync.Sync;
 import com.systematix.itrack.config.RequestCodesList;
 import com.systematix.itrack.fragments.NfcFragment;
-import com.systematix.itrack.fragments.StudentFragment;
+import com.systematix.itrack.fragments.AttendanceFragment;
 import com.systematix.itrack.helpers.AlertDialogHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
@@ -209,9 +209,9 @@ public class MainActivity extends AppCompatActivity
         // create fragmentModel
         if (user != null && fragmentModel == null) {
             // NfcFragment is the default fragment for teacher
-            // StudentFragment for student
+            // AttendanceFragment for student
             final boolean isTeacher = user.checkAccess("teacher");
-            final Fragment fragment = isTeacher ? new NfcFragment() : new StudentFragment();
+            final Fragment fragment = isTeacher ? new NfcFragment() : new AttendanceFragment();
             fragmentModel = new FragmentModel(this, fragment, R.id.main_content_layout, true);
         }
 
@@ -302,8 +302,8 @@ public class MainActivity extends AppCompatActivity
 
         Fragment newFragment = null;
 
-        if (id == R.id.nav_dashboard) {
-            newFragment = new StudentFragment();
+        if (id == R.id.nav_attendance) {
+            newFragment = new AttendanceFragment();
         } else if (id == R.id.nav_nfc) {
             newFragment = new NfcFragment();
         } else if (id == R.id.nav_profile) {

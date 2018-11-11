@@ -48,7 +48,7 @@
     <string name="login_btn_login">Login</string>
 
     <!-- main nav drawer -->
-    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_attendance">Attendance</string>
     <string name="nav_nfc">Scan Student ID</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_logout">Logout</string>

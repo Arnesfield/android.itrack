@@ -15,10 +15,10 @@ import com.systematix.itrack.interfaces.OnNavItemChangeListener;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StudentFragment extends Fragment implements FragmentModel.TitleableFragment, OnNavItemChangeListener {
+public class AttendanceFragment extends Fragment implements FragmentModel.TitleableFragment, OnNavItemChangeListener {
 
 
-    public StudentFragment() {
+    public AttendanceFragment() {
         // Required empty public constructor
     }
 
@@ -33,12 +33,12 @@ public class StudentFragment extends Fragment implements FragmentModel.Titleable
     // TitleableFragment
     @Override
     public String getTitle(Resources resources) {
-        return resources.getString(R.string.nav_dashboard);
+        return resources.getString(R.string.nav_attendance);
     }
 
     // OnNavItemChangeListener
     @Override
     public int getNavId() {
-        return R.id.nav_dashboard;
+        return R.id.nav_attendance;
     }
 }
