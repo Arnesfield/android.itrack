@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import com.systematix.itrack.database.daos.AttendanceDao;
 import com.systematix.itrack.database.daos.MinorReportDao;
 import com.systematix.itrack.database.daos.UserDao;
 import com.systematix.itrack.database.daos.ViolationDao;
@@ -17,6 +18,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract ViolationDao violationDao();
     public abstract MinorReportDao minorReportDao();
+    public abstract AttendanceDao attendanceDao();
 
     private static AppDatabase db;
 
