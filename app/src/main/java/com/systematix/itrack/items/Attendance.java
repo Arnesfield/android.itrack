@@ -22,6 +22,12 @@ public final class Attendance implements DbEntity {
     @ColumnInfo(name = "hours_rendered") private int hoursRendered;
     @ColumnInfo(name = "violation_hours") private int violationHours;
 
+    public Attendance(int id, int hoursRendered, int violationHours) {
+        this.id = id;
+        this.hoursRendered = hoursRendered;
+        this.violationHours = violationHours;
+    }
+
     public Attendance(JSONObject json) throws JSONException {
         this.id = json.getInt("user_id");
         this.hoursRendered = json.getInt("hours_rendered");
