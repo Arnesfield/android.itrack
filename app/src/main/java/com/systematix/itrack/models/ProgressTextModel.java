@@ -33,12 +33,15 @@ public final class ProgressTextModel {
         // some animation
 
         // make sure startAt is less than value!
-        final int iValue = Math.round(value);
-        startAt = startAt > iValue ? 0 : startAt;
+        final int targetValue = Math.round(value);
+        final boolean increment = startAt <= targetValue;
 
-        for (int i = startAt; i <= iValue; i++) {
+        for (int i = startAt; increment ? i <= targetValue : i >= targetValue; i += increment ? 1 : -1) {
             final int currValue = i;
             final int progress = getProgress(i, total);
+
+            final int delayProgress = getProgress(Math.abs(i - startAt), total);
+
             final Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
@@ -52,7 +55,7 @@ public final class ProgressTextModel {
             if (i == startAt) {
                 runnable.run();
             } else {
-                new Handler().postDelayed(runnable, (progress * (progress / 8)) + 100);
+                new Handler().postDelayed(runnable, (delayProgress * (delayProgress / 8)) + 100);
             }
         }
     }
