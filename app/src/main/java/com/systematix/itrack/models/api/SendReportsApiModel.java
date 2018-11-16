@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public final class SendMinorReportsApiModel {
+public final class SendReportsApiModel {
     public static void send(final Context context) {
         final AppDatabase db = AppDatabase.getInstance(context);
 
@@ -25,7 +25,7 @@ public final class SendMinorReportsApiModel {
             @Override
             public void onApiSuccess(String tag, JSONObject response, boolean success, String msg) {
                 // after sending the request,
-                // empty the minor reports!
+                // empty the reports!
                 Log.i(AppConfig.TAG, "syncModel@synced:" + success);
                 if (!success) {
                     return;
@@ -33,7 +33,7 @@ public final class SendMinorReportsApiModel {
                 new Task<>(new Task.OnTaskExecuteListener<Void>() {
                     @Override
                     public Void execute() {
-                        db.minorReportDao().deleteAll();
+                        db.reportDao().deleteAll();
                         return null;
                     }
                 }).execute();
@@ -63,7 +63,7 @@ public final class SendMinorReportsApiModel {
             @Override
             public List<Report> execute() {
                 // get list of minor reports
-                return db.minorReportDao().getAll();
+                return db.reportDao().getAll();
             }
 
             @Override
@@ -76,10 +76,10 @@ public final class SendMinorReportsApiModel {
                 final JSONArray array = Api.collectionRequest(result);
                 final JSONObject params = new JSONObject();
                 try {
-                    params.put("minorReports", array);
+                    params.put("reports", array);
 
                     Api.post(context)
-                        .setTag("sendMinorViolationBatch")
+                        .setTag("sendViolationBatch")
                         .setUrl(UrlsList.SEND_VIOLATION_BATCH_URL)
                         .setApiListener(apiRespondListener)
                         .request(params);

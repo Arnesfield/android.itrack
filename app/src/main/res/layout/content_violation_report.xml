@@ -67,6 +67,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
+                    android:id="@+id/violation_report_txt_age_layout"
+                    android:hint="@string/violation_report_txt_age">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/violation_report_txt_age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number|numberSigned" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:id="@+id/violation_report_txt_year_section_layout"
+                    android:hint="@string/violation_report_txt_year_section">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/violation_report_txt_year_section"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:hint="@string/violation_report_txt_message_hint">
 
                     <android.support.design.widget.TextInputEditText

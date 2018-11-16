@@ -23,7 +23,13 @@ public final class Report implements DbEntity, Api.ApiRequestable {
     @ColumnInfo private String serial;
     @ColumnInfo private String location;
     @ColumnInfo private String message;
+    @ColumnInfo private int age;
+    @ColumnInfo(name = "year_section") private String yearSection;
     @ColumnInfo(typeAffinity = ColumnInfo.INTEGER) private long timestamp;
+
+    public Report(int violationId, int reporterId, String serial, String location, String message) {
+        this(violationId, reporterId, serial, location, message, System.currentTimeMillis() / 1000);
+    }
 
     public Report(int violationId, int reporterId, String serial, String location, String message, long timestamp) {
         this.violationId = violationId;
@@ -59,6 +65,14 @@ public final class Report implements DbEntity, Api.ApiRequestable {
         return message;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public String getYearSection() {
+        return yearSection;
+    }
+
     public long getTimestamp() {
         return timestamp;
     }
@@ -88,6 +102,14 @@ public final class Report implements DbEntity, Api.ApiRequestable {
         this.message = message;
     }
 
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setYearSection(String yearSection) {
+        this.yearSection = yearSection;
+    }
+
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
@@ -98,7 +120,7 @@ public final class Report implements DbEntity, Api.ApiRequestable {
         final AppDatabase db = AppDatabase.getInstance(context);
         new Task<>(preExecuteListener, new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
-                final ReportDao dao = db.minorReportDao();
+                final ReportDao dao = db.reportDao();
                 if (id == 0 || dao.findById(id) == null) {
                     dao.insertAll(Report.this);
                 } else {
@@ -114,7 +136,7 @@ public final class Report implements DbEntity, Api.ApiRequestable {
         final AppDatabase db = AppDatabase.getInstance(context);
         new Task<>(preExecuteListener, new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
-                db.minorReportDao().delete(Report.this);
+                db.reportDao().delete(Report.this);
                 return null;
             }
         }, finishListener).execute();
@@ -130,6 +152,12 @@ public final class Report implements DbEntity, Api.ApiRequestable {
             params.put("reporter_id", reporterId);
             params.put("location", location);
             params.put("message", message);
+            if (age != 0) {
+                params.put("age", age);
+            }
+            if (yearSection != null) {
+                params.put("year_section", yearSection);
+            }
             params.put("timestamp", timestamp);
 
             return params;

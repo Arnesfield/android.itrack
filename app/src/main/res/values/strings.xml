@@ -102,6 +102,8 @@
     <string name="violation_report_txt_location_placeholder">e.g. F1205, Library, or 8th Floor</string>
     <string name="violation_report_txt_message_hint">More Details</string>
     <string name="violation_report_txt_message_placeholder">Supply further information or details</string>
+    <string name="violation_report_txt_age">Age</string>
+    <string name="violation_report_txt_year_section">Year/Section</string>
     <!-- violationReport@send -->
     <string name="violation_report_send_dialog_title">Sending Report</string>
     <string name="violation_report_send_dialog_message">Reporting %1$s for the violation: \"%2$s\"</string>

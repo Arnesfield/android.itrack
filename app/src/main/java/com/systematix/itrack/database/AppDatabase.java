@@ -18,7 +18,7 @@ import com.systematix.itrack.items.Violation;
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract ViolationDao violationDao();
-    public abstract ReportDao minorReportDao();
+    public abstract ReportDao reportDao();
     public abstract AttendanceDao attendanceDao();
 
     private static AppDatabase db;

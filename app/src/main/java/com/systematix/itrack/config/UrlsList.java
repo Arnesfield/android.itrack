@@ -10,8 +10,8 @@ public final class UrlsList {
     public static final String UPLOADED_IMAGES_URL = BASE_URL + "images/";
     public static final String GET_USER_URL = API_URL + "User";
     public static final String GET_VIOLATIONS_URL = API_URL + "Violation";
-    public static final String SEND_VIOLATION_URL = API_URL + "MinorViolation/make";
-    public static final String SEND_VIOLATION_BATCH_URL = API_URL + "MinorViolation/batch";
+    public static final String SEND_VIOLATION_URL = API_URL + "Violation/make";
+    public static final String SEND_VIOLATION_BATCH_URL = API_URL + "Violation/batch";
 
     public static String PICTURE_URL(String picture) {
         return BASE_URL + picture;

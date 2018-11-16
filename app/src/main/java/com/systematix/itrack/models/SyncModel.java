@@ -7,21 +7,21 @@ import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.models.api.GetAttendanceApiModel;
 import com.systematix.itrack.models.api.GetViolationsApiModel;
-import com.systematix.itrack.models.api.SendMinorReportsApiModel;
+import com.systematix.itrack.models.api.SendReportsApiModel;
 import com.systematix.itrack.utils.Task;
 
 public final class SyncModel implements Sync.OnSyncListener {
     @Override
     public void onSync(Context context, boolean isConnected) {
         if (isConnected) {
-            syncMinorReports(context);
+            syncReports(context);
             syncViolations(context);
             syncAttendance(context);
         }
     }
 
-    private void syncMinorReports(final Context context) {
-        SendMinorReportsApiModel.send(context);
+    private void syncReports(final Context context) {
+        SendReportsApiModel.send(context);
     }
 
     private void syncViolations(final Context context) {

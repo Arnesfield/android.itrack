@@ -35,6 +35,8 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
     private LoadingDialogModel loadingDialogModel;
     private TextInputEditText txtLocation;
     private TextInputEditText txtMessage;
+    private TextInputEditText txtAge;
+    private TextInputEditText txtYearSection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,11 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
             finish();
             return;
         }
+
+        // set edit text fields
+        final int visibility = violationType.equals("major") ? View.VISIBLE : View.GONE;
+        findViewById(R.id.violation_report_txt_age_layout).setVisibility(visibility);
+        findViewById(R.id.violation_report_txt_year_section_layout).setVisibility(visibility);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -85,6 +92,8 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
         // set edit text fields
         txtLocation = findViewById(R.id.violation_report_txt_location);
         txtMessage = findViewById(R.id.violation_report_txt_message);
+        txtAge = findViewById(R.id.violation_report_txt_age);
+        txtYearSection = findViewById(R.id.violation_report_txt_year_section);
 
         // add placeholders
         EditTextModel.setOnFocusPlaceholder(txtLocation, R.string.violation_report_txt_location_placeholder);
@@ -98,14 +107,21 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
         // request
         final String location = txtLocation.getText().toString();
         final String message = txtMessage.getText().toString();
-        final long timestamp = System.currentTimeMillis() / 1000;
 
         // make report
-        report = new Report(violationId, reporterId, serial, location, message, timestamp);
+        report = new Report(violationId, reporterId, serial, location, message);
+
+        if (violationType.equals("major")) {
+            final String age = txtAge.getText().toString();
+            final String yearSection = txtYearSection.getText().toString();
+            report.setAge(Integer.parseInt(age));
+            report.setYearSection(yearSection);
+        }
+
         final JSONObject params = report.toApiJson();
 
         Api.post(this)
-            .setTag("sendMinorViolation")
+            .setTag("sendViolation")
             .setUrl(UrlsList.SEND_VIOLATION_URL)
             .setApiListener(this)
             .request(params);
@@ -132,8 +148,8 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("minorViolationSent", true);
-        intent.putExtra("minorViolationSuccess", success);
+        intent.putExtra("violationSent", true);
+        intent.putExtra("violationSuccess", success);
         return intent;
     }
 

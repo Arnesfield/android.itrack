@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         final ViewFlipper viewFlipper = findViewById(R.id.main_view_flipper);
         viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.main_loading_layout);
 
-        checkForMinorViolationSent();
+        checkForViolationSent();
 
         // make sync
         sync = new Sync(this);
@@ -78,12 +78,12 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    // check for minor violation sent
-    private void checkForMinorViolationSent() {
+    // check for violation sent
+    private void checkForViolationSent() {
         final Intent intent = getIntent();
-        if (intent.getBooleanExtra("minorViolationSent", false)) {
+        if (intent.getBooleanExtra("violationSent", false)) {
             // if sent successfully
-            final boolean success = intent.getBooleanExtra("minorViolationSuccess", false);
+            final boolean success = intent.getBooleanExtra("violationSuccess", false);
 
             final int title = success ? R.string.violation_report_sent_success_dialog_title : R.string.violation_report_sent_fail_dialog_title;
             final int message = success ? R.string.violation_report_sent_success_dialog_message : R.string.violation_report_sent_fail_dialog_message;
