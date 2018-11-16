@@ -109,7 +109,7 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
         final String message = txtMessage.getText().toString();
 
         // make report
-        report = new Report(violationId, reporterId, serial, location, message);
+        report = new Report(violationId, violationType, reporterId, serial, location, message);
 
         if (violationType.equals("major")) {
             final String age = txtAge.getText().toString();

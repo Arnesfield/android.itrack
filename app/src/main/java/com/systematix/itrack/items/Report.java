@@ -2,6 +2,7 @@ package com.systematix.itrack.items;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -26,13 +27,19 @@ public final class Report implements DbEntity, Api.ApiRequestable {
     @ColumnInfo private int age;
     @ColumnInfo(name = "year_section") private String yearSection;
     @ColumnInfo(typeAffinity = ColumnInfo.INTEGER) private long timestamp;
+    @Ignore private String violationType;
 
     public Report(int violationId, int reporterId, String serial, String location, String message) {
-        this(violationId, reporterId, serial, location, message, System.currentTimeMillis() / 1000);
+        this(violationId, "minor", reporterId, serial, location, message, System.currentTimeMillis() / 1000);
     }
 
-    public Report(int violationId, int reporterId, String serial, String location, String message, long timestamp) {
+    public Report(int violationId, String violationType, int reporterId, String serial, String location, String message) {
+        this(violationId, violationType, reporterId, serial, location, message, System.currentTimeMillis() / 1000);
+    }
+
+    public Report(int violationId, String violationType, int reporterId, String serial, String location, String message, long timestamp) {
         this.violationId = violationId;
+        this.violationType = violationType;
         this.reporterId = reporterId;
         this.serial = serial;
         this.location = location;
@@ -77,6 +84,10 @@ public final class Report implements DbEntity, Api.ApiRequestable {
         return timestamp;
     }
 
+    public String getViolationType() {
+        return violationType;
+    }
+
     // setters
     public void setId(int id) {
         this.id = id;
@@ -112,6 +123,10 @@ public final class Report implements DbEntity, Api.ApiRequestable {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public void setViolationType(String violationType) {
+        this.violationType = violationType;
     }
 
     // DbEntity
@@ -152,13 +167,12 @@ public final class Report implements DbEntity, Api.ApiRequestable {
             params.put("reporter_id", reporterId);
             params.put("location", location);
             params.put("message", message);
-            if (age != 0) {
+            params.put("timestamp", timestamp);
+
+            if (violationType.equals("major")) {
                 params.put("age", age);
-            }
-            if (yearSection != null) {
                 params.put("year_section", yearSection);
             }
-            params.put("timestamp", timestamp);
 
             return params;
         } catch (JSONException e) {
