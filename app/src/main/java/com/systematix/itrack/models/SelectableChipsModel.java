@@ -1,5 +1,6 @@
 package com.systematix.itrack.models;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,30 +12,43 @@ import java.util.List;
 
 public final class SelectableChipsModel<T extends Chipable> {
     private List<T> chips;
-    private FlexboxLayout layout;
-    private int size;
     private int selected;
 
-    public SelectableChipsModel(FlexboxLayout layout, List<T> chips) {
-        this(layout, chips, -1);
+    public interface OnModelInitListener<T extends Chipable> {
+        List<T> getChips(List<T> chips);
     }
 
-    public SelectableChipsModel(FlexboxLayout layout, List<T> chips, int size) {
-        this.layout = layout;
+    public SelectableChipsModel(List<T> chips) {
         this.chips = chips;
-        this.size = size;
         this.selected = -1;
-        init();
     }
 
-    private int getVisibleSize() {
-        // use either size or chips length
-        // choose chip length if size is negative, or if chip length is less than size
-        int length = size < 0 ? chips.size() : size;
+    private int getVisibleSize(List<T> chips) {
+        return getVisibleSize(chips, -1);
+    }
+
+    private int getVisibleSize(List<T> chips, int maxSize) {
+        // use either maxSize or chips length
+        // choose chip length if maxSize is negative, or if chip length is less than maxSize
+        int length = maxSize < 0 ? chips.size() : maxSize;
         return chips.size() < length ? chips.size() : length;
     }
 
-    private void init() {
+    public void init(FlexboxLayout layout) {
+        init(layout, -1, new OnModelInitListener<T>() {
+            @Override
+            public List<T> getChips(List<T> chips) {
+                return chips;
+            }
+        });
+    }
+
+    public void init(FlexboxLayout layout, @NonNull OnModelInitListener<T> listener) {
+        init(layout, -1, listener);
+    }
+
+    public void init(FlexboxLayout layout, int maxSize, @NonNull OnModelInitListener<T> listener) {
+        final List<T> chips = listener.getChips(this.chips);
         // remove all views in the layout
         layout.removeAllViews();
         if (chips.isEmpty()) {
@@ -44,9 +58,10 @@ public final class SelectableChipsModel<T extends Chipable> {
         }
 
         layout.setVisibility(View.VISIBLE);
+        final int visibleSize = getVisibleSize(chips, maxSize);
 
         // then start adding the views hehe
-        for (int i = 0; i < getVisibleSize(); i++) {
+        for (int i = 0; i < visibleSize; i++) {
             final Chipable chip = chips.get(i);
             final TextView tvChip = new TextView(layout.getContext());
 
@@ -63,12 +78,12 @@ public final class SelectableChipsModel<T extends Chipable> {
             tvChip.setLayoutParams(tvChipLayoutParams);
 
             // set listener and then add to layout
-            tvChip.setOnClickListener(buildClickListener(chip));
+            tvChip.setOnClickListener(buildClickListener(chips, chip, visibleSize));
             layout.addView(tvChip);
         }
     }
 
-    private View.OnClickListener buildClickListener(final Chipable chip) {
+    private View.OnClickListener buildClickListener(final List<T> chips, final Chipable chip, final int maxSize) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +95,7 @@ public final class SelectableChipsModel<T extends Chipable> {
                 // when chip is clicked, unselect everything
                 // assert that layout.getChildCount() is the same as getVisibleSize()
                 int newSelected = -1;
-                for (int i = 0; i < layout.getChildCount(); i++) {
+                for (int i = 0; i < maxSize; i++) {
                     final Chipable lChip = chips.get(i);
                     // if this is the current chip
                     // and if it is not yet selected, select it!

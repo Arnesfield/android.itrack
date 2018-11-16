@@ -155,7 +155,8 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
         viewFlipperModel.switchTo(R.id.minor_violation_content_view);
         final FlexboxLayout layout = findViewById(R.id.minor_violation_flexbox_layout);
 
-        selectableChipsModel = new SelectableChipsModel<>(layout, violations);
+        selectableChipsModel = new SelectableChipsModel<>(violations);
+        selectableChipsModel.init(layout);
         // set chip click listener
         selectableChipsModel.collectionSetListener(new Chip.OnChipClickListener() {
             @Override
