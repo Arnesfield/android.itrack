@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MinorViolationExtrasActivity"
-    tools:showIn="@layout/activity_minor_violation_extras">
+    tools:context=".ViolationReportActivity"
+    tools:showIn="@layout/activity_violation_report">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,17 +29,17 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/minor_violation_extras_title"
+                    android:text="@string/violation_report_title"
                     android:textSize="17sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/black" />
 
                 <TextView
-                    android:id="@+id/minor_violation_extras_subtitle"
+                    android:id="@+id/violation_report_subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:alpha="0.65"
-                    android:text="@string/minor_violation_extras_subtitle" />
+                    android:text="@string/violation_report_subtitle" />
             </LinearLayout>
 
             <LinearLayout
@@ -54,10 +54,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:hint="@string/minor_violation_extras_txt_location_hint">
+                    android:hint="@string/violation_report_txt_location_hint">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/minor_violation_extras_txt_location"
+                        android:id="@+id/violation_report_txt_location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text" />
@@ -67,10 +67,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:hint="@string/minor_violation_extras_txt_message_hint">
+                    android:hint="@string/violation_report_txt_message_hint">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/minor_violation_extras_txt_message"
+                        android:id="@+id/violation_report_txt_message"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text|textMultiLine" />
@@ -97,15 +97,15 @@
             android:textSize="12sp"
             android:textAlignment="center"
             android:alpha="0.75"
-            android:text="@string/minor_violation_extras_bottom_text" />
+            android:text="@string/violation_report_bottom_text" />
 
         <Button
-            android:id="@+id/minor_violation_extras_button"
+            android:id="@+id/violation_report_button"
             android:layout_margin="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorError"
-            android:text="@string/minor_violation_extras_action"
+            android:text="@string/violation_report_action"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@android:color/white" />

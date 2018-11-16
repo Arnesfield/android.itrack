@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.systematix.itrack.config.UrlsList;
 import com.systematix.itrack.items.Auth;
-import com.systematix.itrack.items.MinorReport;
+import com.systematix.itrack.items.Report;
 import com.systematix.itrack.models.EditTextModel;
 import com.systematix.itrack.models.LoadingDialogModel;
 import com.systematix.itrack.utils.Api;
@@ -23,11 +23,12 @@ import com.systematix.itrack.utils.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MinorViolationExtrasActivity extends AppCompatActivity implements Api.OnApiRespondListener {
+public class ViolationReportActivity extends AppCompatActivity implements Api.OnApiRespondListener {
 
-    private MinorReport minorReport;
+    private Report report;
     private String serial;
     private String userName;
+    private String violationType;
     private String violationText;
     private int violationId;
     private int reporterId;
@@ -38,7 +39,7 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_minor_violation_extras);
+        setContentView(R.layout.activity_violation_report);
 
         // get serial
         final Intent intent = getIntent();
@@ -46,6 +47,7 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
         userName = intent.getStringExtra("userName");
         violationId = intent.getIntExtra("violationId", -1);
         reporterId = Auth.getSavedUserId(this);
+        violationType = intent.getStringExtra("violationType");
         violationText = intent.getStringExtra("violationText");
 
         // just to make sure hehe
@@ -67,7 +69,7 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
         }
 
         // set btn
-        final View btnSubmit = findViewById(R.id.minor_violation_extras_button);
+        final View btnSubmit = findViewById(R.id.violation_report_button);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,17 +78,17 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
         });
 
         // set textView
-        final String msg = getResources().getString(R.string.minor_violation_extras_subtitle, userName, violationText);
-        final TextView tvSubtitle = findViewById(R.id.minor_violation_extras_subtitle);
+        final String msg = getResources().getString(R.string.violation_report_subtitle, userName, violationText);
+        final TextView tvSubtitle = findViewById(R.id.violation_report_subtitle);
         tvSubtitle.setText(msg);
 
         // set edit text fields
-        txtLocation = findViewById(R.id.minor_violation_extras_txt_location);
-        txtMessage = findViewById(R.id.minor_violation_extras_txt_message);
+        txtLocation = findViewById(R.id.violation_report_txt_location);
+        txtMessage = findViewById(R.id.violation_report_txt_message);
 
         // add placeholders
-        EditTextModel.setOnFocusPlaceholder(txtLocation, R.string.minor_violation_extras_txt_location_placeholder);
-        EditTextModel.setOnFocusPlaceholder(txtMessage, R.string.minor_violation_extras_txt_message_placeholder);
+        EditTextModel.setOnFocusPlaceholder(txtLocation, R.string.violation_report_txt_location_placeholder);
+        EditTextModel.setOnFocusPlaceholder(txtMessage, R.string.violation_report_txt_message_placeholder);
     }
 
     private void submit() {
@@ -99,12 +101,12 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
         final long timestamp = System.currentTimeMillis() / 1000;
 
         // make report
-        minorReport = new MinorReport(violationId, reporterId, serial, location, message, timestamp);
-        final JSONObject params = minorReport.toApiJson();
+        report = new Report(violationId, reporterId, serial, location, message, timestamp);
+        final JSONObject params = report.toApiJson();
 
         Api.post(this)
             .setTag("sendMinorViolation")
-            .setUrl(UrlsList.SEND_MINOR_VIOLATION_URL)
+            .setUrl(UrlsList.SEND_VIOLATION_URL)
             .setApiListener(this)
             .request(params);
     }
@@ -115,9 +117,9 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
             final AlertDialog dialog = loadingDialogModel.getDialog();
             final TextView tvMessage = loadingDialogModel.getMessageTextView();
 
-            final String msg = getResources().getString(R.string.minor_violation_extras_send_dialog_message, userName, violationText);
+            final String msg = getResources().getString(R.string.violation_report_send_dialog_message, userName, violationText);
 
-            dialog.setTitle(R.string.minor_violation_extras_send_dialog_title);
+            dialog.setTitle(R.string.violation_report_send_dialog_title);
             tvMessage.setText(msg);
         }
 
@@ -157,12 +159,12 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
     @Override
     public void onApiError(String tag, VolleyError error) {
         // save properly!
-        minorReport.save(this, null, new Task.OnTaskFinishListener<Void>() {
+        report.save(this, null, new Task.OnTaskFinishListener<Void>() {
             @Override
             public void finish(Void result) {
                 getLoadingDialog().dismiss();
                 startActivity(getOnSubmitIntent(false));
-                MinorViolationExtrasActivity.this.finish();
+                ViolationReportActivity.this.finish();
             }
         });
     }
@@ -172,6 +174,6 @@ public class MinorViolationExtrasActivity extends AppCompatActivity implements A
     public void onApiException(String tag, JSONException e) {
         // unlikely to pass here
         getLoadingDialog().dismiss();
-        Toast.makeText(this, R.string.minor_violation_extras_sent_exception_msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.violation_report_sent_exception_msg, Toast.LENGTH_SHORT).show();
     }
 }

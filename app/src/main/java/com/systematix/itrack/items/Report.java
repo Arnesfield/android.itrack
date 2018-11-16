@@ -8,15 +8,15 @@ import android.support.annotation.Nullable;
 
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.database.DbEntity;
-import com.systematix.itrack.database.daos.MinorReportDao;
+import com.systematix.itrack.database.daos.ReportDao;
 import com.systematix.itrack.utils.Api;
 import com.systematix.itrack.utils.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@Entity(tableName = "minor_report")
-public final class MinorReport implements DbEntity, Api.ApiRequestable {
+@Entity
+public final class Report implements DbEntity, Api.ApiRequestable {
     @PrimaryKey(autoGenerate = true) private int id;
     @ColumnInfo(name = "violation_id") private int violationId;
     @ColumnInfo(name = "reporter_id") private int reporterId;
@@ -25,7 +25,7 @@ public final class MinorReport implements DbEntity, Api.ApiRequestable {
     @ColumnInfo private String message;
     @ColumnInfo(typeAffinity = ColumnInfo.INTEGER) private long timestamp;
 
-    public MinorReport(int violationId, int reporterId, String serial, String location, String message, long timestamp) {
+    public Report(int violationId, int reporterId, String serial, String location, String message, long timestamp) {
         this.violationId = violationId;
         this.reporterId = reporterId;
         this.serial = serial;
@@ -98,11 +98,11 @@ public final class MinorReport implements DbEntity, Api.ApiRequestable {
         final AppDatabase db = AppDatabase.getInstance(context);
         new Task<>(preExecuteListener, new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
-                final MinorReportDao dao = db.minorReportDao();
+                final ReportDao dao = db.minorReportDao();
                 if (id == 0 || dao.findById(id) == null) {
-                    dao.insertAll(MinorReport.this);
+                    dao.insertAll(Report.this);
                 } else {
-                    dao.update(MinorReport.this);
+                    dao.update(Report.this);
                 }
                 return null;
             }
@@ -114,7 +114,7 @@ public final class MinorReport implements DbEntity, Api.ApiRequestable {
         final AppDatabase db = AppDatabase.getInstance(context);
         new Task<>(preExecuteListener, new Task.OnTaskExecuteListener<Void>() {
             public Void execute() {
-                db.minorReportDao().delete(MinorReport.this);
+                db.minorReportDao().delete(Report.this);
                 return null;
             }
         }, finishListener).execute();

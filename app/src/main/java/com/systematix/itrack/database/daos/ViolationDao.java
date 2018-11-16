@@ -12,6 +12,9 @@ import java.util.List;
 
 @Dao
 public interface ViolationDao {
+    @Query("SELECT * FROM violation")
+    List<Violation> getAll();
+
     @Query("SELECT * FROM violation WHERE violation_type = :type")
     List<Violation> getAll(String type);
 

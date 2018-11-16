@@ -7,7 +7,7 @@ import com.android.volley.VolleyError;
 import com.systematix.itrack.config.AppConfig;
 import com.systematix.itrack.config.UrlsList;
 import com.systematix.itrack.database.AppDatabase;
-import com.systematix.itrack.items.MinorReport;
+import com.systematix.itrack.items.Report;
 import com.systematix.itrack.utils.Api;
 import com.systematix.itrack.utils.Task;
 
@@ -54,20 +54,20 @@ public final class SendMinorReportsApiModel {
 
         // get list of minor reports from db
         // then send api request
-        new Task<>(new Task.OnTaskListener<List<MinorReport>>() {
+        new Task<>(new Task.OnTaskListener<List<Report>>() {
             @Override
             public void preExecute() {
 
             }
 
             @Override
-            public List<MinorReport> execute() {
+            public List<Report> execute() {
                 // get list of minor reports
                 return db.minorReportDao().getAll();
             }
 
             @Override
-            public void finish(List<MinorReport> result) {
+            public void finish(List<Report> result) {
                 // only continue on if result has something
                 if (result.isEmpty()) {
                     return;
@@ -80,7 +80,7 @@ public final class SendMinorReportsApiModel {
 
                     Api.post(context)
                         .setTag("sendMinorViolationBatch")
-                        .setUrl(UrlsList.SEND_MINOR_VIOLATION_BATCH_URL)
+                        .setUrl(UrlsList.SEND_VIOLATION_BATCH_URL)
                         .setApiListener(apiRespondListener)
                         .request(params);
                 } catch (JSONException e) {

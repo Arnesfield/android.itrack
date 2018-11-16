@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity
             // if sent successfully
             final boolean success = intent.getBooleanExtra("minorViolationSuccess", false);
 
-            final int title = success ? R.string.minor_violation_extras_sent_success_dialog_title : R.string.minor_violation_extras_sent_fail_dialog_title;
-            final int message = success ? R.string.minor_violation_extras_sent_success_dialog_message : R.string.minor_violation_extras_sent_fail_dialog_message;
+            final int title = success ? R.string.violation_report_sent_success_dialog_title : R.string.violation_report_sent_fail_dialog_title;
+            final int message = success ? R.string.violation_report_sent_success_dialog_message : R.string.violation_report_sent_fail_dialog_message;
 
             final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(title)

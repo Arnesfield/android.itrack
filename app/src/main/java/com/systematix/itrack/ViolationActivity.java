@@ -30,7 +30,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class MinorViolationActivity extends AppCompatActivity implements Api.OnApiRespondListener {
+public class ViolationActivity extends AppCompatActivity implements Api.OnApiRespondListener {
 
     private String serial;
     private String userName;
@@ -41,7 +41,7 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_minor_violation);
+        setContentView(R.layout.activity_violation);
 
         // get serial
         final Intent intent = getIntent();
@@ -66,7 +66,7 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
         }
 
         // set empty state btn listener
-        final Button btnEmptyState = findViewById(R.id.minor_violation_empty_reload_btn);
+        final Button btnEmptyState = findViewById(R.id.violation_empty_reload_btn);
         btnEmptyState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +74,7 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
             }
         });
 
-        final Button btnNext = findViewById(R.id.minor_violation_button);
+        final Button btnNext = findViewById(R.id.violation_button);
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,25 +84,25 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
         btnStateModel = new ButtonStateModel(btnNext);
 
         // get and set those textViews
-        final TextView tvSubtitle = findViewById(R.id.minor_violation_subtitle);
-        final TextView tvBottom = findViewById(R.id.minor_violation_bottom_text);
+        final TextView tvSubtitle = findViewById(R.id.violation_subtitle);
+        final TextView tvBottom = findViewById(R.id.violation_bottom_text);
 
         final Resources resources = getResources();
-        final String subtitleText = resources.getString(R.string.minor_violation_view_subtitle, userName);
-        final String bottomText = resources.getString(R.string.minor_violation_view_bottom_text, userName);
+        final String subtitleText = resources.getString(R.string.violation_view_subtitle, userName);
+        final String bottomText = resources.getString(R.string.violation_view_bottom_text, userName);
 
         tvSubtitle.setText(subtitleText);
         tvBottom.setText(bottomText);
 
-        final ViewFlipper viewFlipper = findViewById(R.id.minor_violation_view_flipper);
-        viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.minor_violation_loading_layout);
+        final ViewFlipper viewFlipper = findViewById(R.id.violation_view_flipper);
+        viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.violation_loading_layout);
 
         // get violations here
         getViolations();
     }
 
     private void fetchViolations() {
-        viewFlipperModel.switchTo(R.id.minor_violation_loading_layout);
+        viewFlipperModel.switchTo(R.id.violation_loading_layout);
         GetViolationsApiModel.fetch(this, this);
     }
 
@@ -112,10 +112,11 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
             return;
         }
 
-        final Intent intent = new Intent(this, MinorViolationExtrasActivity.class);
+        final Intent intent = new Intent(this, ViolationReportActivity.class);
         intent.putExtra("serial", serial);
         intent.putExtra("userName", userName);
         intent.putExtra("violationId", violation.getId());
+        intent.putExtra("violationType", violation.getType());
         intent.putExtra("violationText", violation.getName());
 
         startActivity(intent);
@@ -128,12 +129,12 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
             @Override
             public void preExecute() {
                 // make sure to show loading screen first
-                viewFlipperModel.switchTo(R.id.minor_violation_loading_layout);
+                viewFlipperModel.switchTo(R.id.violation_loading_layout);
             }
 
             @Override
             public List<Violation> execute() {
-                return db.violationDao().getAll("minor");
+                return db.violationDao().getAll();
             }
 
             @Override
@@ -141,7 +142,7 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
                 // also handle if there are no results :(
                 if (result.isEmpty()) {
                     // show empty state
-                    viewFlipperModel.switchTo(R.id.minor_violation_empty_state_view);
+                    viewFlipperModel.switchTo(R.id.violation_empty_state_view);
                     // fetch api via button and call this method again
                 } else {
                     gotResults(result);
@@ -152,8 +153,8 @@ public class MinorViolationActivity extends AppCompatActivity implements Api.OnA
 
     // finally got results!
     private void gotResults(List<Violation> violations) {
-        viewFlipperModel.switchTo(R.id.minor_violation_content_view);
-        final FlexboxLayout layout = findViewById(R.id.minor_violation_flexbox_layout);
+        viewFlipperModel.switchTo(R.id.violation_content_view);
+        final FlexboxLayout layout = findViewById(R.id.violation_minor_flexbox_layout);
 
         selectableChipsModel = new SelectableChipsModel<>(violations);
         selectableChipsModel.init(layout);

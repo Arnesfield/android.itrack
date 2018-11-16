@@ -12,8 +12,8 @@
     <!-- activity titles -->
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_make_report">Report Student</string>
-    <string name="title_activity_minor_violation">Choose Violation</string>
-    <string name="title_activity_minor_violation_extras">Send Report</string>
+    <string name="title_activity_violation">Choose Violation</string>
+    <string name="title_activity_violation_report">Send Report</string>
 
     <!-- desc -->
     <string name="background_desc">Background</string>
@@ -84,33 +84,33 @@
     <string name="make_report_no_user_title">Cannot load student :(</string>
     <string name="make_report_no_user_subtitle">You can still send this report now and it will be sent later.</string>
 
-    <!-- minor violation -->
-    <string name="minor_violation_action">Choose Violation</string>
-    <!-- minorViolation@emptyState -->
-    <string name="minor_violation_empty_title">No violations list :(</string>
-    <string name="minor_violation_empty_subtitle">Unable to load the list of violations. Please try again.</string>
-    <string name="minor_violation_view_title">List of Violations</string>
-    <string name="minor_violation_view_subtitle">Below are the list of violations %1$s may have observed. Pick one in order to proceed with this report.</string>
-    <string name="minor_violation_view_bottom_text">Choose the violation done by %1$s.</string>
+    <!-- violation -->
+    <string name="violation_action">Choose Violation</string>
+    <!-- violation@emptyState -->
+    <string name="violation_empty_title">No violations list :(</string>
+    <string name="violation_empty_subtitle">Unable to load the list of violations. Please try again.</string>
+    <string name="violation_view_title">List of Violations</string>
+    <string name="violation_view_subtitle">Below are the list of violations %1$s may have observed. Pick one in order to proceed with this report.</string>
+    <string name="violation_view_bottom_text">Choose the violation done by %1$s.</string>
 
-    <!-- minor violation extras -->
-    <string name="minor_violation_extras_action">Send Report</string>
-    <string name="minor_violation_extras_bottom_text">You may provide extra information about this report.</string>
-    <string name="minor_violation_extras_title">Provide additional information</string>
-    <string name="minor_violation_extras_subtitle">Supply other details %1$s made with the violation \"%2$s\". You can skip these fields and send the report.</string>
-    <string name="minor_violation_extras_txt_location_hint">Place or location</string>
-    <string name="minor_violation_extras_txt_location_placeholder">e.g. F1205, Library, or 8th Floor</string>
-    <string name="minor_violation_extras_txt_message_hint">More Details</string>
-    <string name="minor_violation_extras_txt_message_placeholder">Supply further information or details</string>
-    <!-- minorViolation@send -->
-    <string name="minor_violation_extras_send_dialog_title">Sending Report</string>
-    <string name="minor_violation_extras_send_dialog_message">Reporting %1$s for the violation: \"%2$s\"</string>
-    <!-- minorViolationExtras@sent -->
-    <string name="minor_violation_extras_sent_success_dialog_title">Report Sent</string>
-    <string name="minor_violation_extras_sent_success_dialog_message">Your report has been sent.</string>
-    <string name="minor_violation_extras_sent_fail_dialog_title">Report Saved</string>
-    <string name="minor_violation_extras_sent_fail_dialog_message">Your report has been saved. It will be sent the next time the network service is available.</string>
-    <string name="minor_violation_extras_sent_exception_msg">Unable to send report.</string>
+    <!-- violation report -->
+    <string name="violation_report_action">Send Report</string>
+    <string name="violation_report_bottom_text">You may provide extra information about this report.</string>
+    <string name="violation_report_title">Provide additional information</string>
+    <string name="violation_report_subtitle">Supply other details %1$s made with the violation \"%2$s\". You can skip these fields and send the report.</string>
+    <string name="violation_report_txt_location_hint">Place or location</string>
+    <string name="violation_report_txt_location_placeholder">e.g. F1205, Library, or 8th Floor</string>
+    <string name="violation_report_txt_message_hint">More Details</string>
+    <string name="violation_report_txt_message_placeholder">Supply further information or details</string>
+    <!-- violationReport@send -->
+    <string name="violation_report_send_dialog_title">Sending Report</string>
+    <string name="violation_report_send_dialog_message">Reporting %1$s for the violation: \"%2$s\"</string>
+    <!-- violationReport@sent -->
+    <string name="violation_report_sent_success_dialog_title">Report Sent</string>
+    <string name="violation_report_sent_success_dialog_message">Your report has been sent.</string>
+    <string name="violation_report_sent_fail_dialog_title">Report Saved</string>
+    <string name="violation_report_sent_fail_dialog_message">Your report has been saved. It will be sent the next time the network service is available.</string>
+    <string name="violation_report_sent_exception_msg">Unable to send report.</string>
 
     <!-- attendance -->
     <string name="attendance_view_title">Attendance Progress</string>

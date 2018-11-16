@@ -19,7 +19,7 @@ public final class GetViolationsApiModel {
     private static Api build(Context context) {
         return Api.post(context)
             .setTag("violations")
-            .setUrl(UrlsList.GET_MINOR_VIOLATIONS_URL);
+            .setUrl(UrlsList.GET_VIOLATIONS_URL);
     }
 
     private static Api.OnApiSuccessListener buildSuccessListener(final Context context, @Nullable final Api.OnApiSuccessListener listener) {
