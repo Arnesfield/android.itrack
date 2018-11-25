@@ -25,7 +25,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static AppDatabase getInstance(Context context) {
         if (db == null) {
-            db = Room.databaseBuilder(context, AppDatabase.class, "itrackdb").build();
+            db = Room.databaseBuilder(context, AppDatabase.class, "itrack-v2.db").build();
         }
         return db;
     }

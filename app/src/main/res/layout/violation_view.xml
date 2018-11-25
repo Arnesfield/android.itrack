@@ -25,21 +25,55 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/violation_view_title"
+                    android:text="@string/violation_view_minor_title"
                     android:textSize="17sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/black" />
 
                 <TextView
-                    android:id="@+id/violation_subtitle"
+                    android:id="@+id/violation_minor_subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:alpha="0.65"
-                    android:text="@string/violation_view_subtitle" />
+                    android:text="@string/violation_view_minor_subtitle" />
             </LinearLayout>
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/violation_minor_flexbox_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                app:flexWrap="wrap"
+                app:flexDirection="row"
+                app:alignItems="flex_start" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/violation_view_major_title"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/violation_major_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.65"
+                    android:text="@string/violation_view_major_subtitle" />
+            </LinearLayout>
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/violation_major_flexbox_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="0dp"

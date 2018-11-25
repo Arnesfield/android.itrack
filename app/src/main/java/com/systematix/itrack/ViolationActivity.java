@@ -28,6 +28,7 @@ import com.systematix.itrack.utils.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ViolationActivity extends AppCompatActivity implements Api.OnApiRespondListener {
@@ -84,11 +85,11 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
         btnStateModel = new ButtonStateModel(btnNext);
 
         // get and set those textViews
-        final TextView tvSubtitle = findViewById(R.id.violation_subtitle);
+        final TextView tvSubtitle = findViewById(R.id.violation_minor_subtitle);
         final TextView tvBottom = findViewById(R.id.violation_bottom_text);
 
         final Resources resources = getResources();
-        final String subtitleText = resources.getString(R.string.violation_view_subtitle, userName);
+        final String subtitleText = resources.getString(R.string.violation_view_minor_subtitle, userName);
         final String bottomText = resources.getString(R.string.violation_view_bottom_text, userName);
 
         tvSubtitle.setText(subtitleText);
@@ -154,10 +155,35 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
     // finally got results!
     private void gotResults(List<Violation> violations) {
         viewFlipperModel.switchTo(R.id.violation_content_view);
-        final FlexboxLayout layout = findViewById(R.id.violation_minor_flexbox_layout);
+        final FlexboxLayout minorLayout = findViewById(R.id.violation_minor_flexbox_layout);
+        final FlexboxLayout majorLayout = findViewById(R.id.violation_major_flexbox_layout);
 
         selectableChipsModel = new SelectableChipsModel<>(violations);
-        selectableChipsModel.init(layout);
+        selectableChipsModel.init(minorLayout, new SelectableChipsModel.OnModelInitListener<Violation>() {
+            @Override
+            public List<Violation> getChips(List<Violation> chips) {
+                final List<Violation> list = new ArrayList<>();
+                for (final Violation chip : chips) {
+                    if (chip.getType().toLowerCase().equals("minor")) {
+                        list.add(chip);
+                    }
+                }
+                return list;
+            }
+        });
+        selectableChipsModel.init(majorLayout, new SelectableChipsModel.OnModelInitListener<Violation>() {
+            @Override
+            public List<Violation> getChips(List<Violation> chips) {
+                final List<Violation> list = new ArrayList<>();
+                for (final Violation chip : chips) {
+                    if (chip.getType().toLowerCase().equals("major")) {
+                        list.add(chip);
+                    }
+                }
+                return list;
+            }
+        });
+
         // set chip click listener
         selectableChipsModel.collectionSetListener(new Chip.OnChipClickListener() {
             @Override

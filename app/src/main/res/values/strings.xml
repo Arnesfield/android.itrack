@@ -89,8 +89,10 @@
     <!-- violation@emptyState -->
     <string name="violation_empty_title">No violations list :(</string>
     <string name="violation_empty_subtitle">Unable to load the list of violations. Please try again.</string>
-    <string name="violation_view_title">List of Violations</string>
-    <string name="violation_view_subtitle">Below are the list of violations %1$s may have observed. Pick one in order to proceed with this report.</string>
+    <string name="violation_view_minor_title">List of Violations</string>
+    <string name="violation_view_minor_subtitle">Below is the list of violations %1$s may have observed. Pick one in order to proceed with this report.</string>
+    <string name="violation_view_major_title">Major Violations</string>
+    <string name="violation_view_major_subtitle">Below is the list of major violations.</string>
     <string name="violation_view_bottom_text">Choose the violation done by %1$s.</string>
 
     <!-- violation report -->

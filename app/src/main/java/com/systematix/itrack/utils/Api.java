@@ -133,7 +133,7 @@ public final class Api {
         return request(null);
     }
 
-    public JsonObjectRequest request(@Nullable JSONObject params) {
+    public JsonObjectRequest request(@Nullable final JSONObject params) {
         final Api api = this;
 
         final JsonObjectRequest request = new JsonObjectRequest(
@@ -155,6 +155,11 @@ public final class Api {
                                 if (logMsg != null) {
                                     Log.d(AppConfig.TAG, "Api@successMsg:" + tag + "::" + logMsg);
                                 }
+
+                                if (params != null) {
+                                    Log.d(AppConfig.TAG, "Api@successParams:" + tag + "::" + params.toString());
+                                }
+
                                 successListener.onApiSuccess(api.tag, response, success, outMsg);
                             }
                         } catch (JSONException e) {
@@ -162,6 +167,10 @@ public final class Api {
 
                             Log.e(AppConfig.TAG, "Api@OnApiException:" + tag);
                             Log.e(AppConfig.TAG, e.getMessage());
+
+                            if (params != null) {
+                                Log.d(AppConfig.TAG, "Api@exceptionParams:" + tag + "::" + params.toString());
+                            }
 
                             if (exceptionListener != null) {
                                 exceptionListener.onApiException(api.tag, e);
@@ -176,6 +185,10 @@ public final class Api {
                             Log.e(AppConfig.TAG, "Api@OnApiError:" + tag);
                             Log.e(AppConfig.TAG, error.toString());
 
+                            if (params != null) {
+                                Log.d(AppConfig.TAG, "Api@errorParams:" + tag + "::" + params.toString());
+                            }
+
                             if (errorListener != null) {
                                 errorListener.onApiError(api.tag, error);
                             }
@@ -183,6 +196,10 @@ public final class Api {
                             e.printStackTrace();
                             Log.e(AppConfig.TAG, "Api@OnApiException:" + tag);
                             Log.e(AppConfig.TAG, e.getMessage());
+
+                            if (params != null) {
+                                Log.d(AppConfig.TAG, "Api@exceptionParams:" + tag + "::" + params.toString());
+                            }
 
                             if (exceptionListener != null) {
                                 exceptionListener.onApiException(api.tag, e);

@@ -78,12 +78,12 @@ public final class SelectableChipsModel<T extends Chipable> {
             tvChip.setLayoutParams(tvChipLayoutParams);
 
             // set listener and then add to layout
-            tvChip.setOnClickListener(buildClickListener(chips, chip, visibleSize));
+            tvChip.setOnClickListener(buildClickListener(chip));
             layout.addView(tvChip);
         }
     }
 
-    private View.OnClickListener buildClickListener(final List<T> chips, final Chipable chip, final int maxSize) {
+    private View.OnClickListener buildClickListener(final Chipable chip) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +95,7 @@ public final class SelectableChipsModel<T extends Chipable> {
                 // when chip is clicked, unselect everything
                 // assert that layout.getChildCount() is the same as getVisibleSize()
                 int newSelected = -1;
-                for (int i = 0; i < maxSize; i++) {
+                for (int i = 0; i < chips.size(); i++) {
                     final Chipable lChip = chips.get(i);
                     // if this is the current chip
                     // and if it is not yet selected, select it!
