@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ import java.util.List;
 public class NotificationsFragment extends Fragment
         implements FragmentModel.TitleableFragment, OnNavItemChangeListener {
 
+    private List<Notification> notifications;
 
     private ViewFlipperModel viewFlipperModel;
     private View vEmptyState;
@@ -123,7 +126,8 @@ public class NotificationsFragment extends Fragment
     }
 
     private void setNotifications(List<Notification> notifications) {
-        if (notifications.isEmpty()) {
+        this.notifications = notifications;
+        if (notifications == null || notifications.isEmpty()) {
             // show empty here
             viewFlipperModel.switchTo(vEmptyState);
             return;
@@ -132,7 +136,28 @@ public class NotificationsFragment extends Fragment
         viewFlipperModel.switchTo(vNotifications);
 
         // display notifications here
-        // TODO: make adapter for notifications
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        if (notifications == null || notifications.isEmpty()) {
+            // show empty here
+            viewFlipperModel.switchTo(vEmptyState);
+            return;
+        }
+
+        final RecyclerView recyclerView = vNotifications.findViewById(R.id.notifications_recycler_view);
+        recyclerView.setHasFixedSize(true);
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        if (recyclerView.getAdapter() == null) {
+            final Notification.Adapter adapter = new Notification.Adapter(notifications);
+            recyclerView.setAdapter(adapter);
+        } else {
+            recyclerView.getAdapter().notifyDataSetChanged();
+        }
     }
 
     // TitleableFragment
