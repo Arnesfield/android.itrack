@@ -1,14 +1,13 @@
 package com.systematix.itrack.models.api;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.systematix.itrack.config.AppConfig;
-import com.systematix.itrack.config.PreferencesList;
 import com.systematix.itrack.config.UrlsList;
+import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.utils.Api;
 import com.systematix.itrack.utils.Callback;
 
@@ -17,9 +16,7 @@ import org.json.JSONObject;
 
 public final class SendUserFCMTokenApiModel {
     public static void send(final Context context, final String token) {
-        final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
-        final int uid = preferences.getInt(PreferencesList.PREF_USER_ID, -1);
-        send(context, uid, token);
+        send(context, Auth.getSavedUserId(context), token);
     }
 
     public static void send(final Context context, final int userId, final String token) {
