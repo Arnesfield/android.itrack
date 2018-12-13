@@ -26,6 +26,7 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.systematix.itrack.components.sync.Sync;
 import com.systematix.itrack.config.AppConfig;
 import com.systematix.itrack.config.RequestCodesList;
+import com.systematix.itrack.fcm.FCMService;
 import com.systematix.itrack.fragments.AttendanceFragment;
 import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.helpers.AlertDialogHelper;
@@ -70,6 +71,8 @@ public class MainActivity extends AppCompatActivity
                 final String token = instanceIdResult.getToken();
                 Log.d(AppConfig.TAG, "FCM@instanceId:" + id);
                 Log.d(AppConfig.TAG, "FCM@instanceToken:" + token);
+                // save and send to server
+                FCMService.saveAndSendToken(MainActivity.this, token);
             }
         });
 

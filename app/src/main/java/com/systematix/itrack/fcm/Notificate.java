@@ -12,13 +12,13 @@ import com.systematix.itrack.R;
 import com.systematix.itrack.SplashActivity;
 import com.systematix.itrack.config.AppConfig;
 
-public final class Notificate {
+final class Notificate {
     private Context context;
     private String title;
     private String body;
     private NotificationCompat.Builder notificationBuilder;
 
-    public Notificate(Context context, String title, String body) {
+    Notificate(Context context, String title, String body) {
         this.context = context;
         this.title = title;
         this.body = body;

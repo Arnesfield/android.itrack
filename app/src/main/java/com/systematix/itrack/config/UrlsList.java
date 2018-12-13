@@ -12,6 +12,7 @@ public final class UrlsList {
     public static final String GET_VIOLATIONS_URL = API_URL + "Violation";
     public static final String SEND_VIOLATION_URL = API_URL + "Violation/make";
     public static final String SEND_VIOLATION_BATCH_URL = API_URL + "Violation/batch";
+    public static final String SEND_USER_FCM_TOKEN_URL = API_URL + "User/token";
 
     public static String PICTURE_URL(String picture) {
         return BASE_URL + picture;

@@ -1,19 +1,22 @@
 package com.systematix.itrack.fcm;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.systematix.itrack.config.AppConfig;
+import com.systematix.itrack.config.PreferencesList;
+import com.systematix.itrack.models.api.SendUserFCMToken;
 
 public class FCMService extends FirebaseMessagingService {
-    public FCMService() {
-    }
 
     @Override
     public void onNewToken(String token) {
         super.onNewToken(token);
+        saveAndSendToken(this, token);
         Log.d(AppConfig.TAG, "FCMService@token:" + token);
         Log.d(AppConfig.TAG, "FCMService@instanceId:" + FirebaseInstanceId.getInstance().getInstanceId());
     }
@@ -36,5 +39,25 @@ public class FCMService extends FirebaseMessagingService {
             Log.d(AppConfig.TAG, "FCMService@notificationBody:" + body);
             new Notificate(this, title, body).build();
         }
+    }
+
+    public static void saveAndSendToken(Context context, String token) {
+        final SharedPreferences preferences = getSharedPreferences(context);
+        final SharedPreferences.Editor edit = preferences.edit();
+
+        edit.putString(PreferencesList.PREF_USER_FCM_TOKEN, token);
+        edit.apply();
+
+        // also do update server
+        SendUserFCMToken.send(context, token);
+    }
+
+    public static String getToken(Context context) {
+        final SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getString(PreferencesList.PREF_USER_FCM_TOKEN, null);
+    }
+
+    private static SharedPreferences getSharedPreferences(Context context) {
+        return context.getSharedPreferences(PreferencesList.PREF_APP, MODE_PRIVATE);
     }
 }
