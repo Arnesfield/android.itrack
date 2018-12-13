@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <!-- !!! for syncing !!! -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -28,6 +30,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="itrack_channel_id" />
+
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"
@@ -74,10 +81,11 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <service
-            android:name=".FCMService"
-            android:exported="false">
+            android:name=".fcm.FCMService"
+            android:exported="false"
+            android:stopWithTask="false">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>-->
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>

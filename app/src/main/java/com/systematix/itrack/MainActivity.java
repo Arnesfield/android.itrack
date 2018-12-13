@@ -14,15 +14,20 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ViewFlipper;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.systematix.itrack.components.sync.Sync;
+import com.systematix.itrack.config.AppConfig;
 import com.systematix.itrack.config.RequestCodesList;
-import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.fragments.AttendanceFragment;
+import com.systematix.itrack.fragments.NfcFragment;
 import com.systematix.itrack.helpers.AlertDialogHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
@@ -57,6 +62,16 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                final String id = instanceIdResult.getId();
+                final String token = instanceIdResult.getToken();
+                Log.d(AppConfig.TAG, "FCM@instanceId:" + id);
+                Log.d(AppConfig.TAG, "FCM@instanceToken:" + token);
+            }
+        });
 
         // make sure to do loading screen first hehehe
         final ViewFlipper viewFlipper = findViewById(R.id.main_view_flipper);

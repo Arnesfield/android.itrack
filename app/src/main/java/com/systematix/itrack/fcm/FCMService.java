@@ -1,7 +1,8 @@
-package com.systematix.itrack;
+package com.systematix.itrack.fcm;
 
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.systematix.itrack.config.AppConfig;
@@ -14,6 +15,7 @@ public class FCMService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         super.onNewToken(token);
         Log.d(AppConfig.TAG, "FCMService@token:" + token);
+        Log.d(AppConfig.TAG, "FCMService@instanceId:" + FirebaseInstanceId.getInstance().getInstanceId());
     }
 
     @Override
@@ -25,8 +27,14 @@ public class FCMService extends FirebaseMessagingService {
             Log.d(AppConfig.TAG, "FCMService@data:" + remoteMessage.getData());
         }
 
-        if (remoteMessage.getNotification() != null) {
-            Log.d(AppConfig.TAG, "FCMService@notification:" + remoteMessage.getNotification().getBody());
+        final RemoteMessage.Notification n = remoteMessage.getNotification();
+        if (n != null) {
+            n.getTitle();
+            final String title = n.getTitle();
+            final String body = n.getBody();
+            Log.d(AppConfig.TAG, "FCMService@notificationTitle:" + title);
+            Log.d(AppConfig.TAG, "FCMService@notificationBody:" + body);
+            new Notificate(this, title, body).build();
         }
     }
 }
