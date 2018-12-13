@@ -131,7 +131,4 @@
     <!-- notifications@emptyState -->
     <string name="notifications_empty_title">No notifications :)</string>
     <string name="notifications_empty_subtitle">Your notifications will be shown here.</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
