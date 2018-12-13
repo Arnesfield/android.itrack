@@ -15,7 +15,7 @@ import com.systematix.itrack.utils.Callback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public final class SendUserFCMToken {
+public final class SendUserFCMTokenApiModel {
     public static void send(final Context context, final String token) {
         final SharedPreferences preferences = context.getSharedPreferences(PreferencesList.PREF_APP, Context.MODE_PRIVATE);
         final int uid = preferences.getInt(PreferencesList.PREF_USER_ID, -1);

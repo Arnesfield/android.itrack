@@ -9,7 +9,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.systematix.itrack.config.AppConfig;
 import com.systematix.itrack.config.PreferencesList;
-import com.systematix.itrack.models.api.SendUserFCMToken;
+import com.systematix.itrack.models.api.SendUserFCMTokenApiModel;
 
 public class FCMService extends FirebaseMessagingService {
 
@@ -49,7 +49,7 @@ public class FCMService extends FirebaseMessagingService {
         edit.apply();
 
         // also do update server
-        SendUserFCMToken.send(context, token);
+        SendUserFCMTokenApiModel.send(context, token);
     }
 
     public static String getToken(Context context) {
