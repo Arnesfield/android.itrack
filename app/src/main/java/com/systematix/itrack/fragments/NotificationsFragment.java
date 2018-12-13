@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -151,6 +152,12 @@ public class NotificationsFragment extends Fragment
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+
+        final DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+            recyclerView.getContext(),
+            layoutManager.getOrientation()
+        );
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         if (recyclerView.getAdapter() == null) {
             final Notification.Adapter adapter = new Notification.Adapter(notifications);

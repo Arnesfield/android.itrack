@@ -15,7 +15,7 @@ public interface NotificationDao {
     @Query("SELECT * FROM notification")
     List<Notification> getAll();
 
-    @Query("SELECT * FROM notification WHERE user_id = :userId")
+    @Query("SELECT * FROM notification WHERE user_id = :userId ORDER BY timestamp DESC")
     List<Notification> getAll(int userId);
 
     @Query("SELECT * FROM notification WHERE id = :id")

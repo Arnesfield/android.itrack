@@ -23,7 +23,6 @@ public final class UrlsList {
     }
 
     public static String GET_USER_NOTIFICATIONS_URL(int uid) {
-        // TODO: make this in api
         return API_URL + "Notifications/user/" + uid;
     }
 }
