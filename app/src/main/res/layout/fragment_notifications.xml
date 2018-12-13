@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/notifications_view_flipper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:measureAllChildren="false"
+    tools:context=".fragments.NotificationsFragment">
+
+    <include
+        layout="@layout/loading_layout"
+        android:id="@+id/notifications_loading_layout" />
+    <include
+        layout="@layout/notifications_empty_state"
+        android:id="@+id/notifications_empty_state_view" />
+    <include
+        layout="@layout/notifications_view"
+        android:id="@+id/notifications_view" />
+
+</ViewFlipper>

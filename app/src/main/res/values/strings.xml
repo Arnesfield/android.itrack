@@ -51,6 +51,7 @@
     <string name="nav_attendance">Attendance</string>
     <string name="nav_nfc">Scan Student ID</string>
     <string name="nav_profile">Profile</string>
+    <string name="nav_notifications">Notifications</string>
     <string name="nav_logout">Logout</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -125,4 +126,12 @@
     <!-- attendance@errorState -->
     <string name="attendance_error_title">No attendance</string>
     <string name="attendance_error_subtitle">Unable to load your attendance. Please try again.</string>
+
+    <!-- notifications -->
+    <!-- notifications@emptyState -->
+    <string name="notifications_empty_title">No notifications :)</string>
+    <string name="notifications_empty_subtitle">Your notifications will be shown here.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

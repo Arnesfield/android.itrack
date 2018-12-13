@@ -29,6 +29,7 @@ import com.systematix.itrack.config.RequestCodesList;
 import com.systematix.itrack.fcm.FCMService;
 import com.systematix.itrack.fragments.AttendanceFragment;
 import com.systematix.itrack.fragments.NfcFragment;
+import com.systematix.itrack.fragments.NotificationsFragment;
 import com.systematix.itrack.helpers.AlertDialogHelper;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.User;
@@ -327,14 +328,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_profile) {
             final Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
+        } else if (id == R.id.nav_notifications) {
+            newFragment = new NotificationsFragment();
         } else if (id == R.id.nav_logout) {
             doLogout();
             return true;

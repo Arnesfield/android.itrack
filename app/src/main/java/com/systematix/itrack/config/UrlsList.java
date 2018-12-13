@@ -3,7 +3,7 @@ package com.systematix.itrack.config;
 public final class UrlsList {
     public static final String BASE_URL = AppConfig.PRODUCTION
             ? "http://feutechitrack.x10host.com/"
-            : "http://192.168.1.5/itrack/";
+            : "http://192.168.43.128/itrack/";
     public static final String API_URL = BASE_URL + "api";
     // append with 'api...'
     public static final String LOGIN_URL = API_URL + "Login";
@@ -20,5 +20,10 @@ public final class UrlsList {
 
     public static String GET_ATTENDANCE_HOURS_URL(int uid) {
         return API_URL + "Attendance/hours/" + uid;
+    }
+
+    public static String GET_USER_NOTIFICATIONS_URL(int uid) {
+        // TODO: make this in api
+        return API_URL + "Notifications/user/" + uid;
     }
 }

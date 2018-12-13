@@ -13,22 +13,13 @@
             android:icon="@drawable/ic_account_circle"
             android:title="@string/nav_profile" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/nav_notifications"
+            android:icon="@drawable/ic_notifications"
+            android:title="@string/nav_notifications" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_exit_to_app"
+            android:title="@string/nav_logout" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_exit_to_app"
-                android:title="@string/nav_logout" />
-        </menu>
-    </item>
 
 </menu>
