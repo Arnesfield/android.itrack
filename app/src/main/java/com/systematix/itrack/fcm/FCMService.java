@@ -29,7 +29,7 @@ public class FCMService extends FirebaseMessagingService {
 
         final int id;
         if (remoteMessage.getData().size() > 0) {
-            id = Integer.parseInt(remoteMessage.getData().get("id"));
+            id = Integer.parseInt(remoteMessage.getData().get("user_id"));
             Log.d(AppConfig.TAG, "FCMService@data:" + remoteMessage.getData());
         } else {
             // to avoid conflict with authId -1 default value
