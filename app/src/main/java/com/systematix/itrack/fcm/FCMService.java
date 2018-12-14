@@ -9,6 +9,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.systematix.itrack.config.AppConfig;
 import com.systematix.itrack.config.PreferencesList;
+import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.models.api.SendUserFCMTokenApiModel;
 
 public class FCMService extends FirebaseMessagingService {
@@ -26,8 +27,13 @@ public class FCMService extends FirebaseMessagingService {
         // super.onMessageReceived(remoteMessage);
         Log.d(AppConfig.TAG, "FCMService@from:" + remoteMessage.getFrom());
 
+        final int id;
         if (remoteMessage.getData().size() > 0) {
+            id = Integer.parseInt(remoteMessage.getData().get("id"));
             Log.d(AppConfig.TAG, "FCMService@data:" + remoteMessage.getData());
+        } else {
+            // to avoid conflict with authId -1 default value
+            id = -2;
         }
 
         final RemoteMessage.Notification n = remoteMessage.getNotification();
@@ -37,7 +43,11 @@ public class FCMService extends FirebaseMessagingService {
             final String body = n.getBody();
             Log.d(AppConfig.TAG, "FCMService@notificationTitle:" + title);
             Log.d(AppConfig.TAG, "FCMService@notificationBody:" + body);
-            new Notificate(this, title, body).build();
+            // compare id to auth id
+            final int authId = Auth.getSavedUserId(this);
+            if (id == authId) {
+                new Notificate(this, title, body).build();
+            }
         }
     }
 
