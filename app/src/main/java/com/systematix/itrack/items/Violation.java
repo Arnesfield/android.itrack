@@ -25,7 +25,6 @@ public final class Violation extends Chip implements DbEntity {
     @PrimaryKey @ColumnInfo(name = "violation_id") private int id;
     @ColumnInfo(name = "violation_name") private String name;
     @ColumnInfo(name = "violation_type") private String type;
-    @ColumnInfo(name = "violation_hours") private int hours;
     @ColumnInfo(name = "violation_category") private String category;
 
     public Violation() {}
@@ -34,7 +33,6 @@ public final class Violation extends Chip implements DbEntity {
         this.id = json.getInt("violation_id");
         this.name = json.getString("violation_name");
         this.type = json.getString("violation_type");
-        this.hours = json.getInt("violation_hours");
         this.category = json.getString("violation_category");
     }
 
@@ -49,10 +47,6 @@ public final class Violation extends Chip implements DbEntity {
 
     public String getType() {
         return type;
-    }
-
-    public int getHours() {
-        return hours;
     }
 
     public String getCategory() {
@@ -70,10 +64,6 @@ public final class Violation extends Chip implements DbEntity {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public void setHours(int hours) {
-        this.hours = hours;
     }
 
     public void setCategory(String category) {
