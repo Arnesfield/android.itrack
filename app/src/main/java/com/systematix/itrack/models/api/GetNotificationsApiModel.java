@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class GetNotificationsApiModel {
@@ -32,17 +33,24 @@ public final class GetNotificationsApiModel {
             .setApiListener(new Api.OnApiRespondListener() {
                 @Override
                 public void onApiSuccess(final String tag, final JSONObject response, final boolean success, final String msg) throws JSONException {
-                    if (!(success && response.has("notifications"))) {
+                    // remove this lol this is useless
+                    /* if (!(success && response.has("notifications"))) {
                         if (listener != null) {
                             // well, yea it's not successful lol
                             listener.onApiSuccess(tag, response, false, msg);
                         }
                         return;
-                    }
+                    } */
 
                     // attempt to get notifications
-                    final JSONArray jsonNotifications = response.getJSONArray("notifications");
-                    final List<Notification> notifications = Notification.collection(jsonNotifications);
+                    final boolean has = response.has("notifications");
+                    final List<Notification> notifications;
+                    if (has) {
+                        final JSONArray jsonNotifications = response.getJSONArray("notifications");
+                        notifications = Notification.collection(jsonNotifications);
+                    } else {
+                        notifications = new ArrayList<>();
+                    }
 
                     new Task<>(new Task.OnTaskListener<Void>() {
                         @Override
@@ -54,7 +62,9 @@ public final class GetNotificationsApiModel {
                         public Void execute() {
                             // clear and insert
                             db.notificationDao().deleteAll();
-                            db.notificationDao().insertAll(notifications);
+                            if (!notifications.isEmpty()) {
+                                db.notificationDao().insertAll(notifications);
+                            }
                             return null;
                         }
 
