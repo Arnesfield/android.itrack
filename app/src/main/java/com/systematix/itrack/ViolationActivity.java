@@ -7,15 +7,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
-import com.google.android.flexbox.FlexboxLayout;
-import com.systematix.itrack.components.chip.Chip;
-import com.systematix.itrack.components.chip.Chipable;
+import com.systematix.itrack.components.InstantAutoCompleteTextView;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.items.Violation;
 import com.systematix.itrack.models.ButtonStateModel;
@@ -28,16 +29,19 @@ import com.systematix.itrack.utils.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ViolationActivity extends AppCompatActivity implements Api.OnApiRespondListener {
 
+    private List<Violation> minorViolations;
+    private List<Violation> majorViolations;
     private String serial;
     private String userName;
     private ViewFlipperModel viewFlipperModel;
     private SelectableChipsModel<Violation> selectableChipsModel;
     private ButtonStateModel btnStateModel;
+    private InstantAutoCompleteTextView minorAutoComplete;
+    private InstantAutoCompleteTextView majorAutoComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,9 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
+
+        minorAutoComplete = findViewById(R.id.violation_minor_auto_complete);
+        majorAutoComplete = findViewById(R.id.violation_major_auto_complete);
 
         // set empty state btn listener
         final Button btnEmptyState = findViewById(R.id.violation_empty_reload_btn);
@@ -108,7 +115,11 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
     }
 
     private void next() {
-        final Violation violation = selectableChipsModel.getSelectedChip();
+        // final Violation violation = selectableChipsModel.getSelectedChip();
+        final Violation minorSelected = getSelectedFrom(minorAutoComplete, minorViolations);
+        final Violation majorSelected = getSelectedFrom(majorAutoComplete, majorViolations);
+        final Violation violation = minorSelected != null ? minorSelected : majorSelected;
+
         if (violation == null) {
             return;
         }
@@ -152,9 +163,59 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
         }).execute();
     }
 
+    private void setViolationAdapter(AutoCompleteTextView tv, List<Violation> violations) {
+        if (tv.getAdapter() == null) {
+            tv.setAdapter(new Violation.Adapter(this, violations));
+        } else {
+            ((ArrayAdapter) tv.getAdapter()).notifyDataSetChanged();
+        }
+    }
+
+    private Violation getSelectedFrom(AutoCompleteTextView tv, List<Violation> violations) {
+        final int i = tv.getListSelection();
+        return i > -1 ? violations.get(i) : null;
+    }
+
     // finally got results!
     private void gotResults(List<Violation> violations) {
         viewFlipperModel.switchTo(R.id.violation_content_view);
+
+        minorViolations = Violation.filterByType(violations, "minor");
+        majorViolations = Violation.filterByType(violations, "major");
+
+        setViolationAdapter(minorAutoComplete, minorViolations);
+        setViolationAdapter(majorAutoComplete, majorViolations);
+
+        // make some listener
+        minorAutoComplete.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // clear majorAutoComplete
+                majorAutoComplete.clearListSelection();
+                checkForSelected();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                checkForSelected();
+            }
+        });
+
+        majorAutoComplete.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // clear minorAutoComplete
+                minorAutoComplete.clearListSelection();
+                checkForSelected();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                checkForSelected();
+            }
+        });
+
+        /*
         final FlexboxLayout minorLayout = findViewById(R.id.violation_minor_flexbox_layout);
         final FlexboxLayout majorLayout = findViewById(R.id.violation_major_flexbox_layout);
 
@@ -191,13 +252,17 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
                 checkForSelected();
             }
         });
+        */
         // then check for selected
         checkForSelected();
     }
 
     // update btn model
     private void checkForSelected() {
-        btnStateModel.setEnabled(selectableChipsModel.hasSelectedChip());
+        // btnStateModel.setEnabled(selectableChipsModel.hasSelectedChip());
+        final boolean hasMinor = minorAutoComplete.getListSelection() > -1;
+        final boolean hasMajor = majorAutoComplete.getListSelection() > -1;
+        btnStateModel.setEnabled(hasMinor || hasMajor);
     }
 
     @Override

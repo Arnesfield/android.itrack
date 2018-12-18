@@ -4,7 +4,9 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.ArrayAdapter;
 
 import com.systematix.itrack.components.chip.Chip;
 import com.systematix.itrack.database.AppDatabase;
@@ -125,5 +127,30 @@ public final class Violation extends Chip implements DbEntity {
     @Override
     public boolean isChipClickable() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    // static
+    public static class Adapter extends ArrayAdapter<Violation> {
+        public Adapter(@NonNull Context context, @NonNull List<Violation> objects) {
+            this(context, android.R.layout.simple_dropdown_item_1line, objects);
+        }
+        public Adapter(@NonNull Context context, int resource, @NonNull List<Violation> objects) {
+            super(context, resource, objects);
+        }
+    }
+
+    public static List<Violation> filterByType(List<Violation> violations, String type) {
+        final List<Violation> list = new ArrayList<>();
+        for (final Violation violation : violations) {
+            if (violation.getType().toLowerCase().equals(type)) {
+                list.add(violation);
+            }
+        }
+        return list;
     }
 }

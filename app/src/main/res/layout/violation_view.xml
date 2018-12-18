@@ -38,17 +38,25 @@
                     android:text="@string/violation_view_minor_subtitle" />
             </LinearLayout>
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/violation_minor_flexbox_layout"
+            <!--<com.google.android.flexbox.FlexboxLayout-->
+                <!--android:id="@+id/violation_minor_flexbox_layout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingTop="0dp"-->
+                <!--android:paddingBottom="0dp"-->
+                <!--android:paddingStart="12dp"-->
+                <!--android:paddingEnd="12dp"-->
+                <!--app:flexWrap="wrap"-->
+                <!--app:flexDirection="row"-->
+                <!--app:alignItems="flex_start" />-->
+
+            <com.systematix.itrack.components.InstantAutoCompleteTextView
+                android:id="@+id/violation_minor_auto_complete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                app:flexWrap="wrap"
-                app:flexDirection="row"
-                app:alignItems="flex_start" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:hint="@string/violation_minor_auto_complete_hint" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -57,6 +65,7 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/violation_major_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/violation_view_major_title"
@@ -72,17 +81,26 @@
                     android:text="@string/violation_view_major_subtitle" />
             </LinearLayout>
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/violation_major_flexbox_layout"
+            <!--<com.google.android.flexbox.FlexboxLayout-->
+                <!--android:id="@+id/violation_major_flexbox_layout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingTop="0dp"-->
+                <!--android:paddingBottom="12dp"-->
+                <!--android:paddingStart="12dp"-->
+                <!--android:paddingEnd="12dp"-->
+                <!--app:flexWrap="wrap"-->
+                <!--app:flexDirection="row"-->
+                <!--app:alignItems="flex_start" />-->
+
+            <com.systematix.itrack.components.InstantAutoCompleteTextView
+                android:id="@+id/violation_major_auto_complete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="0dp"
-                android:paddingBottom="12dp"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                app:flexWrap="wrap"
-                app:flexDirection="row"
-                app:alignItems="flex_start" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/violation_major_auto_complete_hint" />
         </LinearLayout>
     </ScrollView>
 

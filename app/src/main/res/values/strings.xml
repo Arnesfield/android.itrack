@@ -131,4 +131,6 @@
     <!-- notifications@emptyState -->
     <string name="notifications_empty_title">No notifications :)</string>
     <string name="notifications_empty_subtitle">Your notifications will be shown here.</string>
+    <string name="violation_major_auto_complete_hint">Select major violation</string>
+    <string name="violation_minor_auto_complete_hint">Select minor violation</string>
 </resources>
