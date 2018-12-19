@@ -57,7 +57,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_notifications_off_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_search_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -67,8 +67,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="b9b9b9" />
-                            <entry key="outputName" value="ic_notifications_off" />
+                            <entry key="color" value="757575" />
+                            <entry key="outputName" value="ic_search" />
                             <entry key="sourceFile" value="C:\Users\External SSD" />
                           </map>
                         </option>

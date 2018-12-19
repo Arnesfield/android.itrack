@@ -5,6 +5,7 @@
     <string name="loading_text">Loading…</string>
     <string name="copyright_text">© Systematix 2018</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet.</string>
+    <string name="search_text">Search</string>
 
     <!-- logout -->
     <string name="logout_title">Logging out</string>

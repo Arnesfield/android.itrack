@@ -1,6 +1,5 @@
 package com.systematix.itrack;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -8,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -28,12 +28,11 @@ import com.systematix.itrack.utils.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ViolationActivity extends AppCompatActivity implements Api.OnApiRespondListener {
 
-    private List<Violation> minorViolations;
-    private List<Violation> majorViolations;
     private String serial;
     private String userName;
     private ViewFlipperModel viewFlipperModel;
@@ -41,7 +40,7 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
     private ButtonStateModel btnStateModel;
     private Spinner minorSpinner;
     private Spinner majorSpinner;
-    private SearchableSpinnerModel spinnerModel;
+    private SearchableSpinnerModel<Violation> spinnerModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,27 +162,33 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
     private void gotResults(List<Violation> violations) {
         viewFlipperModel.switchTo(R.id.violation_content_view);
 
-        minorViolations = Violation.filterByType(violations, "minor");
-        majorViolations = Violation.filterByType(violations, "major");
+        final List<Violation> minorViolations = Violation.filterByType(violations, "minor");
+        final List<Violation> majorViolations = Violation.filterByType(violations, "major");
+
+        final ArrayList<Violation> minorViolationsCopy = new ArrayList<>(minorViolations);
+        final ArrayList<Violation> majorViolationsCopy = new ArrayList<>(majorViolations);
 
         final Resources resources = getResources();
         final String minorEmpty = resources.getString(R.string.violation_minor_spinner_empty_initial_text);
         final String majorEmpty = resources.getString(R.string.violation_major_spinner_empty_initial_text);
 
-        final ArrayAdapter minorAdapter = Violation.Adapter.setMe(minorSpinner, minorViolations, minorEmpty);
-        final ArrayAdapter majorAdapter = Violation.Adapter.setMe(majorSpinner, majorViolations, majorEmpty);
+        Violation.Adapter.setMe(minorSpinner, minorViolationsCopy, minorEmpty);
+        Violation.Adapter.setMe(majorSpinner, majorViolationsCopy, majorEmpty);
 
-        final DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+        final ArrayAdapter minorAdapter = new Violation.Adapter(this, minorViolations, true, minorEmpty);
+        final ArrayAdapter majorAdapter = new Violation.Adapter(this, majorViolations, true, majorEmpty);
+
+        spinnerModel = new SearchableSpinnerModel<>();
+        spinnerModel
+            .bind(minorSpinner, minorViolations, minorAdapter, R.string.violation_minor_spinner_hint)
+            .bind(majorSpinner, majorViolations, majorAdapter, R.string.violation_major_spinner_hint);
+
+        spinnerModel.setOnListItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 checkForSelected();
             }
-        };
-
-        spinnerModel = new SearchableSpinnerModel();
-        spinnerModel
-            .bind(minorSpinner, minorAdapter, R.string.violation_minor_spinner_hint, listener)
-            .bind(majorSpinner, majorAdapter, R.string.violation_major_spinner_hint, listener);
+        });
 
         // then check for selected
         checkForSelected();

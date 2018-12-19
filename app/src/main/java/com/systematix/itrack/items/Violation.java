@@ -13,6 +13,7 @@ import com.systematix.itrack.components.chip.Chip;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.database.DbEntity;
 import com.systematix.itrack.database.daos.ViolationDao;
+import com.systematix.itrack.interfaces.Searchable;
 import com.systematix.itrack.utils.Callback;
 import com.systematix.itrack.utils.Task;
 
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public final class Violation extends Chip implements DbEntity {
+public final class Violation extends Chip implements DbEntity, Searchable {
     @PrimaryKey @ColumnInfo(name = "violation_id") private int id;
     @ColumnInfo(name = "violation_name") private String name;
     @ColumnInfo(name = "violation_type") private String type;
@@ -146,6 +147,24 @@ public final class Violation extends Chip implements DbEntity {
         return list;
     }
 
+    // Searchable
+    @Override
+    public boolean onSearch(String query) {
+        return name.trim().toLowerCase().contains(query.trim().toLowerCase());
+    }
+
+    // static
+    public static List<Violation> filterByQuery(List<Violation> violations, String query) {
+        // create new list
+        final List<Violation> newList = new ArrayList<>();
+        for (final Violation violation : violations) {
+            if (violation.onSearch(query)) {
+                newList.add(violation);
+            }
+        }
+        return newList;
+    }
+
     public static class Adapter extends ArrayAdapter<Violation> {
         private boolean emptyInitial;
         private String emptyName;
@@ -166,10 +185,16 @@ public final class Violation extends Chip implements DbEntity {
         public Violation getItem(int position) {
             if (emptyInitial && position == 0) {
                 final Violation violation = new Violation();
+                violation.setId(0);
                 violation.setName(emptyName);
                 return violation;
             }
             return super.getItem(emptyInitial ? position - 1 : position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return super.getItemId(getItem(position).getId());
         }
 
         // static
