@@ -2,6 +2,7 @@ package com.systematix.itrack.models;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 
 import com.systematix.itrack.R;
+import com.systematix.itrack.helpers.AlertDialogHelper;
 import com.systematix.itrack.interfaces.Searchable;
 
 import java.util.ArrayList;
@@ -101,7 +103,15 @@ public final class SearchableSpinnerModel<T extends Searchable> {
         final AlertDialog dialog = new AlertDialog.Builder(context)
             .setTitle(titleRes)
             .setView(dialogView)
+            .setPositiveButton(R.string.action_done, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            })
             .create();
+
+        AlertDialogHelper.setPositiveColorPrimary(dialog);
 
         final ListView listView = getDialogListView();
         if (listView != null) {
