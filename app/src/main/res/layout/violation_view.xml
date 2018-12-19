@@ -38,17 +38,24 @@
                     android:text="@string/violation_view_minor_subtitle" />
             </LinearLayout>
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/violation_minor_flexbox_layout"
+            <!--<com.google.android.flexbox.FlexboxLayout-->
+                <!--android:id="@+id/violation_minor_flexbox_layout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingTop="0dp"-->
+                <!--android:paddingBottom="0dp"-->
+                <!--android:paddingStart="12dp"-->
+                <!--android:paddingEnd="12dp"-->
+                <!--app:flexWrap="wrap"-->
+                <!--app:flexDirection="row"-->
+                <!--app:alignItems="flex_start" />-->
+
+            <Spinner
+                android:id="@+id/violation_minor_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                app:flexWrap="wrap"
-                app:flexDirection="row"
-                app:alignItems="flex_start" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -72,7 +79,7 @@
                     android:text="@string/violation_view_major_subtitle" />
             </LinearLayout>
 
-            <com.google.android.flexbox.FlexboxLayout
+            <!--<com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/violation_major_flexbox_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,7 +89,15 @@
                 android:paddingEnd="12dp"
                 app:flexWrap="wrap"
                 app:flexDirection="row"
-                app:alignItems="flex_start" />
+                app:alignItems="flex_start" />-->
+
+            <Spinner
+                android:id="@+id/violation_major_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp" />
         </LinearLayout>
     </ScrollView>
 

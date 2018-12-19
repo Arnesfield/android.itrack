@@ -1,5 +1,6 @@
 package com.systematix.itrack;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -7,19 +8,18 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
-import com.google.android.flexbox.FlexboxLayout;
-import com.systematix.itrack.components.chip.Chip;
-import com.systematix.itrack.components.chip.Chipable;
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.items.Violation;
 import com.systematix.itrack.models.ButtonStateModel;
-import com.systematix.itrack.models.SelectableChipsModel;
+import com.systematix.itrack.models.SearchableSpinnerModel;
 import com.systematix.itrack.models.ViewFlipperModel;
 import com.systematix.itrack.models.api.GetViolationsApiModel;
 import com.systematix.itrack.utils.Api;
@@ -28,16 +28,20 @@ import com.systematix.itrack.utils.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ViolationActivity extends AppCompatActivity implements Api.OnApiRespondListener {
 
+    private List<Violation> minorViolations;
+    private List<Violation> majorViolations;
     private String serial;
     private String userName;
     private ViewFlipperModel viewFlipperModel;
-    private SelectableChipsModel<Violation> selectableChipsModel;
+    // private SelectableChipsModel<Violation> selectableChipsModel;
     private ButtonStateModel btnStateModel;
+    private Spinner minorSpinner;
+    private Spinner majorSpinner;
+    private SearchableSpinnerModel<Violation> spinnerModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,9 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
+
+        minorSpinner = findViewById(R.id.violation_minor_spinner);
+        majorSpinner = findViewById(R.id.violation_major_spinner);
 
         // set empty state btn listener
         final Button btnEmptyState = findViewById(R.id.violation_empty_reload_btn);
@@ -108,7 +115,8 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
     }
 
     private void next() {
-        final Violation violation = selectableChipsModel.getSelectedChip();
+        // final Violation violation = selectableChipsModel.getSelectedChip();
+        final Violation violation = (Violation) spinnerModel.getSelected();
         if (violation == null) {
             return;
         }
@@ -155,6 +163,30 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
     // finally got results!
     private void gotResults(List<Violation> violations) {
         viewFlipperModel.switchTo(R.id.violation_content_view);
+
+        spinnerModel = new SearchableSpinnerModel<>(violations);
+
+        minorViolations = Violation.filterByType(violations, "minor");
+        majorViolations = Violation.filterByType(violations, "major");
+
+        final Resources resources = getResources();
+        final String minorEmpty = resources.getString(R.string.violation_minor_spinner_hint);
+        final String majorEmpty = resources.getString(R.string.violation_major_spinner_hint);
+
+        final ArrayAdapter minorAdapter = Violation.Adapter.setMe(minorSpinner, minorViolations, minorEmpty);
+        final ArrayAdapter majorAdapter = Violation.Adapter.setMe(majorSpinner, majorViolations, majorEmpty);
+
+        final DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                checkForSelected();
+            }
+        };
+
+        spinnerModel.bind(minorSpinner, minorViolations, minorAdapter, R.string.violation_minor_spinner_hint, listener);
+        spinnerModel.bind(majorSpinner, majorViolations, majorAdapter, R.string.violation_major_spinner_hint, listener);
+
+        /*
         final FlexboxLayout minorLayout = findViewById(R.id.violation_minor_flexbox_layout);
         final FlexboxLayout majorLayout = findViewById(R.id.violation_major_flexbox_layout);
 
@@ -191,13 +223,15 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
                 checkForSelected();
             }
         });
+        */
         // then check for selected
         checkForSelected();
     }
 
     // update btn model
     private void checkForSelected() {
-        btnStateModel.setEnabled(selectableChipsModel.hasSelectedChip());
+        // btnStateModel.setEnabled(selectableChipsModel.hasSelectedChip());
+        btnStateModel.setEnabled(spinnerModel.hasSelected());
     }
 
     @Override

@@ -4,7 +4,10 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.systematix.itrack.components.chip.Chip;
 import com.systematix.itrack.database.AppDatabase;
@@ -126,4 +129,101 @@ public final class Violation extends Chip implements DbEntity {
     public boolean isChipClickable() {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    // static
+    public static List<Violation> filterByType(List<Violation> violations, String type) {
+        final List<Violation> list = new ArrayList<>();
+        for (final Violation violation : violations) {
+            if (violation.getType().toLowerCase().equals(type)) {
+                list.add(violation);
+            }
+        }
+        return list;
+    }
+
+    public static class Adapter extends ArrayAdapter<Violation> {
+        private boolean emptyInitial;
+        private String emptyName;
+
+        public Adapter(@NonNull Context context, @NonNull List<Violation> objects, boolean emptyInitial, String emptyName) {
+            this(context, android.R.layout.simple_list_item_1, objects);
+            this.emptyInitial = emptyInitial;
+            this.emptyName = emptyName;
+        }
+
+        public Adapter(@NonNull Context context, int resource, @NonNull List<Violation> objects) {
+            super(context, resource, objects);
+            emptyInitial = false;
+        }
+
+        @Nullable
+        @Override
+        public Violation getItem(int position) {
+            if (emptyInitial && position == 0) {
+                final Violation violation = new Violation();
+                violation.setName(emptyName);
+                return violation;
+            }
+            return super.getItem(emptyInitial ? position - 1 : position);
+        }
+
+        // static
+        public static ArrayAdapter setMe(Spinner spinner, List<Violation> violations, String emptyName) {
+            if (spinner.getAdapter() == null) {
+                spinner.setAdapter(new Adapter(spinner.getContext(), violations, true, emptyName));
+            } else {
+                ((ArrayAdapter) spinner.getAdapter()).notifyDataSetChanged();
+            }
+            return (ArrayAdapter) spinner.getAdapter();
+        }
+    }
+
+    /*public static class Adapter extends ArrayAdapter<Violation> implements SpinnerAdapter {
+        public Adapter(@NonNull Context context, @NonNull List<Violation> objects) {
+            this(context, android.R.layout.simple_list_item_1, objects);
+        }
+
+        public Adapter(@NonNull Context context, int resource, @NonNull List<Violation> objects) {
+            super(context, resource, objects);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View view = convertView;
+
+            if (view == null) {
+                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(R.layout.support_simple_spinner_dropdown_item, null, false);
+            }
+
+            return view;
+        }
+
+        @Override
+        public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View view = convertView;
+
+            if (view == null) {
+                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(R.layout.support_simple_spinner_dropdown_item, null, false);
+            }
+
+            return view;
+        }
+
+        // static
+        public static void setMe(Context context, SearchableSpinner spinner, List<Violation> violations) {
+            if (spinner.getAdapter() == null) {
+                spinner.setAdapter(new Adapter(context, violations));
+            } else {
+                ((ArrayAdapter) spinner.getAdapter()).notifyDataSetChanged();
+            }
+        }
+    }*/
 }
