@@ -88,6 +88,10 @@
 
     <!-- violation -->
     <string name="violation_action">Choose Violation</string>
+    <string name="violation_major_spinner_hint">Select major violation</string>
+    <string name="violation_minor_spinner_hint">Select minor violation</string>
+    <string name="violation_major_spinner_empty_initial_text">-- Select major violation --</string>
+    <string name="violation_minor_spinner_empty_initial_text">-- Select minor violation --</string>
     <!-- violation@emptyState -->
     <string name="violation_empty_title">No violations list :(</string>
     <string name="violation_empty_subtitle">Unable to load the list of violations. Please try again.</string>
@@ -132,6 +136,4 @@
     <!-- notifications@emptyState -->
     <string name="notifications_empty_title">No notifications :)</string>
     <string name="notifications_empty_subtitle">Your notifications will be shown here.</string>
-    <string name="violation_major_spinner_hint">Select major violation</string>
-    <string name="violation_minor_spinner_hint">Select minor violation</string>
 </resources>

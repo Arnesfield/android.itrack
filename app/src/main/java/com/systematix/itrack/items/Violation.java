@@ -182,48 +182,4 @@ public final class Violation extends Chip implements DbEntity {
             return (ArrayAdapter) spinner.getAdapter();
         }
     }
-
-    /*public static class Adapter extends ArrayAdapter<Violation> implements SpinnerAdapter {
-        public Adapter(@NonNull Context context, @NonNull List<Violation> objects) {
-            this(context, android.R.layout.simple_list_item_1, objects);
-        }
-
-        public Adapter(@NonNull Context context, int resource, @NonNull List<Violation> objects) {
-            super(context, resource, objects);
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            View view = convertView;
-
-            if (view == null) {
-                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.support_simple_spinner_dropdown_item, null, false);
-            }
-
-            return view;
-        }
-
-        @Override
-        public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            View view = convertView;
-
-            if (view == null) {
-                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.support_simple_spinner_dropdown_item, null, false);
-            }
-
-            return view;
-        }
-
-        // static
-        public static void setMe(Context context, SearchableSpinner spinner, List<Violation> violations) {
-            if (spinner.getAdapter() == null) {
-                spinner.setAdapter(new Adapter(context, violations));
-            } else {
-                ((ArrayAdapter) spinner.getAdapter()).notifyDataSetChanged();
-            }
-        }
-    }*/
 }

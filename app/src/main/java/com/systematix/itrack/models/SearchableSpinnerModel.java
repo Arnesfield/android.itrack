@@ -12,29 +12,24 @@ import android.widget.Spinner;
 import com.systematix.itrack.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public final class SearchableSpinnerModel<T> {
-    private List<T> list;
+public final class SearchableSpinnerModel {
     private ArrayList<Spinner> spinners;
 
-    public SearchableSpinnerModel(List<T> list) {
-        this.list = list;
+    public SearchableSpinnerModel() {
         spinners = new ArrayList<>();
     }
 
-    public SearchableSpinnerModel<T> bind(
+    public SearchableSpinnerModel bind(
         Spinner spinner,
-        final List<T> list,
         ArrayAdapter adapter,
         @StringRes int titleRes
     ) {
-        return bind(spinner, list, adapter, titleRes, null);
+        return bind(spinner, adapter, titleRes, null);
     }
 
-    public SearchableSpinnerModel<T> bind(
+    public SearchableSpinnerModel bind(
         Spinner spinner,
-        final List<T> list,
         ArrayAdapter adapter,
         @StringRes int titleRes,
         @Nullable DialogInterface.OnClickListener listener

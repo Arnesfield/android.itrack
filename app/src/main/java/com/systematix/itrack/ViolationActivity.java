@@ -41,7 +41,7 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
     private ButtonStateModel btnStateModel;
     private Spinner minorSpinner;
     private Spinner majorSpinner;
-    private SearchableSpinnerModel<Violation> spinnerModel;
+    private SearchableSpinnerModel spinnerModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +115,6 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
     }
 
     private void next() {
-        // final Violation violation = selectableChipsModel.getSelectedChip();
         final Violation violation = (Violation) spinnerModel.getSelected();
         if (violation == null) {
             return;
@@ -164,14 +163,12 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
     private void gotResults(List<Violation> violations) {
         viewFlipperModel.switchTo(R.id.violation_content_view);
 
-        spinnerModel = new SearchableSpinnerModel<>(violations);
-
         minorViolations = Violation.filterByType(violations, "minor");
         majorViolations = Violation.filterByType(violations, "major");
 
         final Resources resources = getResources();
-        final String minorEmpty = resources.getString(R.string.violation_minor_spinner_hint);
-        final String majorEmpty = resources.getString(R.string.violation_major_spinner_hint);
+        final String minorEmpty = resources.getString(R.string.violation_minor_spinner_empty_initial_text);
+        final String majorEmpty = resources.getString(R.string.violation_major_spinner_empty_initial_text);
 
         final ArrayAdapter minorAdapter = Violation.Adapter.setMe(minorSpinner, minorViolations, minorEmpty);
         final ArrayAdapter majorAdapter = Violation.Adapter.setMe(majorSpinner, majorViolations, majorEmpty);
@@ -183,54 +180,17 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
             }
         };
 
-        spinnerModel.bind(minorSpinner, minorViolations, minorAdapter, R.string.violation_minor_spinner_hint, listener);
-        spinnerModel.bind(majorSpinner, majorViolations, majorAdapter, R.string.violation_major_spinner_hint, listener);
+        spinnerModel = new SearchableSpinnerModel();
+        spinnerModel
+            .bind(minorSpinner, minorAdapter, R.string.violation_minor_spinner_hint, listener)
+            .bind(majorSpinner, majorAdapter, R.string.violation_major_spinner_hint, listener);
 
-        /*
-        final FlexboxLayout minorLayout = findViewById(R.id.violation_minor_flexbox_layout);
-        final FlexboxLayout majorLayout = findViewById(R.id.violation_major_flexbox_layout);
-
-        selectableChipsModel = new SelectableChipsModel<>(violations);
-        selectableChipsModel.init(minorLayout, new SelectableChipsModel.OnModelInitListener<Violation>() {
-            @Override
-            public List<Violation> getChips(List<Violation> chips) {
-                final List<Violation> list = new ArrayList<>();
-                for (final Violation chip : chips) {
-                    if (chip.getType().toLowerCase().equals("minor")) {
-                        list.add(chip);
-                    }
-                }
-                return list;
-            }
-        });
-        selectableChipsModel.init(majorLayout, new SelectableChipsModel.OnModelInitListener<Violation>() {
-            @Override
-            public List<Violation> getChips(List<Violation> chips) {
-                final List<Violation> list = new ArrayList<>();
-                for (final Violation chip : chips) {
-                    if (chip.getType().toLowerCase().equals("major")) {
-                        list.add(chip);
-                    }
-                }
-                return list;
-            }
-        });
-
-        // set chip click listener
-        selectableChipsModel.collectionSetListener(new Chip.OnChipClickListener() {
-            @Override
-            public void onChipClick(Chipable chip) {
-                checkForSelected();
-            }
-        });
-        */
         // then check for selected
         checkForSelected();
     }
 
     // update btn model
     private void checkForSelected() {
-        // btnStateModel.setEnabled(selectableChipsModel.hasSelectedChip());
         btnStateModel.setEnabled(spinnerModel.hasSelected());
     }
 
