@@ -1,9 +1,12 @@
 package com.systematix.itrack.database;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.systematix.itrack.database.daos.AttendanceDao;
 import com.systematix.itrack.database.daos.NotificationDao;
@@ -16,7 +19,7 @@ import com.systematix.itrack.items.Report;
 import com.systematix.itrack.items.User;
 import com.systematix.itrack.items.Violation;
 
-@Database(version = 1, exportSchema = false, entities = {
+@Database(version = 2, exportSchema = false, entities = {
         User.class,
         Violation.class,
         Report.class,
@@ -34,8 +37,19 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static AppDatabase getInstance(Context context) {
         if (db == null) {
-            db = Room.databaseBuilder(context, AppDatabase.class, "itrack-v1.db").build();
+            db = Room.databaseBuilder(context, AppDatabase.class, "itrack-v1.db")
+                    .addMigrations(MIGRATION_1_2)
+                    .build();
         }
         return db;
     }
+
+    // migrations
+    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE report "
+                + " ADD COLUMN imgSrc TEXT");
+        }
+    };
 }

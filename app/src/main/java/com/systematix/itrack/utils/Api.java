@@ -182,8 +182,23 @@ public final class Api {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         try {
+                            // get String
+                            String res = null;
+                            try {
+                                res = new String(error.networkResponse.data, "UTF-8");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            String logMsg = "";
+                            if (res != null) {
+                                final JSONObject json = new JSONObject(res);
+                                logMsg = JSONObjectHelper.optString(json, "msg");
+                            }
+
                             Log.e(AppConfig.TAG, "Api@OnApiError:" + tag);
                             Log.e(AppConfig.TAG, error.toString());
+                            Log.e(AppConfig.TAG, String.valueOf(logMsg));
 
                             if (params != null) {
                                 Log.d(AppConfig.TAG, "Api@errorParams:" + tag + "::" + params.toString());

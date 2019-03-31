@@ -105,6 +105,81 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
+            <!-- image -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/violation_report_img_container"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textSize="12sp"
+                        android:textAlignment="center"
+                        android:alpha="0.75"
+                        android:text="@string/violation_report_txt_image_header" />
+
+                    <ImageView
+                        android:id="@+id/violation_report_img_proof"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/image_desc"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:alpha="0.75"
+                    android:text="@string/violation_report_txt_image_upload" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+
+                    <!--<Button
+                        android:id="@+id/violation_report_btn_camera"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_camera"
+                        android:layout_marginEnd="2dp"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:background="@color/colorButtonDisabled" />-->
+
+                    <Button
+                        android:id="@+id/violation_report_btn_gallery"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_gallery"
+                        android:layout_marginStart="2dp"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:background="@color/colorButtonDisabled" />
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 

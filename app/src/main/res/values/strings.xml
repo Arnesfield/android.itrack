@@ -22,11 +22,14 @@
     <string name="avatar_desc">Avatar</string>
     <string name="icon_desc">Icon</string>
     <string name="nfc_desc">NFC</string>
+    <string name="image_desc">Image</string>
 
     <!-- actions -->
     <string name="action_done">Done</string>
     <string name="action_reload">Reload</string>
     <string name="action_dismiss">Dismiss</string>
+    <string name="action_camera">Camera</string>
+    <string name="action_gallery">Gallery</string>
 
     <!-- errors -->
     <string name="error">An error occurred.</string>
@@ -113,6 +116,8 @@
     <string name="violation_report_txt_message_placeholder">Supply further information or details</string>
     <string name="violation_report_txt_age">Age</string>
     <string name="violation_report_txt_year_section">Year/Section</string>
+    <string name="violation_report_txt_image_header">Attached image</string>
+    <string name="violation_report_txt_image_upload">Upload an image as proof of this report.</string>
     <!-- violationReport@send -->
     <string name="violation_report_send_dialog_title">Sending Report</string>
     <string name="violation_report_send_dialog_message">Reporting %1$s for the violation: \"%2$s\"</string>

@@ -43,7 +43,8 @@ public final class SendReportsApiModel {
             public void onApiError(String tag, VolleyError error) {
                 // if error, do it again hehehe
                 Log.e(AppConfig.TAG, "syncModel@repeat:" + error.toString());
-                send(context);
+                // for god's sake no
+                // send(context);
             }
 
             @Override

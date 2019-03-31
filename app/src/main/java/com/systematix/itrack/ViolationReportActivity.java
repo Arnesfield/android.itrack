@@ -1,13 +1,18 @@
 package com.systematix.itrack;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,15 +28,24 @@ import com.systematix.itrack.utils.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class ViolationReportActivity extends AppCompatActivity implements Api.OnApiRespondListener {
+
+    private static final int IMG_CAMERA_REQUEST_CODE = 16;
+    private static final int IMG_GALLERY_REQUEST_CODE = 17;
 
     private Report report;
     private String serial;
     private String userName;
     private String violationType;
     private String violationText;
+    private String cameraImagePath;
     private int violationId;
     private int reporterId;
+    private Bitmap bitmap;
+    private View imgContainer;
+    private ImageView imgProof;
     private LoadingDialogModel loadingDialogModel;
     private TextInputEditText txtLocation;
     private TextInputEditText txtMessage;
@@ -76,7 +90,7 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
         }
 
         // set btn
-        final View btnSubmit = findViewById(R.id.violation_report_button);
+        final Button btnSubmit = findViewById(R.id.violation_report_button);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,10 +98,31 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
             }
         });
 
+        // image buttons
+        // final Button btnCamera = findViewById(R.id.violation_report_btn_camera);
+        final Button btnGallery = findViewById(R.id.violation_report_btn_gallery);
+
+        /*btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startCamera();
+            }
+        });*/
+        btnGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImageFromGallery();
+            }
+        });
+
         // set textView
         final String msg = getResources().getString(R.string.violation_report_subtitle, userName, violationText);
         final TextView tvSubtitle = findViewById(R.id.violation_report_subtitle);
         tvSubtitle.setText(msg);
+        
+        // set stuff
+        imgContainer = findViewById(R.id.violation_report_img_container);
+        imgProof = findViewById(R.id.violation_report_img_proof);
 
         // set edit text fields
         txtLocation = findViewById(R.id.violation_report_txt_location);
@@ -109,12 +144,12 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
         final String message = txtMessage.getText().toString();
 
         // make report
-        report = new Report(violationId, violationType, reporterId, serial, location, message);
+        report = new Report(violationId, violationType, reporterId, serial, location, message, bitmap);
 
         if (violationType.equals("major")) {
             final String age = txtAge.getText().toString();
             final String yearSection = txtYearSection.getText().toString();
-            report.setAge(Integer.parseInt(age));
+            report.setAge(age);
             report.setYearSection(yearSection);
         }
 
@@ -125,6 +160,38 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
             .setUrl(UrlsList.SEND_VIOLATION_URL)
             .setApiListener(this)
             .request(params);
+    }
+
+    // image
+    /*private void startCamera() {
+        final Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File imageFile = null;
+            try {
+                imageFile = ImageHelper.createImageFile(this);
+                cameraImagePath = ImageHelper.getImagePath(imageFile);
+            } catch (IOException e) {
+                // Error occurred while creating the File
+                e.printStackTrace();
+            }
+
+            // Continue only if the File was successfully created
+            if (imageFile != null) {
+                // intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                final Uri uri = Uri.fromFile(imageFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(intent, IMG_CAMERA_REQUEST_CODE);
+            }
+        }
+    }*/
+
+    private void selectImageFromGallery() {
+        // final Intent intent = new Intent();
+        final Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // intent.setType("image/*");
+        // intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, IMG_GALLERY_REQUEST_CODE);
     }
 
     private AlertDialog getLoadingDialog() {
@@ -151,6 +218,43 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
         intent.putExtra("violationSent", true);
         intent.putExtra("violationSuccess", success);
         return intent;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // skip if not ok or if no data
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        // FIXME: this
+        if (false && requestCode == IMG_CAMERA_REQUEST_CODE && cameraImagePath != null) {
+            /*final Bundle extras = data.getExtras();
+            if (extras != null) {
+                bitmap = (Bitmap) extras.get("data");
+                imgContainer.setVisibility(View.VISIBLE);
+                imgProof.setImageBitmap(bitmap);
+            }*/
+            /*final Uri path = Uri.parse(cameraImagePath);
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
+                imgContainer.setVisibility(View.VISIBLE);
+                imgProof.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+        } else if (requestCode == IMG_GALLERY_REQUEST_CODE && data != null) {
+            final Uri path = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
+                imgContainer.setVisibility(View.VISIBLE);
+                imgProof.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

@@ -5,11 +5,13 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 
 import com.systematix.itrack.database.AppDatabase;
 import com.systematix.itrack.database.DbEntity;
 import com.systematix.itrack.database.daos.ReportDao;
+import com.systematix.itrack.helpers.ImageHelper;
 import com.systematix.itrack.utils.Api;
 import com.systematix.itrack.utils.Task;
 
@@ -24,6 +26,7 @@ public final class Report implements DbEntity, Api.ApiRequestable {
     @ColumnInfo private String serial;
     @ColumnInfo private String location;
     @ColumnInfo private String message;
+    @ColumnInfo @Nullable private String imgSrc;
     @ColumnInfo private int age;
     @ColumnInfo(name = "year_section") private String yearSection;
     @ColumnInfo(typeAffinity = ColumnInfo.INTEGER) private long timestamp;
@@ -38,12 +41,21 @@ public final class Report implements DbEntity, Api.ApiRequestable {
     }
 
     public Report(int violationId, String violationType, int reporterId, String serial, String location, String message, long timestamp) {
+        this(violationId, violationType, reporterId, serial, location, message, (String) null, timestamp);
+    }
+
+    public Report(int violationId, String violationType, int reporterId, String serial, String location, String message, @Nullable Bitmap imgSrc) {
+        this(violationId, violationType, reporterId, serial, location, message, ImageHelper.stringify(imgSrc), System.currentTimeMillis() / 1000);
+    }
+
+    public Report(int violationId, String violationType, int reporterId, String serial, String location, String message, @Nullable String imgSrc, long timestamp) {
         this.violationId = violationId;
         this.violationType = violationType;
         this.reporterId = reporterId;
         this.serial = serial;
         this.location = location;
         this.message = message;
+        this.imgSrc = imgSrc;
         this.timestamp = timestamp;
     }
 
@@ -70,6 +82,10 @@ public final class Report implements DbEntity, Api.ApiRequestable {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getImgSrc() {
+        return imgSrc;
     }
 
     public int getAge() {
@@ -111,6 +127,22 @@ public final class Report implements DbEntity, Api.ApiRequestable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public void setImgSrc(String imgSrc) {
+        this.imgSrc = imgSrc;
+    }
+
+    public void setImgSrc(Bitmap imgSrc) {
+        this.imgSrc = ImageHelper.stringify(imgSrc);
+    }
+
+    public void setAge(String age) {
+        try {
+            this.age = Integer.parseInt(age);
+        } catch (Exception e) {
+            this.age = 0;
+        }
     }
 
     public void setAge(int age) {
@@ -167,6 +199,7 @@ public final class Report implements DbEntity, Api.ApiRequestable {
             params.put("reporter_id", reporterId);
             params.put("location", location);
             params.put("message", message);
+            params.put("img_src", imgSrc);
             params.put("timestamp", timestamp);
 
             if (violationType.equals("major")) {
