@@ -29,7 +29,9 @@ public final class SyncModel implements Sync.OnSyncListener {
         Auth.getSavedUser(context, new Task.OnTaskFinishListener<User>() {
             @Override
             public void finish(User user) {
-                if (user != null && user.checkAccess("teacher")) {
+                // user.checkAccess("teacher")
+                //! no need for teacher as student also has tap?
+                if (user != null) {
                     GetViolationsApiModel.fetch(context);
                 }
             }

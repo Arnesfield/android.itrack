@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_timelapse"
             android:title="@string/nav_attendance" />
         <item
+            android:id="@+id/nav_nfc"
+            android:icon="@drawable/ic_nfc"
+            android:title="@string/nav_nfc" />
+        <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_account_circle"
             android:title="@string/nav_profile" />
