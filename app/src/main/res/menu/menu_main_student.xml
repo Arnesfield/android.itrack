@@ -9,9 +9,9 @@
             android:icon="@drawable/ic_timelapse"
             android:title="@string/nav_attendance" />
         <item
-            android:id="@+id/nav_nfc"
-            android:icon="@drawable/ic_nfc"
-            android:title="@string/nav_nfc" />
+            android:id="@+id/nav_report_student"
+            android:icon="@drawable/ic_report"
+            android:title="@string/nav_report_student" />
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_account_circle"

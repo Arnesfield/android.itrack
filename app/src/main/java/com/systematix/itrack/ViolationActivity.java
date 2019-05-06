@@ -17,6 +17,8 @@ import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
 import com.systematix.itrack.database.AppDatabase;
+import com.systematix.itrack.items.Auth;
+import com.systematix.itrack.items.User;
 import com.systematix.itrack.items.Violation;
 import com.systematix.itrack.models.ButtonStateModel;
 import com.systematix.itrack.models.SearchableSpinnerModel;
@@ -33,6 +35,7 @@ import java.util.List;
 
 public class ViolationActivity extends AppCompatActivity implements Api.OnApiRespondListener {
 
+    private User user;
     private String serial;
     private String userName;
     private ViewFlipperModel viewFlipperModel;
@@ -104,8 +107,15 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
         final ViewFlipper viewFlipper = findViewById(R.id.violation_view_flipper);
         viewFlipperModel = new ViewFlipperModel(viewFlipper, R.id.violation_loading_layout);
 
-        // get violations here
-        getViolations();
+        // get auth user first then
+        Auth.getSavedUser(this, new Task.OnTaskFinishListener<User>() {
+            @Override
+            public void finish(final User result) {
+                user = result;
+                // get violations here
+                getViolations();
+            }
+        });
     }
 
     private void fetchViolations() {
@@ -122,6 +132,8 @@ public class ViolationActivity extends AppCompatActivity implements Api.OnApiRes
         final Intent intent = new Intent(this, ViolationReportActivity.class);
         intent.putExtra("serial", serial);
         intent.putExtra("userName", userName);
+        // add isTeacher extra, true if no user
+        intent.putExtra("isTeacher", user == null || user.checkAccess("teacher"));
         intent.putExtra("violationId", violation.getId());
         intent.putExtra("violationType", violation.getType());
         intent.putExtra("violationText", violation.getName());

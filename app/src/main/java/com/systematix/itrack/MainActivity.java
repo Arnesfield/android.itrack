@@ -291,6 +291,12 @@ public class MainActivity extends AppCompatActivity
             newFragment = new AttendanceFragment();
         } else if (id == R.id.nav_nfc) {
             newFragment = new NfcFragment();
+        } else if (id == R.id.nav_report_student) {
+            // report student without serial ;)
+            final Intent intent = new Intent(this, ViolationActivity.class);
+            // add empty string to bypass null serial check
+            intent.putExtra("serial", "");
+            startActivity(intent);
         } else if (id == R.id.nav_profile) {
             final Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);

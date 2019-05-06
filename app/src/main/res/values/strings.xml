@@ -55,6 +55,7 @@
     <!-- main nav drawer -->
     <string name="nav_attendance">Attendance</string>
     <string name="nav_nfc">Scan Student ID</string>
+    <string name="nav_report_student">Report Student</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_notifications">Notifications</string>
     <string name="nav_logout">Logout</string>

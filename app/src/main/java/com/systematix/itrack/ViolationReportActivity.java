@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.systematix.itrack.config.UrlsList;
 import com.systematix.itrack.items.Auth;
 import com.systematix.itrack.items.Report;
+import com.systematix.itrack.models.ButtonStateModel;
 import com.systematix.itrack.models.EditTextModel;
 import com.systematix.itrack.models.LoadingDialogModel;
 import com.systematix.itrack.utils.Api;
@@ -38,6 +39,7 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
     private Report report;
     private String serial;
     private String userName;
+    private boolean isTeacher;
     private String violationType;
     private String violationText;
     private String cameraImagePath;
@@ -47,6 +49,7 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
     private View imgContainer;
     private ImageView imgProof;
     private LoadingDialogModel loadingDialogModel;
+    private ButtonStateModel btnStateModel;
     private TextInputEditText txtLocation;
     private TextInputEditText txtMessage;
     private TextInputEditText txtAge;
@@ -61,6 +64,7 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
         final Intent intent = getIntent();
         serial = intent.getStringExtra("serial");
         userName = intent.getStringExtra("userName");
+        isTeacher = intent.getBooleanExtra("isTeacher", true);
         violationId = intent.getIntExtra("violationId", -1);
         reporterId = Auth.getSavedUserId(this);
         violationType = intent.getStringExtra("violationType");
@@ -97,6 +101,9 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
                 submit();
             }
         });
+        // disable submit first if student
+        btnStateModel = new ButtonStateModel(btnSubmit);
+        btnStateModel.setEnabled(isTeacher);
 
         // image buttons
         // final Button btnCamera = findViewById(R.id.violation_report_btn_camera);
@@ -251,6 +258,9 @@ public class ViolationReportActivity extends AppCompatActivity implements Api.On
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
                 imgContainer.setVisibility(View.VISIBLE);
                 imgProof.setImageBitmap(bitmap);
+
+                // enable button
+                btnStateModel.setEnabled(true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
